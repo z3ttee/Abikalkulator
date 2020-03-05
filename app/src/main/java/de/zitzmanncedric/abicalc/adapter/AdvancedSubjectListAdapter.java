@@ -37,6 +37,11 @@ public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSub
         this.dataset = dataset;
         this.context = context;
     }
+    public AdvancedSubjectListAdapter(Context context, ArrayList<? extends ListableObject> dataset, OnListItemCallback onCallback) {
+        this.dataset = dataset;
+        this.context = context;
+        this.onCallback = onCallback;
+    }
 
     @NonNull
     @Override
@@ -56,8 +61,7 @@ public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSub
             holder.itemView.setPoints(grade.getValue());
             holder.itemView.setShowPoints(true);
             holder.itemView.setOnClickListener(v -> {
-                Intent intent = new Intent(context, EditGradeActivity.class);
-                context.startActivity(intent);
+                if (onCallback != null) onCallback.onItemClicked(obj);
             });
 
             return;

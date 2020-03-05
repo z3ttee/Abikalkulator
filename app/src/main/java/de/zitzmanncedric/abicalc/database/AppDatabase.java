@@ -6,6 +6,8 @@ import android.content.res.XmlResourceParser;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParser;
 
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.api.Grade;
 import de.zitzmanncedric.abicalc.api.Subject;
@@ -169,6 +172,15 @@ public class AppDatabase extends SQLiteOpenHelper {
         return getWritableDatabase().updateWithOnConflict(TABLE_SUBJECTS, values, "subjectID=?", new String[]{""+subject.getId()}, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
+    public Subject getUserSubjectByID(int id) {
+        for(Subject subject : userSubjects) {
+            if(subject.getId() == id) {
+                return  subject;
+            }
+        }
+        return userSubjects.get(0);
+    }
+
     /**
      *
      * @param subjectID
@@ -199,6 +211,8 @@ public class AppDatabase extends SQLiteOpenHelper {
         long id = getWritableDatabase().insert(TABLE_GRADES, null, values);
         AppDatabase.getInstance().notifyGradeAdded(subject);
 
+        // Change to new term
+        AppCore.getSharedPreferences().edit().putInt("currentTerm",grade.getTermID()).apply();
         return id;
     }
 
@@ -209,15 +223,18 @@ public class AppDatabase extends SQLiteOpenHelper {
      * @return
      */
     public long updateGrade(Subject subject, Grade grade) {
-        AppDatabase.getInstance().notifyGradeAdded(subject);
+        Log.i(TAG, "updateGrade: "+grade.getId());
 
         ContentValues values = new ContentValues();
         values.put("subjectID", subject.getId());
         values.put("typeID", grade.getType().getId());
         values.put("value", grade.getValue());
         values.put("date", grade.getDateCreated());
+        values.put("termID", grade.getTermID());
 
-        return getWritableDatabase().insert(TABLE_GRADES, null, values);
+        AppDatabase.getInstance().notifyGradeAdded(subject);
+
+        return getWritableDatabase().updateWithOnConflict(TABLE_GRADES, values, "id=?", new String[]{String.valueOf(grade.getId())}, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     /**
@@ -261,6 +278,6 @@ public class AppDatabase extends SQLiteOpenHelper {
      */
     // TODO: Calculate new average in background
     public void notifyGradeAdded(Subject subject){
-
+        Toast.makeText(AppCore.getInstance().getApplicationContext(), subject.getTitle()+" updated.", Toast.LENGTH_SHORT).show();
     }
 }

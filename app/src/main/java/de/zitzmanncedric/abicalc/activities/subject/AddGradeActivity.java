@@ -20,6 +20,7 @@ import de.zitzmanncedric.abicalc.api.Grade;
 import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.api.list.ListableObject;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
+import de.zitzmanncedric.abicalc.utils.AppSerializer;
 import de.zitzmanncedric.abicalc.views.AppActionBar;
 
 /**
@@ -51,9 +52,10 @@ public class AddGradeActivity extends AppCompatActivity implements AdapterView.O
 
         {
             List<String> items = new ArrayList<>();
-            for(Subject subject : AppDatabase.getInstance().userSubjects) {
+            for (Subject subject : AppDatabase.getInstance().userSubjects) {
                 items.add(subject.getTitle());
             }
+
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
             subjectSpinner.setAdapter(adapter);
             subjectSpinner.setOnItemSelectedListener(this);

@@ -1,5 +1,6 @@
 package de.zitzmanncedric.abicalc.fragments.subject;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,16 +17,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.zitzmanncedric.abicalc.R;
+import de.zitzmanncedric.abicalc.activities.subject.EditGradeActivity;
 import de.zitzmanncedric.abicalc.adapter.AdvancedSubjectListAdapter;
 import de.zitzmanncedric.abicalc.api.Grade;
 import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.api.list.ListableObject;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
+import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
+import de.zitzmanncedric.abicalc.utils.AppSerializer;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class GradesFragment extends Fragment {
+public class GradesFragment extends Fragment implements OnListItemCallback {
     private static final String TAG = "GradesFragment";
 
     private RecyclerView recyclerView;
@@ -45,9 +49,9 @@ public class GradesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_grades, container, false);
 
         recyclerView = view.findViewById(R.id.grades_list);
-        AdvancedSubjectListAdapter adapter = new AdvancedSubjectListAdapter(view.getContext(), this.dataset);
-        recyclerView.setAdapter(adapter);
+        AdvancedSubjectListAdapter adapter = new AdvancedSubjectListAdapter(view.getContext(), this.dataset, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        recyclerView.setAdapter(adapter);
 
         new Handler().post(() -> {
             ArrayList<? extends ListableObject> grades = AppDatabase.getInstance().getGradesForTerm(subject, termID);
@@ -56,4 +60,35 @@ public class GradesFragment extends Fragment {
 
         return view;
     }
+
+
+
+    @Override
+    public void onItemClicked(ListableObject object) {
+        Intent intent = new Intent(getContext(), EditGradeActivity.class);
+
+        if(object instanceof Grade) {
+            Grade grade = (Grade) object;
+            intent.putExtra("subjectID", grade.getSubjectID());
+            intent.putExtra("termID", termID);
+            intent.putExtra("value", grade.getValue());
+            intent.putExtra("typeID", grade.getType().getId());
+            intent.putExtra("grade", AppSerializer.serialize(grade));
+            startActivity(intent);
+        }
+
+        // startActivity(intent);
+    }
+
+    @Override
+    public void onItemClicked(int position) { }
+
+    @Override
+    public void onItemDeleted(int position) { }
+
+    @Override
+    public void onItemEdit(int position) { }
+
+    @Override
+    public void onItemLongClicked(ListableObject object) { }
 }

@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.subject.AddGradeActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <de.zitzmanncedric.abicalc.views.AppActionBar
         android:id="@+id/app_toolbar"
@@ -40,8 +41,11 @@
         android:layout_marginStart="@dimen/window_padding"
         android:layout_marginEnd="@dimen/window_padding"
         android:dropDownWidth="match_parent"
-        android:popupBackground="@drawable/background_dialog"
-        android:spinnerMode="dropdown" />
+
+        android:popupTheme="@style/Popup"
+        android:spinnerMode="dropdown"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"/>
 
     <TextView
         style="@style/TextAppearance.Label"
@@ -61,7 +65,9 @@
         android:dropDownWidth="match_parent"
         android:spinnerMode="dropdown"
         android:layout_marginStart="@dimen/window_padding"
-        android:layout_marginEnd="@dimen/window_padding" />
+        android:layout_marginEnd="@dimen/window_padding"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"/>
 
     <TextView
         style="@style/TextAppearance.Label"
@@ -81,7 +87,9 @@
         android:dropDownWidth="match_parent"
         android:spinnerMode="dropdown"
         android:layout_marginStart="@dimen/window_padding"
-        android:layout_marginEnd="@dimen/window_padding"/>
+        android:layout_marginEnd="@dimen/window_padding"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"/>
 
     <TextView
         style="@style/TextAppearance.Label"

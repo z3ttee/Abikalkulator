@@ -13,6 +13,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,10 +35,12 @@ import de.zitzmanncedric.abicalc.utils.AppSerializer;
 import de.zitzmanncedric.abicalc.views.AppActionBar;
 
 public class ViewSubjectActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final String TAG = "ViewSubjectActivity";
 
     private ViewPager fragmentPager;
     private TabLayout tabLayout;
     private Subject subject;
+    private int termID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +55,14 @@ public class ViewSubjectActivity extends AppCompatActivity implements View.OnCli
         actionBar.getCloseView().setOnClickListener(this);
 
         Intent intent = getIntent();
-        subject = (Subject) AppSerializer.deserialize(intent.getByteArrayExtra("subject"));
+        termID = intent.getIntExtra("termID", 0);
+        byte[] bytes = intent.getByteArrayExtra("subject");
 
-        fragmentPager.setAdapter(new Adapter(getSupportFragmentManager(), this, subject));
-        tabLayout.setupWithViewPager(fragmentPager, true);
+        if(bytes != null) {
+            subject = (Subject) AppSerializer.deserialize(bytes);
+        }
+
+        reSetup();
     }
 
     @Override
@@ -65,15 +72,21 @@ public class ViewSubjectActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    private void reSetup(){
+        fragmentPager.setAdapter(new Adapter(getSupportFragmentManager(), this, subject));
+        tabLayout.setupWithViewPager(fragmentPager, true);
+        new Handler().post(() -> {
+            fragmentPager.setCurrentItem(termID, true);
+        });
+    }
+
     /**
      * Lädt Noten, wenn Aktivität fortgesetzt wird
      */
     @Override
     protected void onResume() {
         super.onResume();
-        fragmentPager.setAdapter(new Adapter(getSupportFragmentManager(), this, subject));
-        tabLayout.setupWithViewPager(fragmentPager, true);
-        //Toast.makeText(this, "resumed.", Toast.LENGTH_SHORT).show();
+        reSetup();
     }
 
     private static class Adapter extends FragmentPagerAdapter {
@@ -103,7 +116,6 @@ public class ViewSubjectActivity extends AppCompatActivity implements View.OnCli
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            Log.i(TAG, "getItem: "+position);
 
             Fragment fragment = new GradesFragment(subject, 0);
             switch (position) {

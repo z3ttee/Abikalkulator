@@ -69,6 +69,7 @@ public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapte
                 }
             } else {
                 holder.titleView.setText(String.valueOf(obj.getTitle()));
+                holder.pointsView.setText(String.valueOf(obj.getAside()));
             }
         });
 
@@ -92,5 +93,11 @@ public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapte
             titleView = itemView.findViewById(R.id.item_name);
             pointsView = itemView.findViewById(R.id.item_points);
         }
+    }
+
+    public void update(ArrayList<? extends ListableObject> dataset){
+        this.dataset.clear();
+        this.dataset = dataset;
+        notifyDataSetChanged();
     }
 }

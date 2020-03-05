@@ -12,6 +12,7 @@
     <string name="label_chose_term">Wähle das Halbjahr</string>
     <string name="label_chose_grade">Erhaltene Punktzahl</string>
     <string name="label_chose_type">Art der Note</string>
+    <string name="label_being_saved">Wird gespeichert…</string>
 
     <string name="paragraph_welcome">Wir bedanken uns, dass du dein Vertrauen in uns steckst. Bevor du starten kannst, benötigen wir aber noch einige Informationen. Bitte gib uns deshalb Auskunft über deine Kursbelegung. Beachte, dass du 5 Kurse als Prüfungsfach markieren solltest.</string>
 
@@ -36,6 +37,7 @@
 
     <string name="headline_edit_subject">Schnellbearbeitung</string>
     <string name="headline_add_grade">Neue Note hinzufügen</string>
+    <string name="headline_edit_grade">Einzelnote bearbeiten</string>
 
     <string name="subject_math">Mathematik</string>
     <string name="subject_english">Englisch</string>

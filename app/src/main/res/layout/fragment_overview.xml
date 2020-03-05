@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:nestedScrollingEnabled="true"
     android:background="@android:color/white"
-    android:padding="@dimen/window_padding"
+    android:paddingTop="@dimen/window_padding"
+    android:paddingBottom="0dp"
     android:orientation="vertical">
 
     <de.zitzmanncedric.abicalc.views.AverageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/window_padding"
+        android:layout_marginEnd="@dimen/window_padding"
         android:layout_marginTop="@dimen/window_padding"
         app:avgTitle="Deine Gesamtpunktzahl"
         app:avgSubtitle="640 / 900Pkt."/>
@@ -19,37 +23,19 @@
         style="@style/TabLayout"
         android:id="@+id/app_tabbar"
         android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/default_padding_large">
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1. Halbjahr"/>
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2. Halbjahr"/>
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3. Halbjahr"/>
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="4. Halbjahr"/>
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Abitur"/>
+        android:layout_marginTop="@dimen/default_padding_large"
+        android:layout_marginBottom="@dimen/default_padding_large"
+        android:layout_marginStart="@dimen/window_padding"
+        android:layout_marginEnd="@dimen/window_padding">
 
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/app_viewpager"
+        android:id="@+id/app_fragment_pager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="750dp"/>
 
-    <TextView
+    <!--<TextView
         style="@style/TextAppearance.Label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -60,9 +46,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/app_grid_intensified"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="300dp"
         android:orientation="vertical"
-        android:nestedScrollingEnabled="false" />
+        android:nestedScrollingEnabled="false"
+        android:background="@color/colorAccent"/>
 
     <TextView
         style="@style/TextAppearance.Label"
@@ -75,9 +62,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/app_grid_seminar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="300dp"
         android:orientation="vertical"
-        android:nestedScrollingEnabled="false" />
+        android:nestedScrollingEnabled="false"
+        android:background="@color/colorAccent"/>
 
     <TextView
         style="@style/TextAppearance.Label"
@@ -90,9 +78,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/app_grid_normals"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="300dp"
         android:orientation="vertical"
-        android:nestedScrollingEnabled="false" />
+        android:nestedScrollingEnabled="false"
+        android:background="@color/colorAccent"/>-->
 
     <!--<GridView
         android:id="@+id/app_grid"

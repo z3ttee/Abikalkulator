@@ -21,6 +21,7 @@ public class AppActionBar extends Toolbar {
 
     private TextView titleView;
     @Getter private ImageView closeView;
+    @Getter private ImageView saveView;
 
     private String title = getContext().getString(R.string.app_name);
 
@@ -45,10 +46,13 @@ public class AppActionBar extends Toolbar {
             View view = inflater.inflate(R.layout.view_actionbar, this);
             titleView = view.findViewById(R.id.toolbar_title);
             closeView = view.findViewById(R.id.btn_close);
+            saveView = view.findViewById(R.id.btn_save);
 
             titleView.setText(title);
             closeView.setClipToOutline(true);
+            saveView.setClipToOutline(true);
             setShowClose(false);
+            setShowSave(false);
         }
     }
 
@@ -64,6 +68,9 @@ public class AppActionBar extends Toolbar {
     }
 
     public void setShowClose(boolean showClose) {
-        closeView.setVisibility((showClose ? VISIBLE : GONE));
+        closeView.setVisibility((showClose ? VISIBLE : INVISIBLE));
+    }
+    public void setShowSave(boolean showSave) {
+        saveView.setVisibility((showSave ? VISIBLE : INVISIBLE));
     }
 }

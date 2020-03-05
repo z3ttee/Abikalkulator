@@ -2,6 +2,8 @@ package de.zitzmanncedric.abicalc.api;
 
 import android.content.Context;
 
+import java.io.Serializable;
+
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.api.list.ListableObject;
@@ -12,7 +14,7 @@ import lombok.Setter;
 /**
  * Datenobjekt für eine Note
  */
-public class Grade extends ListableObject {
+public class Grade extends ListableObject implements Serializable {
 
     @Getter private int id;
     @Getter private int subjectID;

@@ -1,14 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.subject.SubjectsFragment">
+    android:orientation="vertical"
+    tools:context=".fragments.subject.SubjectsFragment"
+    android:paddingStart="@dimen/window_padding"
+    android:paddingEnd="@dimen/window_padding">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        style="@style/TextAppearance.Label"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/default_padding"
+        android:text="@string/label_yourintensified" />
 
-</FrameLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/app_grid_intensified"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:nestedScrollingEnabled="false" />
+
+    <TextView
+        style="@style/TextAppearance.Label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/window_padding"
+        android:layout_marginBottom="@dimen/default_padding"
+        android:text="@string/label_yourseminar" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/app_grid_seminar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:nestedScrollingEnabled="false" />
+
+    <TextView
+        style="@style/TextAppearance.Label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/window_padding"
+        android:layout_marginBottom="@dimen/default_padding"
+        android:text="@string/label_yourintensified" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/app_grid_basics"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:nestedScrollingEnabled="false" />
+
+</LinearLayout>

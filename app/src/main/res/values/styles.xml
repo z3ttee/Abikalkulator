@@ -111,6 +111,9 @@
         <item name="android:background">@drawable/background_input</item>
         <item name="android:textAppearance">@style/Headline.h5</item>
     </style>
+    <style name="Popup" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:background">@drawable/background_input</item>
+    </style>
 
     <!-- TabLayout -->
     <style name="TabLayout">

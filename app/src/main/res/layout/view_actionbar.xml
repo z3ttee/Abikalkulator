@@ -2,7 +2,7 @@
 <merge xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:orientation="horizontal"
@@ -12,26 +12,60 @@
             android:id="@+id/btn_close"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
+            android:background="@drawable/background_input"
+            android:foreground="?attr/selectableItemBackground"
             android:padding="10dp"
             android:src="@drawable/ic_back"
             android:tint="@color/colorPrimary"
-            android:foreground="?attr/selectableItemBackground"
-            android:background="@drawable/background_input"
-            android:layout_marginEnd="@dimen/window_padding"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout4"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginEnd="8dp"
+                android:visibility="visible"
+                app:srcCompat="@drawable/ic_app_logo" />
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                style="@style/Headline.h4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/bebaskai"
+                android:text="@string/app_name"
+                android:visibility="visible" />
+
+        </LinearLayout>
+
 
         <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            app:srcCompat="@drawable/ic_app_logo"
-            android:layout_marginEnd="@dimen/default_padding"/>
+            android:id="@+id/btn_save"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
+            android:layout_marginEnd="@dimen/window_padding"
+            android:background="@drawable/background_input"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="end"
+            android:padding="10dp"
+            android:src="@drawable/ic_check"
+            android:tint="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            style="@style/Headline.h4"
-            android:id="@+id/toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:fontFamily="@font/bebaskai"/>
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </merge>
