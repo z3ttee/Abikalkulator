@@ -1,0 +1,62 @@
+<resources>
+    <string name="app_name">Abikalkulator</string>
+
+    <string name="label_chose_intensified">Wähle deine Leistungskurse (5)</string>
+    <string name="label_chose_normal">Wähle deine anderen Kurse (6)</string>
+    <string name="label_chose_subject">Wähle einen Kurs</string>
+    <string name="label_markAsExam">Als Prüfungsfach merken</string>
+    <string name="label_settingup_app">Die App wird eingerichtet…</string>
+    <string name="label_yourintensified">Deine Leistungskurse</string>
+    <string name="label_yournormals">Deine Nebenkurse</string>
+    <string name="label_yourseminar">Dein Seminarfach</string>
+    <string name="label_chose_term">Wähle das Halbjahr</string>
+    <string name="label_chose_grade">Erhaltene Punktzahl</string>
+    <string name="label_chose_type">Art der Note</string>
+
+    <string name="paragraph_welcome">Wir bedanken uns, dass du dein Vertrauen in uns steckst. Bevor du starten kannst, benötigen wir aber noch einige Informationen. Bitte gib uns deshalb Auskunft über deine Kursbelegung. Beachte, dass du 5 Kurse als Prüfungsfach markieren solltest.</string>
+
+    <string name="btn_add_subject">Einen Kurs hinzufügen</string>
+    <string name="btn_continue">Fortfahren</string>
+    <string name="btn_finish">Abschließen</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_cancel">Abbrechen</string>
+    <string name="btn_show">Ansehen</string>
+    <string name="btn_edit">Bearbeiten</string>
+    <string name="btn_change">Mit Fach tauschen</string>
+    <string name="btn_add">Hinzufügen</string>
+
+    <string name="exp_examsubject">Prüfungsfach</string>
+    <string name="exp_term">%. Term</string>
+    <string name="exp_abi">Abitur</string>
+
+    <string name="error_headline">Whooops!</string>
+    <string name="error_occured">Es ist ein irreparabler Fehler aufgetreten. Die App wird geschlossen.</string>
+    <string name="error_missing_exams">Du musst 5 Kurse als Prüfungsfach markieren. Deine vorherige Auswahl erreichst du, indem du auf den ZURÜCK-Pfeil deines Smartphones drückst.</string>
+    <string name="error_setup_cancelled">Du hast das Setup abgebrochen. Die App kann ohne Einrichtung nicht genutzt werden.</string>
+
+    <string name="headline_edit_subject">Schnellbearbeitung</string>
+    <string name="headline_add_grade">Neue Note hinzufügen</string>
+
+    <string name="subject_math">Mathematik</string>
+    <string name="subject_english">Englisch</string>
+    <string name="subject_pe">Sport</string>
+    <string name="subject_chemistry">Chemie</string>
+    <string name="subject_german">Deutsch</string>
+    <string name="subject_informatics">Informatik</string>
+    <string name="subject_economics">Wirtschaft &amp; Recht</string>
+    <string name="subject_history">Geschichte</string>
+    <string name="subject_french">Französisch</string>
+    <string name="subject_art">Kunst</string>
+    <string name="subject_religion">Religion</string>
+    <string name="subject_seminar">Seminarfach</string>
+
+    <string name="type_lk">Leistungskontrolle</string>
+    <string name="type_ka">Kursarbeit</string>
+
+    <string name="menu_home">Übersicht</string>
+    <string name="menu_goals">Ziele</string>
+    <string name="menu_settings">Einstellungen</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SubjectListItemView">
+        <attr name="title" format="string|reference" />
+        <attr name="subtitle" format="string|reference" />
+        <attr name="points" format="integer|reference" />
+        <attr name="showEdit" format="boolean" />
+        <attr name="showDelete" format="boolean" />
+        <attr name="showPoints" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="AverageView">
+        <attr name="avgTitle" format="string|reference" />
+        <attr name="avgSubtitle" format="string|reference" />
+        <attr name="average" format="float" />
+        <attr name="showMedal" format="boolean|reference" />
+    </declare-styleable>
+</resources>

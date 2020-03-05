@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:nestedScrollingEnabled="true"
+    android:background="@android:color/white"
+    android:padding="@dimen/window_padding"
+    android:orientation="vertical">
+
+    <de.zitzmanncedric.abicalc.views.AverageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/window_padding"
+        app:avgTitle="Deine Gesamtpunktzahl"
+        app:avgSubtitle="640 / 900Pkt."/>
+
+    <com.google.android.material.tabs.TabLayout
+        style="@style/TabLayout"
+        android:id="@+id/app_tabbar"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/default_padding_large">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1. Halbjahr"/>
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2. Halbjahr"/>
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3. Halbjahr"/>
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4. Halbjahr"/>
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Abitur"/>
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/app_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        style="@style/TextAppearance.Label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/window_padding_large"
+        android:layout_marginBottom="@dimen/default_padding"
+        android:text="@string/label_yourintensified" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/app_grid_intensified"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:nestedScrollingEnabled="false" />
+
+    <TextView
+        style="@style/TextAppearance.Label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/window_padding"
+        android:layout_marginBottom="@dimen/default_padding"
+        android:text="@string/label_yourseminar" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/app_grid_seminar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:nestedScrollingEnabled="false" />
+
+    <TextView
+        style="@style/TextAppearance.Label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/window_padding"
+        android:layout_marginBottom="@dimen/default_padding"
+        android:text="@string/label_yourintensified" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/app_grid_normals"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:nestedScrollingEnabled="false" />
+
+    <!--<GridView
+        android:id="@+id/app_grid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp"
+        android:horizontalSpacing="@dimen/default_padding_large"
+        android:nestedScrollingEnabled="false"
+        android:numColumns="3"
+        android:padding="0dp"
+        android:scrollbarSize="4dp"
+        android:scrollbars="none"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="@dimen/default_padding_large"
+        />-->
+
+</LinearLayout>

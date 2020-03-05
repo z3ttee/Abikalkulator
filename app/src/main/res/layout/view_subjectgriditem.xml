@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/griditem_width"
+    android:layout_height="@dimen/griditem_height"
+    android:orientation="vertical"
+    android:background="@drawable/background_listitem"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:layout_margin="@dimen/default_padding">
+
+    <TextView
+        style="@style/Headline.h6"
+        android:fontFamily="@font/bebaskai"
+        android:id="@+id/item_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorAccent"
+        android:textAlignment="center"
+        android:text="" />
+
+    <TextView
+        style="@style/Headline.h1"
+        android:id="@+id/item_points"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:textAlignment="center"
+        android:includeFontPadding="false"
+        android:text="" />
+
+</LinearLayout>

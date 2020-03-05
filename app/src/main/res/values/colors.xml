@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1B2644</color>
+    <color name="colorPrimaryDark">#17203A</color>
+    <color name="colorAccent">#FF9137</color>
+    <color name="colorAccentLight">#66E69963</color>
+    <color name="colorAccentDark">#DA792E</color>
+
+    <color name="splash_background">@android:color/white</color>
+
+    <color name="listitem_bg">#F2F2F2</color>
+    <color name="listitem_border">#0D17203A</color>
+
+    <color name="colorDisabled">#BCBCBC</color>
+    <color name="colorDisabledDark">#707070</color>
+</resources>

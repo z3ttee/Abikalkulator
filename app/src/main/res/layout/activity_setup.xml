@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.setup.SetupActivity"
+    android:background="@color/splash_background">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/setup_button_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/Headline.h1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/window_padding"
+                android:paddingTop="@dimen/window_padding"
+                android:paddingEnd="@dimen/window_padding"
+                android:text="@string/app_name" />
+
+            <TextView
+                style="@style/TextAppearance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/window_padding"
+                android:layout_marginBottom="@dimen/window_padding"
+                android:paddingStart="@dimen/window_padding"
+                android:paddingEnd="@dimen/window_padding"
+                android:text="@string/paragraph_welcome" />
+
+            <FrameLayout
+                android:id="@+id/app_fragment_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/setup_button_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:background="@color/splash_background"
+        android:elevation="5dp"
+        android:orientation="vertical"
+        android:padding="@dimen/window_padding"
+        android:translationZ="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <de.zitzmanncedric.abicalc.views.AppButton
+            android:id="@+id/btn_add_subject"
+            style="@style/Button.primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_padding"
+            android:onClick="addSubject"
+            android:text="@string/btn_add_subject" />
+
+        <de.zitzmanncedric.abicalc.views.AppButton
+            android:id="@+id/btn_continue"
+            style="@style/Button.primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="true"
+            android:onClick="continueSetup"
+            android:text="@string/btn_continue" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
