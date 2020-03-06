@@ -4,6 +4,9 @@ import android.content.Context;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 /**
  * Verwaltet Funktionen für spezielle Vorgänge, die öfter wiederholt werden
@@ -28,6 +31,17 @@ public class AppUtils {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    /**
+     * Methode zum erstellen der Standardanimation von Elementen in einer Liste
+     * @return Objekt der erstellten Animation
+     */
+    public static Animation getListItemEnterAnim(){
+        Animation animation = AnimationUtils.loadAnimation(AppCore.getInstance().getApplicationContext(), R.anim.list_item_falldown);
+        animation.setInterpolator(new AccelerateDecelerateInterpolator());
+        animation.setDuration(AppCore.getInstance().getResources().getInteger(R.integer.anim_speed_quickly));
+        return animation;
     }
 
 }

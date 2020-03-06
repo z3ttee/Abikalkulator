@@ -49,13 +49,14 @@ public class GradesFragment extends Fragment implements OnListItemCallback {
         View view = inflater.inflate(R.layout.fragment_grades, container, false);
 
         recyclerView = view.findViewById(R.id.grades_list);
-        AdvancedSubjectListAdapter adapter = new AdvancedSubjectListAdapter(view.getContext(), this.dataset, this);
+        AdvancedSubjectListAdapter adapter = new AdvancedSubjectListAdapter(view.getContext(), new ArrayList<>(), this);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(adapter);
 
+
         new Handler().post(() -> {
-            ArrayList<? extends ListableObject> grades = AppDatabase.getInstance().getGradesForTerm(subject, termID);
-            adapter.update(grades);
+            ArrayList<ListableObject> grades = new ArrayList<>(AppDatabase.getInstance().getGradesForTerm(subject, termID));
+            adapter.set(grades);
         });
 
         return view;
@@ -76,18 +77,13 @@ public class GradesFragment extends Fragment implements OnListItemCallback {
             intent.putExtra("grade", AppSerializer.serialize(grade));
             startActivity(intent);
         }
-
-        // startActivity(intent);
     }
 
     @Override
-    public void onItemClicked(int position) { }
+    public void onItemDeleted(ListableObject object) { }
 
     @Override
-    public void onItemDeleted(int position) { }
-
-    @Override
-    public void onItemEdit(int position) { }
+    public void onItemEdit(ListableObject object) { }
 
     @Override
     public void onItemLongClicked(ListableObject object) { }

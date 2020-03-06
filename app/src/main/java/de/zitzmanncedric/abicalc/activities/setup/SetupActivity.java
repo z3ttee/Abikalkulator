@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -124,12 +125,7 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
         if(exams < AMOUNT_EXAMS_MAX) {
             // Show dialog if something is missing.
             AlertDialog dialog = new AlertDialog.Builder(this).setTitle(getString(R.string.error_headline)).setMessage(getString(R.string.error_missing_exams)).create();
-            dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.btn_ok), null, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
+            dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.btn_ok), null, (dialog1, which) -> dialog1.dismiss());
             dialog.show();
             return;
         }

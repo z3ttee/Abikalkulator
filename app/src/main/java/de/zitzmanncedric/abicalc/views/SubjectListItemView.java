@@ -170,9 +170,6 @@ public class SubjectListItemView extends LinearLayout implements View.OnClickLis
                 return;
             }
             if (view.getId() == itemDeleteBtn.getId()) {
-                correspondingDataset.remove(getPositionInList());
-                // TODO: Make notify item removed. But needs to change all positions of views
-                correspondingRecycler.getAdapter().notifyDataSetChanged();
                 if(this.onDeleteListener != null) onDeleteListener.onDeleteItem();
                 return;
             }

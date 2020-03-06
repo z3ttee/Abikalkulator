@@ -12,6 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.activities.setup.SetupActivity;
@@ -30,6 +33,9 @@ public class AddNormalFragment extends Fragment implements OnActivityToFragment,
     private AppButton addSubjectBtn;
     private RecyclerView recyclerView;
 
+    private SetupActivity setupActivity;
+    private AdvancedSubjectListAdapter adapter;
+
     public AddNormalFragment(AppButton continueSetupBtn, AppButton addSubjectBtn) {
         this.continueSetupBtn = continueSetupBtn;
         this.addSubjectBtn = addSubjectBtn;
@@ -42,11 +48,15 @@ public class AddNormalFragment extends Fragment implements OnActivityToFragment,
         if(getActivity() != null) {
             recyclerView = view.findViewById(R.id.setup_recycler_normal);
             recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-            AdvancedSubjectListAdapter adapter = new AdvancedSubjectListAdapter(getContext(),((SetupActivity) getActivity()).normals);
-            adapter.setOnCallback(this);
 
+            ArrayList<ListableObject> objects = new ArrayList<>(((SetupActivity) getActivity()).normals);
+            adapter = new AdvancedSubjectListAdapter(getContext(), objects);
+
+            adapter.setOnCallback(this);
             adapter.setCorrespondingRecyclerView(recyclerView);
             recyclerView.setAdapter(adapter);
+
+            setupActivity = (SetupActivity) getActivity();
         }
 
         return view;
@@ -55,49 +65,47 @@ public class AddNormalFragment extends Fragment implements OnActivityToFragment,
     @Override
     public void onActivityToFragment(Activity activity, Object object, int actionCode) {
         try {
-            recyclerView.getAdapter().notifyDataSetChanged();
-            recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount());
+            adapter.add((ListableObject) object);
+            recyclerView.scrollToPosition(adapter.getItemCount());
         } catch (Exception ex){
             ex.printStackTrace();
         }
     }
 
     @Override
-    public void onItemClicked(int position) {
-        // TODO
+    public void onItemDeleted(ListableObject object) {
+        if(object instanceof Subject) {
+            setupActivity.normals.remove(object);
+            adapter.remove(object);
+            setupActivity.onFragmentToActivity(this, object, AppCore.ActionCodes.ACTION_LIST_REMOVEITEM);
+        }
     }
 
     @Override
-    public void onItemClicked(ListableObject object) {
-
-    }
-
-    @Override
-    public void onItemDeleted(int position) {
-        ((SetupActivity) getActivity()).onFragmentToActivity(this, position, AppCore.ActionCodes.ACTION_LIST_REMOVEITEM);
-    }
-
-    @Override
-    public void onItemEdit(final int position) {
+    public void onItemEdit(final ListableObject object) {
         try {
-            QuickSubjectEditDialog dialog = new QuickSubjectEditDialog(getContext(), ((SetupActivity) getActivity()).normals.get(position));
-            dialog.setCallback(new QuickSubjectEditDialog.DialogCallback() {
-                @Override
-                public void onCallback(Subject subject) {
-                    ((SetupActivity) getActivity()).normals.set(position, subject);
-                    recyclerView.getAdapter().notifyDataSetChanged();
-                }
-            });
-            dialog.show();
+            if(object instanceof Subject) {
+                Subject subject = (Subject) object;
+                QuickSubjectEditDialog dialog = new QuickSubjectEditDialog(getContext(), subject);
+                dialog.setCallback(sbj -> {
+                    int index = setupActivity.normals.indexOf(subject);
+                    setupActivity.normals.set(index, sbj);
+                    adapter.update(subject, sbj);
+                });
+                dialog.show();
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
     @Override
-    public void onItemLongClicked(ListableObject object) {
-
+    public void onItemClicked(ListableObject object) {
+        onItemEdit(object);
     }
+
+    @Override
+    public void onItemLongClicked(ListableObject object) { }
 
     @Override
     public void onResume() {
@@ -105,7 +113,7 @@ public class AddNormalFragment extends Fragment implements OnActivityToFragment,
         continueSetupBtn.setText(getString(R.string.btn_finish));
 
         try {
-            if (((SetupActivity) getActivity()).normals.size() == SetupActivity.AMOUNT_NORMALS) {
+            if (setupActivity.normals.size() == SetupActivity.AMOUNT_NORMALS) {
                 continueSetupBtn.setEnabled(true);
                 addSubjectBtn.setEnabled(false);
             } else {

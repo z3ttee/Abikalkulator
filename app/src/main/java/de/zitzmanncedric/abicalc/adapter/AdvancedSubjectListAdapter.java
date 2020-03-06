@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
+import de.zitzmanncedric.abicalc.AppCore;
+import de.zitzmanncedric.abicalc.AppUtils;
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.activities.subject.EditGradeActivity;
 import de.zitzmanncedric.abicalc.api.Grade;
@@ -25,19 +28,19 @@ import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
 import de.zitzmanncedric.abicalc.views.SubjectListItemView;
 import lombok.Setter;
 
-public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSubjectListAdapter.ViewHolder> {
+public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSubjectListAdapter.ViewHolder> implements DatasetInterface<ListableObject> {
     private static final String TAG = "AdvancedSubjectListAdap";
 
     private Context context;
-    private ArrayList<? extends ListableObject> dataset;
+    private ArrayList<ListableObject> dataset;
     @Setter private RecyclerView correspondingRecyclerView;
     @Setter private OnListItemCallback onCallback;
 
-    public AdvancedSubjectListAdapter(Context context, ArrayList<? extends ListableObject> dataset) {
+    public AdvancedSubjectListAdapter(Context context, ArrayList<ListableObject> dataset) {
         this.dataset = dataset;
         this.context = context;
     }
-    public AdvancedSubjectListAdapter(Context context, ArrayList<? extends ListableObject> dataset, OnListItemCallback onCallback) {
+    public AdvancedSubjectListAdapter(Context context, ArrayList<ListableObject> dataset, OnListItemCallback onCallback) {
         this.dataset = dataset;
         this.context = context;
         this.onCallback = onCallback;
@@ -53,6 +56,8 @@ public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSub
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         ListableObject obj = dataset.get(position);
 
+        holder.itemView.setAnimation(AppUtils.getListItemEnterAnim());
+
         if(obj instanceof Grade) {
             Grade grade = (Grade) obj;
 
@@ -63,16 +68,16 @@ public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSub
             holder.itemView.setOnClickListener(v -> {
                 if (onCallback != null) onCallback.onItemClicked(obj);
             });
+            holder.itemView.setShowDelete(true);
+            holder.itemView.setOnDeleteListener(() -> {
+                if(onCallback != null) onCallback.onItemDeleted(grade);
+            });
 
             return;
         }
 
         if(obj instanceof Subject) {
             Subject subject = (Subject) obj;
-
-            holder.itemView.setTranslationY(30);
-            holder.itemView.setAlpha(0);
-            holder.itemView.animate().alpha(1).translationY(0).setStartDelay(context.getResources().getInteger(R.integer.anim_delay)).setDuration(context.getResources().getInteger(R.integer.anim_speed));
 
             holder.itemView.setShowEdit(true);
             holder.itemView.setShowDelete(true);
@@ -81,11 +86,14 @@ public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSub
             holder.itemView.setSubtitle((subject.isExam() ? context.getString(R.string.exp_examsubject) : ""));
             holder.itemView.setPositionInList(position);
             holder.itemView.setCorrespondingDataset(dataset);
+            holder.itemView.setOnClickListener((view) -> {
+                if(onCallback != null) onCallback.onItemClicked(subject);
+            });
             holder.itemView.setOnDeleteListener(() -> {
-                if (onCallback != null) onCallback.onItemDeleted(position);
+                if (onCallback != null) onCallback.onItemDeleted(subject);
             });
             holder.itemView.setOnEditCallback(() -> {
-                if (onCallback != null) onCallback.onItemEdit(position);
+                if (onCallback != null) onCallback.onItemEdit(subject);
             });
 
             if (correspondingRecyclerView != null)
@@ -98,6 +106,33 @@ public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSub
         return dataset.size();
     }
 
+    @Override
+    public void add(ListableObject object) {
+        dataset.add(object);
+        this.notifyItemInserted(dataset.size());
+        this.notifyItemRangeChanged(dataset.size()-1, dataset.size());
+    }
+
+    @Override
+    public void remove(ListableObject object) {
+        int index = dataset.indexOf(object);
+        dataset.remove(object);
+        this.notifyItemRemoved(index);
+    }
+
+    @Override
+    public void set(ArrayList<ListableObject> list) {
+        this.dataset = list;
+        this.notifyDataSetChanged();
+    }
+
+    @Override
+    public void update(ListableObject old, ListableObject updated) {
+        int index = this.dataset.indexOf(old);
+        this.dataset.set(index, updated);
+        this.notifyItemChanged(index);
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private SubjectListItemView itemView;
@@ -105,12 +140,6 @@ public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSub
             super(itemView);
             this.itemView = itemView;
         }
-    }
-
-    public void update(ArrayList<? extends ListableObject> dataset){
-        this.dataset.clear();
-        this.dataset = dataset;
-        notifyDataSetChanged();
     }
 
 }

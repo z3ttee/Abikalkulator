@@ -2,6 +2,7 @@ de.zitzmanncedric.abicalc
 de.zitzmanncedric.abicalc.activities
 de.zitzmanncedric.abicalc.activities.main
 de.zitzmanncedric.abicalc.activities.setup
+de.zitzmanncedric.abicalc.activities.subject
 de.zitzmanncedric.abicalc.adapter
 de.zitzmanncedric.abicalc.api
 de.zitzmanncedric.abicalc.api.list
@@ -9,6 +10,7 @@ de.zitzmanncedric.abicalc.database
 de.zitzmanncedric.abicalc.dialogs
 de.zitzmanncedric.abicalc.fragments.main
 de.zitzmanncedric.abicalc.fragments.setup
+de.zitzmanncedric.abicalc.fragments.subject
 de.zitzmanncedric.abicalc.listener
 de.zitzmanncedric.abicalc.sheets
 de.zitzmanncedric.abicalc.utils

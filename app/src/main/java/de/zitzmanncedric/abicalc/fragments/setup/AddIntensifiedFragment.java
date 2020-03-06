@@ -8,9 +8,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.R;
@@ -30,6 +34,9 @@ public class AddIntensifiedFragment extends Fragment implements OnActivityToFrag
     private AppButton addSubjectBtn;
 
     private RecyclerView recyclerView;
+    private AdvancedSubjectListAdapter adapter;
+
+    private SetupActivity setupActivity;
 
     public AddIntensifiedFragment(AppButton continueSetupBtn, AppButton addSubjectBtn) {
         this.continueSetupBtn = continueSetupBtn;
@@ -42,11 +49,15 @@ public class AddIntensifiedFragment extends Fragment implements OnActivityToFrag
         if(getActivity() != null) {
             recyclerView = view.findViewById(R.id.setup_recycler_intensified);
             recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-            AdvancedSubjectListAdapter adapter = new AdvancedSubjectListAdapter(getContext(),((SetupActivity) getActivity()).intensified);
-            adapter.setOnCallback(this);
 
+            ArrayList<ListableObject> objects = new ArrayList<>(((SetupActivity) getActivity()).intensified);
+            adapter = new AdvancedSubjectListAdapter(getContext(), objects);
+
+            adapter.setOnCallback(this);
             adapter.setCorrespondingRecyclerView(recyclerView);
             recyclerView.setAdapter(adapter);
+
+            setupActivity = (SetupActivity) getActivity();
         }
         return view;
     }
@@ -54,8 +65,8 @@ public class AddIntensifiedFragment extends Fragment implements OnActivityToFrag
     @Override
     public void onActivityToFragment(Activity activity, Object object, int actionCode) {
         try {
-            recyclerView.getAdapter().notifyDataSetChanged();
-            recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount());
+            adapter.add((ListableObject) object);
+            recyclerView.scrollToPosition(adapter.getItemCount());
         } catch (Exception ex){
             ex.printStackTrace();
         }
@@ -67,7 +78,7 @@ public class AddIntensifiedFragment extends Fragment implements OnActivityToFrag
         continueSetupBtn.setText(getString(R.string.btn_continue));
 
         try {
-            if (((SetupActivity) getActivity()).intensified.size() == SetupActivity.AMOUNT_INTENSIFIED) {
+            if (setupActivity.intensified.size() == SetupActivity.AMOUNT_INTENSIFIED) {
                 continueSetupBtn.setEnabled(true);
                 addSubjectBtn.setEnabled(false);
             } else {
@@ -80,33 +91,36 @@ public class AddIntensifiedFragment extends Fragment implements OnActivityToFrag
     }
 
     @Override
-    public void onItemClicked(int position) { }
-
-    @Override
-    public void onItemClicked(ListableObject object) {
-
+    public void onItemDeleted(ListableObject object) {
+        if(object instanceof Subject) {
+            setupActivity.intensified.remove(object);
+            adapter.remove(object);
+            setupActivity.onFragmentToActivity(this, object, AppCore.ActionCodes.ACTION_LIST_REMOVEITEM);
+        }
     }
 
     @Override
-    public void onItemDeleted(int position) {
-        ((SetupActivity) getActivity()).onFragmentToActivity(this, position, AppCore.ActionCodes.ACTION_LIST_REMOVEITEM);
-    }
-
-    @Override
-    public void onItemEdit(final int position) {
+    public void onItemEdit(final ListableObject object) {
         try {
-            QuickSubjectEditDialog dialog = new QuickSubjectEditDialog(getContext(), ((SetupActivity) getActivity()).intensified.get(position));
-            dialog.setCallback(new QuickSubjectEditDialog.DialogCallback() {
-                @Override
-                public void onCallback(Subject subject) {
-                    ((SetupActivity) getActivity()).intensified.set(position, subject);
-                    recyclerView.getAdapter().notifyDataSetChanged();
-                }
-            });
-            dialog.show();
+            if(object instanceof Subject) {
+                Subject subject = (Subject) object;
+
+                QuickSubjectEditDialog dialog = new QuickSubjectEditDialog(getContext(), subject);
+                dialog.setCallback(sbj -> {
+                    int index = setupActivity.intensified.indexOf(subject);
+                    setupActivity.intensified.set(index, sbj);
+                    adapter.update(subject, sbj);
+                });
+                dialog.show();
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public void onItemClicked(ListableObject object) {
+        onItemEdit(object);
     }
 
     @Override

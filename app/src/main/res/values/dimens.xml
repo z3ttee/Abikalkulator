@@ -17,5 +17,6 @@
     <item name="fragment_slidespeed" type="integer">250</item>
 
     <item name="anim_speed" type="integer">300</item>
+    <item name="anim_speed_quickly" type="integer">200</item>
     <item name="anim_delay" type="integer">80</item>
 </resources>

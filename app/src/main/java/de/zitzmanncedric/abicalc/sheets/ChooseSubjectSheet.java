@@ -1,19 +1,22 @@
 package de.zitzmanncedric.abicalc.sheets;
 
-import android.animation.AnimatorSet;
-import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,9 +26,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.R;
@@ -36,8 +42,8 @@ import de.zitzmanncedric.abicalc.database.AppDatabase;
 import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
 import de.zitzmanncedric.abicalc.listener.OnSubjectChosenListener;
 import lombok.Setter;
-
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import needle.Needle;
+import needle.UiRelatedProgressTask;
 
 /**
  * Klasse für BottomSheet, um ein neues Fach hinzuzufügen
@@ -47,7 +53,7 @@ public class ChooseSubjectSheet extends BottomSheetDialog implements OnListItemC
     private static final String TAG = "ChooseSubjectSheet";
 
     private ArrayList<Subject> dataset = new ArrayList<>();
-    private ArrayList<Subject> disabled;
+    private ArrayList<Subject> disabled = new ArrayList<>();
 
     private RecyclerView recyclerView;
     private TextView titleView;
@@ -57,8 +63,6 @@ public class ChooseSubjectSheet extends BottomSheetDialog implements OnListItemC
 
     private String title;
     @Setter private OnSubjectChosenListener onSubjectChosenListener;
-
-    int lastViewHeight = 0;
 
     /**
      * Standartkonstruktor der Klasse
@@ -85,40 +89,51 @@ public class ChooseSubjectSheet extends BottomSheetDialog implements OnListItemC
      * @param context Benötigt, um einzelne Views hinzuzufügen
      */
     private void init(final Context context) {
-        setContentView(R.layout.layout_bottomsheet);
+        setContentView(R.layout.sheet_choosesubjectsheet);
         setWhiteNavigationBar(this);
 
-        LinearLayout wrapperView = findViewById(R.id.bottomsheet_wrapper);
-        titleView = findViewById(R.id.bottomsheet_title);
+        titleView = findViewById(R.id.sheet_title);
+        recyclerView = findViewById(R.id.sheet_list);
+        checkBox = findViewById(R.id.sheet_checkbox);
 
-        // TODO: Add subjects async (no loading required to open sheet) and sort items after enabled states (visible ones to top)
-        RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        recyclerView = new RecyclerView(context);
-        recyclerView.setLayoutParams(layoutParams);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-
-        dataset = new ArrayList<>(11);
-        adapter = new SimpleSubjectListAdapter(dataset, disabled);
+        adapter = new SimpleSubjectListAdapter(new ArrayList<>(11), disabled);
         adapter.setOnCallback(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(adapter);
-
-        checkBox = new CheckBox(new ContextThemeWrapper(context, R.style.CheckBox));
-        checkBox.setText(context.getString(R.string.label_markAsExam));
-
-        wrapperView.addView(checkBox);  // Adding view to sheet
-        wrapperView.addView(recyclerView);  // Adding view to sheet
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Populate Recyclerview asynchronously
-        new Handler().post(() -> {
-            dataset.addAll(AppDatabase.getInstance().appSubjects.values());
-            recyclerView.getAdapter().notifyDataSetChanged();
-            recyclerView.invalidate();
+        getBehavior().setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
+
+        Needle.onBackgroundThread().withThreadPoolSize(1).execute(new UiRelatedProgressTask<Void, Subject>() {
+            @Override
+            protected Void doWork() {
+                for(Subject subject : AppDatabase.getInstance().appSubjects.values()) {
+                    if(!disabled.contains(subject)) {
+                        dataset.add(subject);
+                        publishProgress(subject);
+
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onProgressUpdate(Subject subject) {
+                adapter.add(subject);
+            }
+
+            @Override
+            protected void thenDoUiRelatedWork(Void v) { }
         });
     }
 
@@ -169,17 +184,19 @@ public class ChooseSubjectSheet extends BottomSheetDialog implements OnListItemC
 
     /**
      * Behandelt das Auswählen eines Objekts aus der Liste
-     * @param position Gibt die Position des Objekts in der Liste an
+     * @param object Gibt das Objekts in der Liste an
      */
     @Override
-    public void onItemClicked(int position) {
+    public void onItemClicked(ListableObject object) {
         this.dismiss();
         try {
-            Subject subject = AppDatabase.getInstance().getAppSubjects().get(position);
-            subject.setExam(checkBox.isChecked());
+            if(object instanceof Subject) {
+                Subject subject = (Subject) object;
+                subject.setExam(checkBox.isChecked());
 
-            if (this.onSubjectChosenListener != null)
-                this.onSubjectChosenListener.onSubjectChosen(AppDatabase.getInstance().getAppSubjects().get(position));
+                if (this.onSubjectChosenListener != null)
+                    this.onSubjectChosenListener.onSubjectChosen(subject);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
             Toast.makeText(AppCore.getInstance().getApplicationContext(), "Error occured. Procedure failed.", Toast.LENGTH_SHORT).show();
@@ -190,21 +207,13 @@ public class ChooseSubjectSheet extends BottomSheetDialog implements OnListItemC
      * Unwichtig
      */
     @Override
-    public void onItemClicked(ListableObject object) { }
+    public void onItemDeleted(ListableObject object) { }
 
     /**
      * Unwichtig
      */
     @Override
-    public void onItemDeleted(int position) { }
-
-    /**
-     * Unwichtig
-     */
-    @Override
-    public void onItemEdit(int position) {
-
-    }
+    public void onItemEdit(ListableObject object) { }
 
     /**
      * Unwichtig

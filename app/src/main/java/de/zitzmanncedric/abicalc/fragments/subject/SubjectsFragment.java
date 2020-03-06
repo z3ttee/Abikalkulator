@@ -1,23 +1,21 @@
 package de.zitzmanncedric.abicalc.fragments.subject;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.activities.subject.ViewSubjectActivity;
@@ -28,6 +26,9 @@ import de.zitzmanncedric.abicalc.api.list.ListableObject;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
 import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
 import de.zitzmanncedric.abicalc.utils.AppSerializer;
+import needle.Needle;
+import needle.UiRelatedProgressTask;
+import needle.UiRelatedTask;
 
 /**
  * Teil des Hauptbildschirms. Zeigt die Übersicht über alle Fächer eines Halbjahres an
@@ -41,6 +42,8 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
     private RecyclerView intensifiedView;
     private RecyclerView basicsView;
     private RecyclerView seminarView;
+
+    private RecyclerGridAdapter intensifiedAdapter;
 
     public SubjectsFragment() {}
     public SubjectsFragment(int termID) {
@@ -63,14 +66,14 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
             seminar.setAside("--");
         }
 
-        ArrayList<? extends ListableObject> intensifiedDummy = new ArrayList<>();
-        ArrayList<? extends ListableObject> basicsDummy = new ArrayList<>();
+        ArrayList<ListableObject> intensifiedDummy = new ArrayList<>();
+        ArrayList<ListableObject> basicsDummy = new ArrayList<>();
 
         intensifiedView = view.findViewById(R.id.app_grid_intensified);
         basicsView = view.findViewById(R.id.app_grid_basics);
         seminarView = view.findViewById(R.id.app_grid_seminar);
 
-        RecyclerGridAdapter intensifiedAdapter = new RecyclerGridAdapter(view.getContext(), intensifiedDummy);
+        intensifiedAdapter = new RecyclerGridAdapter(view.getContext(), intensifiedDummy);
         RecyclerGridAdapter basicsAdapter = new RecyclerGridAdapter(view.getContext(), basicsDummy);
 
         intensifiedAdapter.setItemCallback(this);
@@ -81,14 +84,34 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
         basicsView.setLayoutManager(new GridLayoutManager(view.getContext(), 3));
         basicsView.setAdapter(basicsAdapter);
 
-        {
+        /*{
             RecyclerGridAdapter adapter = new RecyclerGridAdapter(view.getContext(), Collections.singletonList(seminar));
             adapter.setItemCallback(this);
             seminarView.setLayoutManager(new GridLayoutManager(view.getContext(), 3));
             seminarView.setAdapter(adapter);
-        }
+        }*/
 
-        new Handler().post(() -> {
+
+        /*Needle.onBackgroundThread().execute(new UiRelatedTask<ArrayList<Subject>>() {
+            @Override
+            protected ArrayList<Subject> doWork() {
+                ArrayList<Subject> elements = new ArrayList<>();
+
+                for(Subject subject : AppDatabase.getInstance().getUserSubjects()) {
+                    if(termID != 4) {
+                        if(subject.isIntensified()) elements.add(subject);
+                    }
+                }
+
+                return elements;
+            }
+
+            @Override
+            protected void thenDoUiRelatedWork(ArrayList<Subject> arrayList) {
+                intensifiedAdapter.update(arrayList);
+            }
+        });*/
+        /*Needle.onBackgroundThread().execute(() -> {
             ArrayList<Subject> intensified = new ArrayList<>();
             ArrayList<Subject> basics = new ArrayList<>();
 
@@ -107,12 +130,102 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
                     }
                 }
 
+                intensifiedAdapter.update(intensified);
+                basicsAdapter.update(basics);
+
+                try {
+                    Thread.sleep(50);
+                } catch (Exception ex){
+                    ex.printStackTrace();
+                }
+            }
+        });*/
+        /*new Handler().post(() -> {
+            ArrayList<Subject> intensified = new ArrayList<>();
+            ArrayList<Subject> basics = new ArrayList<>();
+
+            for(Subject subject : AppDatabase.getInstance().getUserSubjects()) {
+                if(termID == 4) {
+                    if(subject.isIntensified() && subject.isExam()) {
+                        intensified.add(subject);
+                    } else if(subject.isExam()) {
+                        basics.add(subject);
+                    }
+                } else {
+                    if(subject.isIntensified()) {
+                        intensified.add(subject);
+                    } else {
+                        basics.add(subject);
+                    }
+                }
+
+                intensifiedAdapter.update(intensified);
+                basicsAdapter.update(basics);
+
+                try {
+                    Thread.sleep(50);
+                } catch (Exception ex){
+                    ex.printStackTrace();
+                }
             }
 
-            intensifiedAdapter.update(intensified);
-            basicsAdapter.update(basics);
-        });
+
+        });*/
         return view;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        Needle.onBackgroundThread().execute(new UiRelatedProgressTask<ArrayList<Subject>, Subject>() {
+            @Override
+            protected ArrayList<Subject> doWork() {
+                ArrayList<Subject> elements = new ArrayList<>();
+
+                for(Subject subject : AppDatabase.getInstance().getUserSubjects()) {
+                    if(termID != 4) {
+                        if(subject.isIntensified()) {
+                            elements.add(subject);
+                            publishProgress(subject);
+                            try {
+                                Thread.sleep(200);
+                            } catch (Exception ex){
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                }
+
+                return elements;
+            }
+
+            @Override
+            protected void onProgressUpdate(Subject subject) {
+                intensifiedAdapter.add(subject);
+            }
+
+            @Override
+            protected void thenDoUiRelatedWork(ArrayList<Subject> arrayList) { }
+        });
+    }
+
+    private static class BackgroundTask extends UiRelatedProgressTask<ArrayList<Subject>, Subject> {
+
+
+        @Override
+        protected void onProgressUpdate(Subject subject) {
+
+        }
+
+        @Override
+        protected ArrayList<Subject> doWork() {
+            return null;
+        }
+
+        @Override
+        protected void thenDoUiRelatedWork(ArrayList<Subject> subjects) {
+
+        }
     }
 
     /**
@@ -146,17 +259,11 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
      * Nicht benötigt (implementiert durch OnListItemCallback
      */
     @Override
-    public void onItemClicked(int position) { }
+    public void onItemDeleted(ListableObject object) { }
 
     /**
      * Nicht benötigt (implementiert durch OnListItemCallback
      */
     @Override
-    public void onItemDeleted(int position) { }
-
-    /**
-     * Nicht benötigt (implementiert durch OnListItemCallback
-     */
-    @Override
-    public void onItemEdit(int position) { }
+    public void onItemEdit(ListableObject object) { }
 }

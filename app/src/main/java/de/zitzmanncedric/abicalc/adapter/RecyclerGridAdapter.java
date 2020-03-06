@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import de.zitzmanncedric.abicalc.AppUtils;
 import de.zitzmanncedric.abicalc.R;
@@ -26,10 +25,10 @@ import lombok.Setter;
 public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapter.ViewHolder> {
 
     private Context context;
-    private List<? extends ListableObject> dataset;
+    private ArrayList<ListableObject> dataset;
     @Setter private OnListItemCallback itemCallback;
 
-    public RecyclerGridAdapter(Context context, List<? extends ListableObject> dataset) {
+    public RecyclerGridAdapter(Context context, ArrayList<ListableObject> dataset) {
         this.context = context;
         this.dataset = dataset;
     }
@@ -95,9 +94,13 @@ public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapte
         }
     }
 
-    public void update(ArrayList<? extends ListableObject> dataset){
+    public void update(ArrayList<ListableObject> dataset){
         this.dataset.clear();
         this.dataset = dataset;
         notifyDataSetChanged();
+    }
+    public void add(Subject subject) {
+        this.dataset.add(subject);
+        notifyItemInserted(this.dataset.indexOf(subject));
     }
 }
