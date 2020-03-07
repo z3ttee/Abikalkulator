@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.AppUtils;
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.api.Subject;
@@ -22,7 +23,7 @@ import de.zitzmanncedric.abicalc.listener.OnButtonTouchListener;
 import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
 import lombok.Setter;
 
-public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapter.ViewHolder> {
+public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapter.ViewHolder> implements DatasetInterface<ListableObject> {
 
     private Context context;
     private ArrayList<ListableObject> dataset;
@@ -41,42 +42,73 @@ public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapte
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        // BindViewHolder asynchronous
-        new Handler().post(() -> {
-            ListableObject obj = dataset.get(position);
+        ListableObject obj = dataset.get(position);
 
-            TypedValue value = new TypedValue();
-            context.getTheme().resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, value, true);
-            holder.container.setForeground(context.getDrawable(value.resourceId));
-            holder.container.setClipToOutline(true);
-            holder.container.setOnTouchListener(new OnButtonTouchListener(0.96f));
-            holder.container.setOnClickListener(v -> {
-                if(itemCallback != null) itemCallback.onItemClicked(obj);
-            });
-            holder.container.setOnLongClickListener(v -> {
-                AppUtils.sendHapticFeedback(60, 50);
-                if(itemCallback != null) itemCallback.onItemLongClicked(obj);
-                return true;
-            });
+        holder.container.setAnimation(AppUtils.getListItemEnterAnim());
 
-            if(obj instanceof Subject) {
-                Subject subject = (Subject) obj;
-                holder.titleView.setText(AppDatabase.getInstance().getSubjectShorts().containsKey(subject.getId()) ? AppDatabase.getInstance().getSubjectShorts().get(subject.getId()) : subject.getTitle());
-                holder.pointsView.setText(String.valueOf(subject.getQuickAverage()));
-                if (((Subject) obj).isExam()) {
-                    holder.container.setBackground(context.getDrawable(R.drawable.background_listitem_selected));
-                }
-            } else {
-                holder.titleView.setText(String.valueOf(obj.getTitle()));
-                holder.pointsView.setText(String.valueOf(obj.getAside()));
-            }
+        TypedValue value = new TypedValue();
+        context.getTheme().resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, value, true);
+        holder.container.setForeground(context.getDrawable(value.resourceId));
+        holder.container.setClipToOutline(true);
+        holder.container.setOnTouchListener(new OnButtonTouchListener(0.96f));
+        holder.container.setOnClickListener(v -> {
+            if(itemCallback != null) itemCallback.onItemClicked(obj);
+        });
+        holder.container.setOnLongClickListener(v -> {
+            AppUtils.sendHapticFeedback(60, 50);
+            if(itemCallback != null) itemCallback.onItemLongClicked(obj);
+            return true;
         });
 
+        if(obj instanceof Subject) {
+            Subject subject = (Subject) obj;
+            holder.titleView.setText(AppDatabase.getInstance().getSubjectShorts().containsKey(subject.getId()) ? AppDatabase.getInstance().getSubjectShorts().get(subject.getId()) : subject.getTitle());
+            holder.pointsView.setText(String.valueOf(subject.getQuickAverage()));
+            if (((Subject) obj).isExam()) {
+                holder.container.setBackground(context.getDrawable(R.drawable.background_listitem_selected));
+            }
+        } else {
+            holder.titleView.setText(String.valueOf(obj.getTitle()));
+            holder.pointsView.setText(String.valueOf(obj.getAside()));
+        }
     }
 
     @Override
     public int getItemCount() {
         return dataset.size();
+    }
+
+    @Override
+    public void add(ListableObject object) {
+        dataset.add(object);
+        this.notifyItemInserted(dataset.size());
+        this.notifyItemRangeChanged(dataset.size()-1, dataset.size());
+    }
+
+    @Override
+    public void remove(ListableObject object) {
+        int index = dataset.indexOf(object);
+        dataset.remove(object);
+        this.notifyItemRemoved(index);
+    }
+
+    @Override
+    public void set(ArrayList<ListableObject> list) {
+        this.dataset = list;
+        this.notifyDataSetChanged();
+    }
+
+    @Override
+    public void update(ListableObject old, ListableObject updated) {
+        int index = this.dataset.indexOf(old);
+        this.dataset.set(index, updated);
+        this.notifyItemChanged(index);
+    }
+
+    @Override
+    public void clear() {
+        this.dataset.clear();
+        this.notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

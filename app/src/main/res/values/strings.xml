@@ -13,6 +13,7 @@
     <string name="label_chose_grade">Erhaltene Punktzahl</string>
     <string name="label_chose_type">Art der Note</string>
     <string name="label_being_saved">Wird gespeichert…</string>
+    <string name="label_grades_missing">Keine Noten gefunden.</string>
 
     <string name="paragraph_welcome">Wir bedanken uns, dass du dein Vertrauen in uns steckst. Bevor du starten kannst, benötigen wir aber noch einige Informationen. Bitte gib uns deshalb Auskunft über deine Kursbelegung. Beachte, dass du 5 Kurse als Prüfungsfach markieren solltest.</string>
 

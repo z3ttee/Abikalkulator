@@ -9,9 +9,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +28,8 @@ import de.zitzmanncedric.abicalc.api.list.ListableObject;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
 import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
 import de.zitzmanncedric.abicalc.utils.AppSerializer;
+import needle.Needle;
+import needle.UiRelatedProgressTask;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,11 +37,10 @@ import de.zitzmanncedric.abicalc.utils.AppSerializer;
 public class GradesFragment extends Fragment implements OnListItemCallback {
     private static final String TAG = "GradesFragment";
 
-    private RecyclerView recyclerView;
-    private ArrayList<? extends ListableObject> dataset = new ArrayList<>();
-
     private Subject subject;
     private int termID;
+
+    private AdvancedSubjectListAdapter adapter;
 
     public GradesFragment() { }
     public GradesFragment(Subject subject, int termID) {
@@ -48,17 +52,49 @@ public class GradesFragment extends Fragment implements OnListItemCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_grades, container, false);
 
-        recyclerView = view.findViewById(R.id.grades_list);
-        AdvancedSubjectListAdapter adapter = new AdvancedSubjectListAdapter(view.getContext(), new ArrayList<>(), this);
+        RecyclerView recyclerView = view.findViewById(R.id.grades_list);
+        adapter = new AdvancedSubjectListAdapter(view.getContext(), new ArrayList<>(), this);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(adapter);
 
+        LinearLayout wrapper = view.findViewById(R.id.fragment_wrapper);
+        ArrayList<ListableObject> grades = new ArrayList<>(AppDatabase.getInstance().getGradesForTerm(subject, termID));
 
-        new Handler().post(() -> {
-            ArrayList<ListableObject> grades = new ArrayList<>(AppDatabase.getInstance().getGradesForTerm(subject, termID));
-            adapter.set(grades);
-        });
+        if(grades.isEmpty()) {
+            TextView textView = new TextView(new ContextThemeWrapper(view.getContext(), R.style.TextAppearance));
 
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            textView.setLayoutParams(params);
+
+            textView.setAlpha(0.5f);
+            textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            textView.setText(view.getContext().getString(R.string.label_grades_missing));
+            wrapper.addView(textView);
+        } else {
+            Needle.onBackgroundThread().execute(new UiRelatedProgressTask<Void, ListableObject>() {
+                @Override
+                protected Void doWork() {
+                    for (ListableObject grade : grades) {
+                        publishProgress(grade);
+                    }
+                    try {
+                        Thread.sleep(100);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onProgressUpdate(ListableObject grade) {
+                    adapter.add(grade);
+                }
+
+                @Override
+                protected void thenDoUiRelatedWork(Void aVoid) {
+                }
+            });
+        }
         return view;
     }
 
@@ -70,17 +106,20 @@ public class GradesFragment extends Fragment implements OnListItemCallback {
 
         if(object instanceof Grade) {
             Grade grade = (Grade) object;
-            intent.putExtra("subjectID", grade.getSubjectID());
-            intent.putExtra("termID", termID);
-            intent.putExtra("value", grade.getValue());
-            intent.putExtra("typeID", grade.getType().getId());
+
             intent.putExtra("grade", AppSerializer.serialize(grade));
             startActivity(intent);
         }
     }
 
     @Override
-    public void onItemDeleted(ListableObject object) { }
+    public void onItemDeleted(ListableObject object) {
+        if(object instanceof Grade) {
+            int id = AppDatabase.getInstance().removeGrade(((Grade) object).getId());
+            adapter.remove(object);
+            Log.i(TAG, "onItemDeleted: "+id);
+        }
+    }
 
     @Override
     public void onItemEdit(ListableObject object) { }

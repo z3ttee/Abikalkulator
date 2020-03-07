@@ -13,11 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.R;
-import de.zitzmanncedric.abicalc.activities.setup.SetupActivity;
+import de.zitzmanncedric.abicalc.activities.main.SetupActivity;
 import de.zitzmanncedric.abicalc.adapter.AdvancedSubjectListAdapter;
 import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.api.list.ListableObject;

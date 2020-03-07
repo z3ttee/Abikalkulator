@@ -1,8 +1,15 @@
 package de.zitzmanncedric.abicalc;
 
+import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
+import de.zitzmanncedric.abicalc.activities.SplashActivity;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
 import lombok.Getter;
 
@@ -27,6 +34,23 @@ public class AppCore extends Application {
         sharedPreferences = getSharedPreferences(getPackageName(), MODE_PRIVATE);
 
         AppDatabase.createInstance(this, 1);
+    }
+
+    /**
+     *
+     */
+    public void restartApp(Activity callerActivity) {
+        try {
+            Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
+            int mPendingIntentId = 0;
+            PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), mPendingIntentId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+            AlarmManager mgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+            System.exit(0);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Toast.makeText(getApplicationContext(), "Restart failed. App must be restarted manually.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**

@@ -133,6 +133,12 @@ public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSub
         this.notifyItemChanged(index);
     }
 
+    @Override
+    public void clear() {
+        this.dataset.clear();
+        this.notifyDataSetChanged();
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private SubjectListItemView itemView;

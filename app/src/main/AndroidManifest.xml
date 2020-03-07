@@ -17,7 +17,7 @@
         <activity android:name=".activities.subject.AddGradeActivity" />
         <activity android:name=".activities.main.MainActivity" />
         <activity
-            android:name=".activities.setup.SetupActivity"
+            android:name=".activities.main.SetupActivity"
             android:theme="@style/AppTheme.Splash" />
         <activity
             android:name=".activities.SplashActivity"

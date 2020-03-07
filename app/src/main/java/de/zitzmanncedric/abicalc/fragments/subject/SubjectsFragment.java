@@ -6,16 +6,20 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.activities.subject.ViewSubjectActivity;
@@ -44,6 +48,7 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
     private RecyclerView seminarView;
 
     private RecyclerGridAdapter intensifiedAdapter;
+    private RecyclerGridAdapter basicsAdapter;
 
     public SubjectsFragment() {}
     public SubjectsFragment(int termID) {
@@ -74,7 +79,7 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
         seminarView = view.findViewById(R.id.app_grid_seminar);
 
         intensifiedAdapter = new RecyclerGridAdapter(view.getContext(), intensifiedDummy);
-        RecyclerGridAdapter basicsAdapter = new RecyclerGridAdapter(view.getContext(), basicsDummy);
+        basicsAdapter = new RecyclerGridAdapter(view.getContext(), basicsDummy);
 
         intensifiedAdapter.setItemCallback(this);
         intensifiedView.setLayoutManager(new GridLayoutManager(view.getContext(), 3));
@@ -84,148 +89,48 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
         basicsView.setLayoutManager(new GridLayoutManager(view.getContext(), 3));
         basicsView.setAdapter(basicsAdapter);
 
-        /*{
-            RecyclerGridAdapter adapter = new RecyclerGridAdapter(view.getContext(), Collections.singletonList(seminar));
+        {
+            RecyclerGridAdapter adapter = new RecyclerGridAdapter(view.getContext(), new ArrayList<>(Collections.singletonList(seminar)));
             adapter.setItemCallback(this);
             seminarView.setLayoutManager(new GridLayoutManager(view.getContext(), 3));
             seminarView.setAdapter(adapter);
-        }*/
+        }
 
-
-        /*Needle.onBackgroundThread().execute(new UiRelatedTask<ArrayList<Subject>>() {
+        Needle.onBackgroundThread().withThreadPoolSize(1).execute(new UiRelatedProgressTask<ArrayList<Subject>, Subject>() {
             @Override
             protected ArrayList<Subject> doWork() {
                 ArrayList<Subject> elements = new ArrayList<>();
 
                 for(Subject subject : AppDatabase.getInstance().getUserSubjects()) {
                     if(termID != 4) {
-                        if(subject.isIntensified()) elements.add(subject);
-                    }
-                }
-
-                return elements;
-            }
-
-            @Override
-            protected void thenDoUiRelatedWork(ArrayList<Subject> arrayList) {
-                intensifiedAdapter.update(arrayList);
-            }
-        });*/
-        /*Needle.onBackgroundThread().execute(() -> {
-            ArrayList<Subject> intensified = new ArrayList<>();
-            ArrayList<Subject> basics = new ArrayList<>();
-
-            for(Subject subject : AppDatabase.getInstance().getUserSubjects()) {
-                if(termID == 4) {
-                    if(subject.isIntensified() && subject.isExam()) {
-                        intensified.add(subject);
-                    } else if(subject.isExam()) {
-                        basics.add(subject);
-                    }
-                } else {
-                    if(subject.isIntensified()) {
-                        intensified.add(subject);
+                        elements.add(subject);
+                        publishProgress(subject);
                     } else {
-                        basics.add(subject);
-                    }
-                }
-
-                intensifiedAdapter.update(intensified);
-                basicsAdapter.update(basics);
-
-                try {
-                    Thread.sleep(50);
-                } catch (Exception ex){
-                    ex.printStackTrace();
-                }
-            }
-        });*/
-        /*new Handler().post(() -> {
-            ArrayList<Subject> intensified = new ArrayList<>();
-            ArrayList<Subject> basics = new ArrayList<>();
-
-            for(Subject subject : AppDatabase.getInstance().getUserSubjects()) {
-                if(termID == 4) {
-                    if(subject.isIntensified() && subject.isExam()) {
-                        intensified.add(subject);
-                    } else if(subject.isExam()) {
-                        basics.add(subject);
-                    }
-                } else {
-                    if(subject.isIntensified()) {
-                        intensified.add(subject);
-                    } else {
-                        basics.add(subject);
-                    }
-                }
-
-                intensifiedAdapter.update(intensified);
-                basicsAdapter.update(basics);
-
-                try {
-                    Thread.sleep(50);
-                } catch (Exception ex){
-                    ex.printStackTrace();
-                }
-            }
-
-
-        });*/
-        return view;
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        Needle.onBackgroundThread().execute(new UiRelatedProgressTask<ArrayList<Subject>, Subject>() {
-            @Override
-            protected ArrayList<Subject> doWork() {
-                ArrayList<Subject> elements = new ArrayList<>();
-
-                for(Subject subject : AppDatabase.getInstance().getUserSubjects()) {
-                    if(termID != 4) {
-                        if(subject.isIntensified()) {
+                        if(subject.isExam()) {
                             elements.add(subject);
                             publishProgress(subject);
-                            try {
-                                Thread.sleep(200);
-                            } catch (Exception ex){
-                                ex.printStackTrace();
-                            }
                         }
                     }
-                }
 
+                    try {
+                        Thread.sleep(100);
+                    } catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+                }
                 return elements;
             }
 
             @Override
             protected void onProgressUpdate(Subject subject) {
-                intensifiedAdapter.add(subject);
+                if(subject.isIntensified()) intensifiedAdapter.add(subject);
+                else basicsAdapter.add(subject);
             }
 
             @Override
             protected void thenDoUiRelatedWork(ArrayList<Subject> arrayList) { }
         });
-    }
-
-    private static class BackgroundTask extends UiRelatedProgressTask<ArrayList<Subject>, Subject> {
-
-
-        @Override
-        protected void onProgressUpdate(Subject subject) {
-
-        }
-
-        @Override
-        protected ArrayList<Subject> doWork() {
-            return null;
-        }
-
-        @Override
-        protected void thenDoUiRelatedWork(ArrayList<Subject> subjects) {
-
-        }
+        return view;
     }
 
     /**

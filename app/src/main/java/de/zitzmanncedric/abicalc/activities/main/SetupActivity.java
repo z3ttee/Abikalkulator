@@ -1,4 +1,4 @@
-package de.zitzmanncedric.abicalc.activities.setup;
+package de.zitzmanncedric.abicalc.activities.main;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -16,6 +18,9 @@ import java.util.ArrayList;
 
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.AppFragments;
+import de.zitzmanncedric.abicalc.activities.SplashActivity;
+import de.zitzmanncedric.abicalc.database.AppDatabase;
+import de.zitzmanncedric.abicalc.dialogs.ProgressDialog;
 import de.zitzmanncedric.abicalc.utils.AppSerializer;
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.api.Subject;
@@ -25,6 +30,8 @@ import de.zitzmanncedric.abicalc.listener.OnFragmentToActivity;
 import de.zitzmanncedric.abicalc.listener.OnSubjectChosenListener;
 import de.zitzmanncedric.abicalc.sheets.ChooseSubjectSheet;
 import de.zitzmanncedric.abicalc.views.AppButton;
+import needle.Needle;
+import needle.UiRelatedTask;
 
 /**
  * Verwaltung der Ersteinrichtung der App
@@ -39,7 +46,7 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
 
     // TODO
     private final int AMOUNT_INTENSIFIED_EXAMS_MAX = 5;
-    private final int AMOUNT_NORMALS_EXAMS_MAX = 1;
+    private final int AMOUNT_NORMALS_EXAMS_MAX = 2;
 
     private FrameLayout appFragmentContainer;
 
@@ -51,7 +58,7 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
 
     /**
      * Baut die Aktivität auf
-     * @param savedInstanceState
+     * @param savedInstanceState Von Android übergeben
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +129,7 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
         for(Subject subject : subjects) {
             if(subject.isExam()) ++exams;
         }
-        if(exams < AMOUNT_EXAMS_MAX) {
+        if(exams < AMOUNT_EXAMS_MAX || exams > AMOUNT_EXAMS_MAX) {
             // Show dialog if something is missing.
             AlertDialog dialog = new AlertDialog.Builder(this).setTitle(getString(R.string.error_headline)).setMessage(getString(R.string.error_missing_exams)).create();
             dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.btn_ok), null, (dialog1, which) -> dialog1.dismiss());
@@ -130,11 +137,48 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
             return;
         }
 
-        byte[] bytes = AppSerializer.serialize(subjects);
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setTitle(getString(R.string.label_settingup_app));
+        dialog.show();
 
-        Intent data = new Intent();
+        Needle.onBackgroundThread().execute(new UiRelatedTask<Void>() {
+            @Override
+            protected Void doWork() {
+                for (Subject subject : subjects) {
+                    AppDatabase.getInstance().createSubjectEntry(subject);
+                }
+                AppCore.Setup.setSetupPassed(true);
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void thenDoUiRelatedWork(Void aVoid) {
+                dialog.dismiss();
+                setResult(AppCore.ResultCodes.RESULT_OK);
+                finish();
+            }
+        });
+
+        new Handler().post(() -> {
+
+        });
+
+        /*Intent data = new Intent();
         data.putExtra("subjects", bytes);
         setResult(AppCore.ResultCodes.RESULT_OK, data);
+        finish();*/
+    }
+
+    /**
+     * Schließt die Aktivität und zeigt einen Fehler an, wenn beim Einrichten einer aufgetreten ist
+     */
+    private void showError() {
+        setResult(AppCore.ResultCodes.RESULT_FAILED);
         finish();
     }
 
@@ -184,7 +228,6 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
      * @param object Übergibt das betreffende Datenobjekt
      * @param actionCode Legt die Aktion fest. Bestimmt wie mit dem Datenobjekt verfahren werden soll
      */
-    //Receive info from Fragment
     @Override
     public void onFragmentToActivity(Fragment fragment, Object object, int actionCode) {
         if(fragment instanceof AddIntensifiedFragment) {

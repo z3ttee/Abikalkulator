@@ -120,8 +120,9 @@ public class EditGradeActivity extends AppCompatActivity implements View.OnClick
 
             new Handler().post(()-> {
                 if(grade != null && subject != null) {
-                    long edited = AppDatabase.getInstance().updateGrade(subject, grade);
-                    Log.i(TAG, "onClick: "+edited);
+                    grade.setType(Grade.Type.getByID(typeSpinner.getSelectedItemPosition()));
+                    grade.setValue(numberPicker.getValue());
+                    AppDatabase.getInstance().updateGrade(subject, grade);
                 } else {
                     Toast.makeText(AppCore.getInstance().getApplicationContext(), "Not saved.", Toast.LENGTH_SHORT).show();
                 }

@@ -223,7 +223,6 @@ public class AppDatabase extends SQLiteOpenHelper {
      * @return
      */
     public long updateGrade(Subject subject, Grade grade) {
-        Log.i(TAG, "updateGrade: "+grade.getId());
 
         ContentValues values = new ContentValues();
         values.put("subjectID", subject.getId());
@@ -235,6 +234,10 @@ public class AppDatabase extends SQLiteOpenHelper {
         AppDatabase.getInstance().notifyGradeAdded(subject);
 
         return getWritableDatabase().updateWithOnConflict(TABLE_GRADES, values, "id=?", new String[]{String.valueOf(grade.getId())}, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    public int removeGrade(int gradeID) {
+        return getWritableDatabase().delete(TABLE_GRADES, "id=?", new String[]{String.valueOf(gradeID)});
     }
 
     /**

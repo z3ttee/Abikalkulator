@@ -18,6 +18,7 @@
         android:id="@+id/setup_recycler_intensified"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:nestedScrollingEnabled="false"/>
+        android:nestedScrollingEnabled="false"
+        android:paddingBottom="@dimen/list_bottom_padding" />
 
 </LinearLayout>

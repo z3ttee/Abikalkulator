@@ -7,4 +7,5 @@ public interface DatasetInterface<T> {
     void remove(T object);
     void set(ArrayList<T> list);
     void update(T old, T updated);
+    void clear();
 }
