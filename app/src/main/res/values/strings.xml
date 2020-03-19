@@ -32,6 +32,7 @@
     <string name="exp_abi">Abitur</string>
 
     <string name="error_headline">Whooops!</string>
+    <string name="error_limitforsubject_reached">Limit für dieses Fach erreicht!</string>
     <string name="error_occured">Es ist ein irreparabler Fehler aufgetreten. Die App wird geschlossen.</string>
     <string name="error_missing_exams">Du musst 5 Kurse als Prüfungsfach markieren. Deine vorherige Auswahl erreichst du, indem du auf den ZURÜCK-Pfeil deines Smartphones drückst.</string>
     <string name="error_setup_cancelled">Du hast das Setup abgebrochen. Die App kann ohne Einrichtung nicht genutzt werden.</string>
@@ -55,6 +56,11 @@
 
     <string name="type_lk">Leistungskontrolle</string>
     <string name="type_ka">Kursarbeit</string>
+    <string name="type_oral">Mündlich</string>
+    <string name="type_epoch">Epochalnote</string>
+    <string name="type_process">Prozessnote</string>
+    <string name="type_thesis">Seminarfacharbeit</string>
+    <string name="type_presentation">Kolloquium</string>
 
     <string name="menu_home">Übersicht</string>
     <string name="menu_goals">Ziele</string>

@@ -28,7 +28,7 @@ public class Seminar extends ListableObject {
     }
 
     public static Seminar getInstance() {
-        if(instance == null) instance = new Seminar();
+        if (instance == null) instance = new Seminar();
         return instance;
     }
 }

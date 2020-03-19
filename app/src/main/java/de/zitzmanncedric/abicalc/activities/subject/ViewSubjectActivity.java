@@ -20,11 +20,13 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.AppFragments;
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.api.Subject;
@@ -41,6 +43,8 @@ public class ViewSubjectActivity extends AppCompatActivity implements View.OnCli
     private TabLayout tabLayout;
     private Subject subject;
     private int termID;
+
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +66,10 @@ public class ViewSubjectActivity extends AppCompatActivity implements View.OnCli
             subject = (Subject) AppSerializer.deserialize(bytes);
         }
 
+        fab = findViewById(R.id.app_fab);
+        fab.setColorFilter(getColor(android.R.color.white));
+        fab.setOnClickListener(this);
+
         reSetup();
     }
 
@@ -69,15 +77,21 @@ public class ViewSubjectActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View v) {
         if(v.getId() == R.id.btn_close) {
             finish();
+            return;
+        }
+        if(v.getId() == fab.getId()) {
+            Intent intent = new Intent(this, GradeEditorActivity.class);
+            intent.putExtra("action", "add");
+            intent.putExtra("subjectID", subject.getId());
+            intent.putExtra("termID", tabLayout.getSelectedTabPosition());
+            startActivity(intent);
         }
     }
 
     private void reSetup(){
         fragmentPager.setAdapter(new Adapter(getSupportFragmentManager(), this, subject));
         tabLayout.setupWithViewPager(fragmentPager, true);
-        new Handler().post(() -> {
-            fragmentPager.setCurrentItem(termID, true);
-        });
+        new Handler().post(() -> fragmentPager.setCurrentItem(termID, false));
     }
 
     /**
@@ -86,7 +100,8 @@ public class ViewSubjectActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onResume() {
         super.onResume();
-        reSetup();
+        termID = AppCore.getSharedPreferences().getInt("currentTerm", 0);
+        //reSetup();
     }
 
     private static class Adapter extends FragmentPagerAdapter {
@@ -116,7 +131,6 @@ public class ViewSubjectActivity extends AppCompatActivity implements View.OnCli
         @NonNull
         @Override
         public Fragment getItem(int position) {
-
             Fragment fragment = new GradesFragment(subject, 0);
             switch (position) {
                 case 1:

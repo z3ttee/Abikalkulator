@@ -97,21 +97,12 @@
     </com.google.android.material.bottomappbar.BottomAppBar>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        style="@style/FloatingActionButton"
         android:id="@+id/app_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorAccent"
-        android:clickable="true"
         android:onClick="addGrade"
-        android:tint="@android:color/white"
-        app:backgroundTint="@color/colorAccent"
-        app:borderWidth="0dp"
-        app:elevation="3dp"
-        app:fabCustomSize="@android:dimen/app_icon_size"
-        app:fabSize="auto"
         app:layout_anchor="@id/app_bottom_bar"
-        app:maxImageSize="14dp"
-        app:rippleColor="@color/colorAccentDark"
         app:srcCompat="@drawable/ic_add" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -52,7 +52,12 @@ public class Grade extends ListableObject implements Serializable {
      */
     public enum Type {
         LK(0, AppCore.getInstance().getString(R.string.type_lk)),
-        KA(1, AppCore.getInstance().getString(R.string.type_ka));
+        KA(1, AppCore.getInstance().getString(R.string.type_ka)),
+        ORAL(2, AppCore.getInstance().getString(R.string.type_oral)),
+        EPOCH(3, AppCore.getInstance().getString(R.string.type_epoch)),
+        PROCESS(4, AppCore.getInstance().getString(R.string.type_process)),
+        THESIS(5, AppCore.getInstance().getString(R.string.type_thesis)),
+        PRESENTATION(6, AppCore.getInstance().getString(R.string.type_presentation));
 
         @Getter private int id;
         @Getter private String title;

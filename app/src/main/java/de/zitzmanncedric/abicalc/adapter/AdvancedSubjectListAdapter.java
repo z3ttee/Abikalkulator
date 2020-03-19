@@ -1,27 +1,20 @@
 package de.zitzmanncedric.abicalc.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
-import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.AppUtils;
 import de.zitzmanncedric.abicalc.R;
-import de.zitzmanncedric.abicalc.activities.subject.EditGradeActivity;
 import de.zitzmanncedric.abicalc.api.Grade;
+import de.zitzmanncedric.abicalc.api.Seminar;
 import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.api.list.ListableObject;
 import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
@@ -61,6 +54,8 @@ public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSub
         if(obj instanceof Grade) {
             Grade grade = (Grade) obj;
 
+            int subjectID = grade.getSubjectID();
+
             holder.itemView.setTitle(grade.getType().getTitle());
             holder.itemView.setSubtitle(new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(new Date(grade.getDateCreated())));
             holder.itemView.setPoints(grade.getValue());
@@ -68,10 +63,17 @@ public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSub
             holder.itemView.setOnClickListener(v -> {
                 if (onCallback != null) onCallback.onItemClicked(obj);
             });
-            holder.itemView.setShowDelete(true);
-            holder.itemView.setOnDeleteListener(() -> {
-                if(onCallback != null) onCallback.onItemDeleted(grade);
-            });
+            if(subjectID != Seminar.getInstance().getSubjectID()) {
+                holder.itemView.setShowDelete(true);
+                holder.itemView.setOnDeleteListener(() -> {
+                    if (onCallback != null) onCallback.onItemDeleted(grade);
+                });
+            } else {
+                holder.itemView.setShowEdit(true);
+                holder.itemView.setOnEditCallback( () -> {
+                    if(onCallback != null) onCallback.onItemEdit(grade);
+                });
+            }
 
             return;
         }

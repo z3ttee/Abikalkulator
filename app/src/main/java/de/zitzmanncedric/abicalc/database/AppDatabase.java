@@ -6,7 +6,6 @@ import android.content.res.XmlResourceParser;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -18,7 +17,9 @@ import java.util.List;
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.api.Grade;
+import de.zitzmanncedric.abicalc.api.Seminar;
 import de.zitzmanncedric.abicalc.api.Subject;
+import de.zitzmanncedric.abicalc.broadcast.GradeBroadcaster;
 import lombok.Getter;
 
 /**
@@ -195,49 +196,51 @@ public class AppDatabase extends SQLiteOpenHelper {
 
     /**
      *
-     * @param subject
+     * @param subjectID
      * @param grade
      * @return
      */
     // TODO
-    public long createGrade(Subject subject, Grade grade) {
+    public long createGrade(int subjectID, Grade grade) {
         ContentValues values = new ContentValues();
-        values.put("subjectID", subject.getId());
+        values.put("subjectID", subjectID);
         values.put("typeID", grade.getType().getId());
         values.put("value", grade.getValue());
         values.put("date", grade.getDateCreated());
         values.put("termID", grade.getTermID());
 
         long id = getWritableDatabase().insert(TABLE_GRADES, null, values);
-        AppDatabase.getInstance().notifyGradeAdded(subject);
+        AppDatabase.getInstance().notifyGradesChanged(subjectID);
 
-        // Change to new term
-        AppCore.getSharedPreferences().edit().putInt("currentTerm",grade.getTermID()).apply();
+        // TODO: Change to new term
+        // AppCore.getSharedPreferences().edit().putInt("currentTerm", grade.getTermID()).apply();
         return id;
     }
 
     /**
      *
-     * @param subject
+     * @param subjectID
      * @param grade
      * @return
      */
-    public long updateGrade(Subject subject, Grade grade) {
-
+    public long updateGrade(int subjectID, Grade grade) {
         ContentValues values = new ContentValues();
-        values.put("subjectID", subject.getId());
+        values.put("subjectID", subjectID);
         values.put("typeID", grade.getType().getId());
         values.put("value", grade.getValue());
         values.put("date", grade.getDateCreated());
         values.put("termID", grade.getTermID());
 
-        AppDatabase.getInstance().notifyGradeAdded(subject);
-
-        return getWritableDatabase().updateWithOnConflict(TABLE_GRADES, values, "id=?", new String[]{String.valueOf(grade.getId())}, SQLiteDatabase.CONFLICT_REPLACE);
+        long l = getWritableDatabase().updateWithOnConflict(TABLE_GRADES, values, "id=?", new String[]{String.valueOf(grade.getId())}, SQLiteDatabase.CONFLICT_REPLACE);
+        AppDatabase.getInstance().notifyGradesChanged(subjectID);
+        return l;
     }
 
-    public int removeGrade(int gradeID) {
-        return getWritableDatabase().delete(TABLE_GRADES, "id=?", new String[]{String.valueOf(gradeID)});
+    public int removeGrade(Grade grade) {
+        int i = getWritableDatabase().delete(TABLE_GRADES, "id=?", new String[]{String.valueOf(grade.getId())});
+        Subject subject = AppDatabase.getInstance().getUserSubjectByID(grade.getSubjectID());
+        AppDatabase.getInstance().notifyGradesChanged(subject);
+        return i;
     }
 
     /**
@@ -276,11 +279,62 @@ public class AppDatabase extends SQLiteOpenHelper {
     }
 
     /**
+     * Funktion, um alle Noten des Seminarfachs zu erhalten
+     */
+    public ArrayList<Grade> getGradesForSeminar() {
+        ArrayList<Grade> grades = new ArrayList<>();
+        Cursor cursor = getReadableDatabase().query(TABLE_GRADES, new String[]{"*"}, "subjectID=?", new String[]{String.valueOf(Seminar.getInstance().getSubjectID())}, null, null, "date");
+
+        if(cursor != null && cursor.moveToFirst()){
+            do {
+                int idIndex = cursor.getColumnIndex("id");
+                int subjectIDIndex = cursor.getColumnIndex("subjectID");
+                int typeIDIndex = cursor.getColumnIndex("typeID");
+                int valueIndex = cursor.getColumnIndex("value");
+                int dateIndex = cursor.getColumnIndex("date");
+                int termIDIndex = cursor.getColumnIndex("termID");
+
+                Grade.Type type = Grade.Type.getByID(cursor.getInt(typeIDIndex));
+
+                Grade grade = new Grade(
+                        cursor.getInt(idIndex),
+                        cursor.getInt(subjectIDIndex),
+                        cursor.getInt(termIDIndex),
+                        cursor.getInt(valueIndex),
+                        type,
+                        cursor.getLong(dateIndex));
+                grades.add(grade);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return grades;
+    }
+
+    /**
      *
      * @param subject
      */
     // TODO: Calculate new average in background
-    public void notifyGradeAdded(Subject subject){
-        Toast.makeText(AppCore.getInstance().getApplicationContext(), subject.getTitle()+" updated.", Toast.LENGTH_SHORT).show();
+    public void notifyGradesChanged(Subject subject){
+        try {
+            GradeBroadcaster.getInstance().broadcastUpdate(1, "Hello World");
+            // Toast.makeText(AppCore.getInstance().getApplicationContext(), subject.getTitle()+" updated.", Toast.LENGTH_SHORT).show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    public void notifyGradesChanged(int subjectID){
+        try {
+            GradeBroadcaster.getInstance().broadcastUpdate(1, "Hello World");
+            if (subjectID != Seminar.getInstance().getSubjectID()) {
+                Subject subject = getUserSubjectByID(subjectID);
+                Toast.makeText(AppCore.getInstance().getApplicationContext(), subject.getTitle() + " updated.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(AppCore.getInstance().getApplicationContext(), "Seminarfach updated.", Toast.LENGTH_SHORT).show();
+            }
+            // Toast.makeText(AppCore.getInstance().getApplicationContext(), subject.getTitle()+" updated.", Toast.LENGTH_SHORT).show();
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 }

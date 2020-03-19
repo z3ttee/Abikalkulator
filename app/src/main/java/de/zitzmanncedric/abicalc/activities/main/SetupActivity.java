@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.AppFragments;
 import de.zitzmanncedric.abicalc.activities.SplashActivity;
+import de.zitzmanncedric.abicalc.api.Grade;
+import de.zitzmanncedric.abicalc.api.Seminar;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
 import de.zitzmanncedric.abicalc.dialogs.ProgressDialog;
 import de.zitzmanncedric.abicalc.utils.AppSerializer;
@@ -146,7 +148,14 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
             protected Void doWork() {
                 for (Subject subject : subjects) {
                     AppDatabase.getInstance().createSubjectEntry(subject);
+
                 }
+
+                // Create default grades for seminar
+                AppDatabase.getInstance().createGrade(Seminar.getInstance().getSubjectID(), new Grade(0, Seminar.getInstance().getSubjectID(), 4, 8, Grade.Type.PROCESS));
+                AppDatabase.getInstance().createGrade(Seminar.getInstance().getSubjectID(), new Grade(0, Seminar.getInstance().getSubjectID(), 4, 8, Grade.Type.THESIS));
+                AppDatabase.getInstance().createGrade(Seminar.getInstance().getSubjectID(), new Grade(0, Seminar.getInstance().getSubjectID(), 4, 8, Grade.Type.PRESENTATION));
+
                 AppCore.Setup.setSetupPassed(true);
                 try {
                     Thread.sleep(1000);

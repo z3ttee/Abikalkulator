@@ -47,6 +47,8 @@ import de.zitzmanncedric.abicalc.utils.AppSerializer;
  */
 public class OverviewFragment extends Fragment {
 
+    private ViewPager fragmentPager;
+
     /**
      * Standard-Konstruktor der Klasse (wird benötigt durch die Erbung von Fragment)
      */
@@ -64,7 +66,7 @@ public class OverviewFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
 
         TabLayout tabLayout = view.findViewById(R.id.app_tabbar);
-        ViewPager fragmentPager = view.findViewById(R.id.app_fragment_pager);
+        fragmentPager = view.findViewById(R.id.app_fragment_pager);
 
         fragmentPager.setAdapter(new Adapter(getChildFragmentManager(), getContext()));
         tabLayout.setupWithViewPager(fragmentPager);
@@ -74,6 +76,15 @@ public class OverviewFragment extends Fragment {
             fragmentPager.setCurrentItem(currentTerm, true);
         });
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        int currentTerm = AppCore.getSharedPreferences().getInt("currentTerm", 0);
+        new Handler().post(() -> {
+            fragmentPager.setCurrentItem(currentTerm, true);
+        });
     }
 
     private static class Adapter extends FragmentPagerAdapter {
@@ -101,7 +112,6 @@ public class OverviewFragment extends Fragment {
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            Log.i(TAG, "getItem: "+position);
 
             Fragment fragment = new SubjectsFragment(0);
             switch (position) {

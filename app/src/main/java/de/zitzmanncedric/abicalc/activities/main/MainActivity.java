@@ -15,7 +15,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.AppFragments;
 import de.zitzmanncedric.abicalc.R;
-import de.zitzmanncedric.abicalc.activities.subject.AddGradeActivity;
+import de.zitzmanncedric.abicalc.activities.subject.GradeEditorActivity;
 import de.zitzmanncedric.abicalc.fragments.main.GoalsFragment;
 import de.zitzmanncedric.abicalc.fragments.main.OverviewFragment;
 import de.zitzmanncedric.abicalc.fragments.main.SettingsFragment;
@@ -79,7 +79,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addGrade(View view) {
-        Intent intent = new Intent(this, AddGradeActivity.class);
+        Intent intent = new Intent(this, GradeEditorActivity.class);
+        intent.putExtra("action", "add");
         startActivityForResult(intent, AppCore.RequestCodes.REQUEST_ADD_GRADE);
     }
 

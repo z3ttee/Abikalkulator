@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import de.zitzmanncedric.abicalc.R;
+import de.zitzmanncedric.abicalc.activities.subject.SeminarActivity;
 import de.zitzmanncedric.abicalc.activities.subject.ViewSubjectActivity;
 import de.zitzmanncedric.abicalc.adapter.RecyclerGridAdapter;
 import de.zitzmanncedric.abicalc.api.Seminar;
@@ -145,6 +146,10 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
             Subject subject = (Subject) object;
             intent.putExtra("subject", AppSerializer.serialize(subject));
             intent.putExtra("termID", termID);
+        }
+
+        if(object instanceof Seminar) {
+            intent = new Intent(getContext(), SeminarActivity.class);
         }
 
         startActivity(intent);

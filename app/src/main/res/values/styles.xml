@@ -127,4 +127,16 @@
         <item name="tabTextColor">@android:color/white</item>
         <item name="tabRippleColor">@android:color/transparent</item>
     </style>
+
+    <!-- FloatingActionButton -->
+    <style name="FloatingActionButton">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="borderWidth">0dp</item>
+        <item name="elevation">3dp</item>
+        <item name="fabCustomSize">@android:dimen/app_icon_size</item>
+        <item name="maxImageSize">14dp</item>
+        <item name="rippleColor">@color/colorAccentDark</item>
+        <item name="backgroundTint">@color/colorAccent</item>
+    </style>
 </resources>
