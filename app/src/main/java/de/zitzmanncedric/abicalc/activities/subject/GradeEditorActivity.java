@@ -201,6 +201,7 @@ public class GradeEditorActivity extends AppCompatActivity implements View.OnCli
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         typeSpinner.setAdapter(adapter);
         if(!seminar) typeSpinner.setSelection(typeID);
+        else typeSpinner.setSelection(typeID-4);
     }
 
     @Override
@@ -282,6 +283,8 @@ public class GradeEditorActivity extends AppCompatActivity implements View.OnCli
                 if(newGrade.getValue() != value) {
                     newGrade.setValue(value);
                     AppDatabase.getInstance().updateGrade(newGrade.getSubjectID(), newGrade);
+                    intent.putExtra("newGrade", AppSerializer.serialize(newGrade));
+                    intent.putExtra("oldGrade", AppSerializer.serialize(grade));
                 }
             } else {
                 if (newGrade.getType().getId() != typeID || newGrade.getValue() != value) {

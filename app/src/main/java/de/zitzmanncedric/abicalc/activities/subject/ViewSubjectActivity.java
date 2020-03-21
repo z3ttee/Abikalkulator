@@ -30,6 +30,7 @@ import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.AppFragments;
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.api.Grade;
+import de.zitzmanncedric.abicalc.api.Seminar;
 import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.api.Term;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
@@ -132,9 +133,14 @@ public class ViewSubjectActivity extends AppCompatActivity implements View.OnCli
                     for (Fragment fragment : getSupportFragmentManager().getFragments()) {
                         if (fragment instanceof GradesFragment) {
                             GradesFragment f = (GradesFragment) fragment;
+                            if(grade.getSubjectID() == Seminar.getInstance().getSubjectID()) {
+                                f.onActivityResult(requestCode, resultCode, data);
+                                return;
+                            }
                             if (f.getTermID() == grade.getTermID()) {
                                 f.onActivityResult(requestCode, resultCode, data);
                             }
+
                         }
                     }
                 }

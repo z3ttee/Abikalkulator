@@ -392,9 +392,6 @@ public class AppDatabase extends SQLiteOpenHelper {
                 Average.getOfTermAndSubject(subject, termID, (result -> {
                     updateQuickAverage(subject, termID, result);
                 }));
-            } else {
-                // TODO: Calculate average for semi
-                Toast.makeText(AppCore.getInstance().getApplicationContext(), "Seminarfach updated.", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception ex){
             ex.printStackTrace();

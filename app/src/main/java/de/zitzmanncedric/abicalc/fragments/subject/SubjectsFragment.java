@@ -27,6 +27,7 @@ import de.zitzmanncedric.abicalc.activities.subject.ViewSubjectActivity;
 import de.zitzmanncedric.abicalc.adapter.RecyclerGridAdapter;
 import de.zitzmanncedric.abicalc.api.Seminar;
 import de.zitzmanncedric.abicalc.api.Subject;
+import de.zitzmanncedric.abicalc.api.calculation.Average;
 import de.zitzmanncedric.abicalc.api.list.ListableObject;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
 import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
@@ -69,7 +70,7 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
 
         Seminar seminar = Seminar.getInstance();
         if(termID != 4) {
-            seminar.setAside("--");
+            seminar.setAside(String.valueOf(Average.getSeminarSync()));
         }
 
         intensifiedView = view.findViewById(R.id.app_grid_intensified);

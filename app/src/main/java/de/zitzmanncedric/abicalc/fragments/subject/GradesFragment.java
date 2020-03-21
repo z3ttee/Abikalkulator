@@ -146,37 +146,44 @@ public class GradesFragment extends Fragment implements OnListItemCallback {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // TODO: Reload list
         if(requestCode == AppCore.RequestCodes.REQUEST_ADD_GRADE) {
             new Handler().postDelayed(() -> {
-                Log.i(TAG, "onActivityResult: grade added. TERM: " + termID);
+                try {
+                    Log.i(TAG, "onActivityResult: grade added. TERM: " + termID);
 
-                if (data != null) {
-                    byte[] bytes = data.getByteArrayExtra("grade");
+                    if (data != null) {
+                        byte[] bytes = data.getByteArrayExtra("grade");
 
-                    Grade grade = (Grade) AppSerializer.deserialize(bytes);
-                    adapter.add(grade);
+                        Grade grade = (Grade) AppSerializer.deserialize(bytes);
+                        adapter.add(grade);
 
-                    if (adapter.getItemCount() > 0) {
-                        if (noticeView != null) wrapper.removeView(noticeView);
+                        if (adapter.getItemCount() > 0) {
+                            if (noticeView != null) wrapper.removeView(noticeView);
+                        }
                     }
+                } catch (NullPointerException ex) {
+                    ex.printStackTrace();
                 }
             }, 100);
         }
 
         if(requestCode == AppCore.RequestCodes.REQUEST_UPDATE_GRADE) {
             new Handler().postDelayed(() -> {
-                Log.i(TAG, "onActivityResult: grade updated. TERM: " + termID);
+                try {
+                    Log.i(TAG, "onActivityResult: grade updated. TERM: " + termID);
 
-                if (data != null) {
-                    Grade oldGrade = (Grade) AppSerializer.deserialize(data.getByteArrayExtra("oldGrade"));
-                    Grade newGrade = (Grade) AppSerializer.deserialize(data.getByteArrayExtra("newGrade"));
+                    if (data != null) {
+                        Grade oldGrade = (Grade) AppSerializer.deserialize(data.getByteArrayExtra("oldGrade"));
+                        Grade newGrade = (Grade) AppSerializer.deserialize(data.getByteArrayExtra("newGrade"));
 
-                    adapter.update(oldGrade, newGrade);
+                        adapter.update(oldGrade, newGrade);
 
-                    if (adapter.getItemCount() > 0) {
-                        if (noticeView != null) wrapper.removeView(noticeView);
+                        if (adapter.getItemCount() > 0) {
+                            if (noticeView != null) wrapper.removeView(noticeView);
+                        }
                     }
+                } catch (NullPointerException ex) {
+                    ex.printStackTrace();
                 }
             }, 100);
         }

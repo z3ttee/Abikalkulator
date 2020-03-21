@@ -9,6 +9,7 @@ import java.util.Iterator;
 
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.api.Grade;
+import de.zitzmanncedric.abicalc.api.Seminar;
 import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
 import needle.Needle;
@@ -80,6 +81,24 @@ public class Average {
         });
 
 
+    }
+
+    public static int getSeminarSync(){
+        float avg = 0;
+
+        for(Grade grade : AppDatabase.getInstance().getGradesForSeminar()) {
+            if(grade.getType() == Grade.Type.PROCESS) {
+                avg += grade.getValue()*0.2f;
+            }
+            if(grade.getType() == Grade.Type.THESIS) {
+                avg += grade.getValue()*0.3f;
+            }
+            if(grade.getType() == Grade.Type.PRESENTATION) {
+                avg += grade.getValue()*0.5f;
+            }
+        }
+
+        return Math.round(avg);
     }
 
     /**

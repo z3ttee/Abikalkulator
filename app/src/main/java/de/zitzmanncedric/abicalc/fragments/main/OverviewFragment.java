@@ -106,11 +106,6 @@ public class OverviewFragment extends Fragment {
         super.onResume();
         setup();
         averageView.recalculate();
-        /*int currentTerm = AppCore.getSharedPreferences().getInt("currentTerm", 0);
-        new Handler().post(() -> {
-            fragmentPager.setCurrentItem(currentTerm, true);
-        });*/
-
     }
 
     private static class Adapter extends FragmentPagerAdapter {
