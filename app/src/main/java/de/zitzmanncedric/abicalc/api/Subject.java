@@ -48,10 +48,6 @@ public class Subject extends ListableObject implements Serializable, Cloneable {
         this.terms = terms;
     }
 
-    public void syncWithDatabase(){
-        // TODO: Database sync
-    }
-
     @Override
     public SubjectListItemView getListItemView(Context context) {
         SubjectListItemView itemView = new SubjectListItemView(context);

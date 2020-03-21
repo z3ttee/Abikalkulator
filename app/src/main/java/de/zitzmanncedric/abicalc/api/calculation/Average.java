@@ -138,7 +138,7 @@ public class Average {
         for(Subject subject : AppDatabase.getInstance().getUserSubjects()) {
             points += subject.getQuickAvgT1()+subject.getQuickAvgT2()+subject.getQuickAvgT3()+subject.getQuickAvgT4();
             if(subject.isExam()) {
-                // TODO: Seminarfach einbringen?
+                // TODO: Seminarfach einbringen beachten
                 points += subject.getQuickAvgTA()*4;
             }
         }

@@ -21,10 +21,7 @@ import de.zitzmanncedric.abicalc.api.Grade;
 import de.zitzmanncedric.abicalc.api.Seminar;
 import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.api.calculation.Average;
-import de.zitzmanncedric.abicalc.broadcast.AverageUpdatedBroadcaster;
-import de.zitzmanncedric.abicalc.broadcast.GradeBroadcaster;
 import lombok.Getter;
-import needle.Needle;
 
 /**
  * Verwaltet die Datenbank der App
@@ -387,28 +384,16 @@ public class AppDatabase extends SQLiteOpenHelper {
         return grades;
     }
 
-    // TODO: Calculate new average in background
-    /*public void notifyGradesChanged(Subject subject){
-        try {
-            GradeBroadcaster.getInstance().broadcastUpdate(1, "Hello World");
-            // Toast.makeText(AppCore.getInstance().getApplicationContext(), subject.getTitle()+" updated.", Toast.LENGTH_SHORT).show();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }*/
-
     public void notifyGradesChanged(int subjectID, int termID){
         try {
-            GradeBroadcaster.getInstance().broadcastUpdate(1, "Hello World");
             if (subjectID != Seminar.getInstance().getSubjectID()) {
                 Subject subject = getUserSubjectByID(subjectID);
 
                 Average.getOfTermAndSubject(subject, termID, (result -> {
                     updateQuickAverage(subject, termID, result);
                 }));
-
-                Toast.makeText(AppCore.getInstance().getApplicationContext(), subject.getTitle() + " updated.", Toast.LENGTH_SHORT).show();
             } else {
+                // TODO: Calculate average for semi
                 Toast.makeText(AppCore.getInstance().getApplicationContext(), "Seminarfach updated.", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception ex){

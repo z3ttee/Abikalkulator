@@ -2,6 +2,8 @@ package de.zitzmanncedric.abicalc.api;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 
 import de.zitzmanncedric.abicalc.AppCore;
@@ -14,16 +16,16 @@ import lombok.Setter;
 /**
  * Datenobjekt für eine Note
  */
-public class Grade extends ListableObject implements Serializable {
+public class Grade extends ListableObject implements Serializable, Cloneable {
 
-    @Getter private int id;
+    @Getter @Setter private long id;
     @Getter private int subjectID;
     @Getter private int termID;
     @Getter @Setter private int value;
     @Getter @Setter private Type type;
     @Getter private long dateCreated;
 
-    public Grade(int id, int subjectID, int termID, int value, Type type) {
+    public Grade(long id, int subjectID, int termID, int value, Type type) {
         super("", "", "");
         this.id = id;
         this.subjectID = subjectID;
@@ -32,7 +34,7 @@ public class Grade extends ListableObject implements Serializable {
         this.type = type;
         this.dateCreated = System.currentTimeMillis();
     }
-    public Grade(int id, int subjectID, int termID, int value, Type type, long date) {
+    public Grade(long id, int subjectID, int termID, int value, Type type, long date) {
         super("", "", "");
         this.id = id;
         this.subjectID = subjectID;
@@ -50,7 +52,7 @@ public class Grade extends ListableObject implements Serializable {
     /**
      * Enum zum Festlegen eines Notentyps
      */
-    public enum Type {
+    public enum Type implements Cloneable {
         LK(0, AppCore.getInstance().getString(R.string.type_lk)),
         KA(1, AppCore.getInstance().getString(R.string.type_ka)),
         ORAL(2, AppCore.getInstance().getString(R.string.type_oral)),
@@ -83,5 +85,11 @@ public class Grade extends ListableObject implements Serializable {
             }
             return Type.LK; // Return default if not found
         }
+    }
+
+    @NonNull
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

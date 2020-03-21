@@ -229,6 +229,8 @@ public class GradeEditorActivity extends AppCompatActivity implements View.OnCli
      * Funktion für "Hinzufügen"-Button. Übermittelt Daten an übergeordnete Aktivität
      */
     private void addGrade() {
+        Intent intent = new Intent();
+
         int subjectPosition = (seminar ? Seminar.getInstance().getSubjectID() : subjectSpinner.getSelectedItemPosition());  // beginnend bei 0
         int termPosition = termSpinner.getSelectedItemPosition();                                                           // beginnend bei 0
         int typePosition = typeSpinner.getSelectedItemPosition()+(seminar ? 4 : 0);                                         // beginnend bei 0
@@ -240,14 +242,19 @@ public class GradeEditorActivity extends AppCompatActivity implements View.OnCli
             Grade.Type type = Grade.Type.getByID(typePosition);
             Grade grade = new Grade(0, subject.getId(), termPosition, value, type); // SubjectID ist gleich mit position, durch sortierung Geht nur, weil positionen wie in der Liste der AppDatenbank
 
-            AppDatabase.getInstance().createGrade(subject.getId(), grade);
+            long id = AppDatabase.getInstance().createGrade(subject.getId(), grade);
+
+            grade.setId(id);
+            byte[] bytes = AppSerializer.serialize(grade);
+            intent.putExtra("grade", bytes);
         } else {
             Grade.Type type = Grade.Type.getByID(typePosition);
             Grade grade = new Grade(0, Seminar.getInstance().getSubjectID(), 4, value, type); // SubjectID ist gleich mit position, durch sortierung Geht nur, weil positionen wie in der Liste der AppDatenbank
 
             AppDatabase.getInstance().createGrade(Seminar.getInstance().getSubjectID(), grade);
         }
-        setResult(AppCore.ResultCodes.RESULT_OK);
+
+        setResult(AppCore.ResultCodes.RESULT_OK, intent);
         finish();
     }
 
@@ -255,29 +262,41 @@ public class GradeEditorActivity extends AppCompatActivity implements View.OnCli
      * Funktion für "Hinzufügen"-Button. Übermittelt Daten an übergeordnete Aktivität
      */
     private void editGrade() {
+        Intent intent = new Intent();
+
         if(grade == null) {
             setResult(AppCore.ResultCodes.RESULT_FAILED);
             finish();
             return;
         }
 
-        int typeID = typeSpinner.getSelectedItemPosition();
-        int value = amountPicker.getValue();
+        try {
+            Grade newGrade = new Grade(grade.getId(), grade.getSubjectID(), grade.getTermID(), grade.getValue(), grade.getType());
 
-        if(seminar) {
-            if(grade.getValue() != value) {
-                grade.setValue(value);
-                AppDatabase.getInstance().updateGrade(grade.getSubjectID(), grade);
+            Log.i(TAG, "editGrade: "+(newGrade == grade));
+
+            int typeID = typeSpinner.getSelectedItemPosition();
+            int value = amountPicker.getValue();
+
+            if(seminar) {
+                if(newGrade.getValue() != value) {
+                    newGrade.setValue(value);
+                    AppDatabase.getInstance().updateGrade(newGrade.getSubjectID(), newGrade);
+                }
+            } else {
+                if (newGrade.getType().getId() != typeID || newGrade.getValue() != value) {
+                    newGrade.setType(Grade.Type.getByID(typeID));
+                    newGrade.setValue(value);
+                    AppDatabase.getInstance().updateGrade(newGrade.getSubjectID(), newGrade);
+                    intent.putExtra("newGrade", AppSerializer.serialize(newGrade));
+                    intent.putExtra("oldGrade", AppSerializer.serialize(grade));
+                }
             }
-        } else {
-            if (grade.getType().getId() != typeID || grade.getValue() != value) {
-                grade.setType(Grade.Type.getByID(typeID));
-                grade.setValue(value);
-                AppDatabase.getInstance().updateGrade(grade.getSubjectID(), grade);
-            }
+
+            setResult(AppCore.ResultCodes.RESULT_OK, intent);
+            finish();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        setResult(AppCore.ResultCodes.RESULT_OK);
-        finish();
     }
 }

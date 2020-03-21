@@ -3,10 +3,12 @@ package de.zitzmanncedric.abicalc.fragments.subject;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -17,30 +19,33 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.activities.subject.GradeEditorActivity;
 import de.zitzmanncedric.abicalc.adapter.AdvancedSubjectListAdapter;
 import de.zitzmanncedric.abicalc.api.Grade;
 import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.api.list.ListableObject;
-import de.zitzmanncedric.abicalc.broadcast.GradeBroadcaster;
-import de.zitzmanncedric.abicalc.broadcast.OnBroadcastActionListener;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
 import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
 import de.zitzmanncedric.abicalc.utils.AppSerializer;
+import lombok.Getter;
 import needle.Needle;
 import needle.UiRelatedProgressTask;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class GradesFragment extends Fragment implements OnListItemCallback, OnBroadcastActionListener {
+public class GradesFragment extends Fragment implements OnListItemCallback {
     private static final String TAG = "GradesFragment";
 
     private Subject subject;
-    private int termID;
+    @Getter private int termID;
 
     private AdvancedSubjectListAdapter adapter;
+
+    private TextView noticeView;
+    private LinearLayout wrapper;
 
     public GradesFragment() { }
     public GradesFragment(Subject subject, int termID) {
@@ -52,26 +57,23 @@ public class GradesFragment extends Fragment implements OnListItemCallback, OnBr
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_grades, container, false);
 
-        GradeBroadcaster.getInstance().register(this);
-
         RecyclerView recyclerView = view.findViewById(R.id.grades_list);
         adapter = new AdvancedSubjectListAdapter(view.getContext(), new ArrayList<>(), this);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(adapter);
 
-        LinearLayout wrapper = view.findViewById(R.id.fragment_wrapper);
+        wrapper = view.findViewById(R.id.fragment_wrapper);
         ArrayList<ListableObject> grades = new ArrayList<>(AppDatabase.getInstance().getGradesForTerm(subject, termID));
 
+        noticeView = new TextView(new ContextThemeWrapper(view.getContext(), R.style.TextAppearance));
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        noticeView.setLayoutParams(params);
+        noticeView.setAlpha(0.5f);
+        noticeView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        noticeView.setText(view.getContext().getString(R.string.label_grades_missing));
+
         if(grades.isEmpty()) {
-            TextView textView = new TextView(new ContextThemeWrapper(view.getContext(), R.style.TextAppearance));
-
-            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            textView.setLayoutParams(params);
-
-            textView.setAlpha(0.5f);
-            textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            textView.setText(view.getContext().getString(R.string.label_grades_missing));
-            wrapper.addView(textView);
+            wrapper.addView(noticeView);
         } else {
             populate();
         }
@@ -103,14 +105,12 @@ public class GradesFragment extends Fragment implements OnListItemCallback, OnBr
             }
 
             @Override
-            protected void thenDoUiRelatedWork(Void aVoid) { }
+            protected void thenDoUiRelatedWork(Void aVoid) {
+                if(adapter.getItemCount() > 0) {
+                    if(noticeView != null) wrapper.removeView(noticeView);
+                }
+            }
         });
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        GradeBroadcaster.getInstance().unregister(this);
     }
 
     @Override
@@ -121,15 +121,19 @@ public class GradesFragment extends Fragment implements OnListItemCallback, OnBr
             Grade grade = (Grade) object;
             intent.putExtra("action", "edit");
             intent.putExtra("grade", AppSerializer.serialize(grade));
-            startActivity(intent);
+            startActivityForResult(intent, AppCore.RequestCodes.REQUEST_UPDATE_GRADE);
         }
     }
 
     @Override
     public void onItemDeleted(ListableObject object) {
         if(object instanceof Grade) {
-            int id = AppDatabase.getInstance().removeGrade((Grade) object);
+            AppDatabase.getInstance().removeGrade((Grade) object);
             adapter.remove(object);
+
+            if(adapter.getItemCount() == 0) {
+                wrapper.addView(noticeView);
+            }
         }
     }
 
@@ -140,8 +144,42 @@ public class GradesFragment extends Fragment implements OnListItemCallback, OnBr
     public void onItemLongClicked(ListableObject object) { }
 
     @Override
-    public void onBroadcast(int code, String payload) {
-        Log.i(TAG, "onBroadcast: received code ["+code+"] with payload ["+payload+"].");
-        populate();
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // TODO: Reload list
+        if(requestCode == AppCore.RequestCodes.REQUEST_ADD_GRADE) {
+            new Handler().postDelayed(() -> {
+                Log.i(TAG, "onActivityResult: grade added. TERM: " + termID);
+
+                if (data != null) {
+                    byte[] bytes = data.getByteArrayExtra("grade");
+
+                    Grade grade = (Grade) AppSerializer.deserialize(bytes);
+                    adapter.add(grade);
+
+                    if (adapter.getItemCount() > 0) {
+                        if (noticeView != null) wrapper.removeView(noticeView);
+                    }
+                }
+            }, 100);
+        }
+
+        if(requestCode == AppCore.RequestCodes.REQUEST_UPDATE_GRADE) {
+            new Handler().postDelayed(() -> {
+                Log.i(TAG, "onActivityResult: grade updated. TERM: " + termID);
+
+                if (data != null) {
+                    Grade oldGrade = (Grade) AppSerializer.deserialize(data.getByteArrayExtra("oldGrade"));
+                    Grade newGrade = (Grade) AppSerializer.deserialize(data.getByteArrayExtra("newGrade"));
+
+                    adapter.update(oldGrade, newGrade);
+
+                    if (adapter.getItemCount() > 0) {
+                        if (noticeView != null) wrapper.removeView(noticeView);
+                    }
+                }
+            }, 100);
+        }
+
     }
 }

@@ -29,6 +29,7 @@ import java.util.Arrays;
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.AppFragments;
 import de.zitzmanncedric.abicalc.R;
+import de.zitzmanncedric.abicalc.api.Grade;
 import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.api.Term;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
@@ -84,7 +85,7 @@ public class ViewSubjectActivity extends AppCompatActivity implements View.OnCli
             intent.putExtra("action", "add");
             intent.putExtra("subjectID", subject.getId());
             intent.putExtra("termID", tabLayout.getSelectedTabPosition());
-            startActivity(intent);
+            startActivityForResult(intent, AppCore.RequestCodes.REQUEST_ADD_GRADE);
         }
     }
 
@@ -101,7 +102,45 @@ public class ViewSubjectActivity extends AppCompatActivity implements View.OnCli
     protected void onResume() {
         super.onResume();
         termID = AppCore.getSharedPreferences().getInt("currentTerm", 0);
-        //reSetup();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(data != null) {
+            if(requestCode == AppCore.RequestCodes.REQUEST_ADD_GRADE) {
+                byte[] bytes = data.getByteArrayExtra("grade");
+                Grade grade = (Grade) AppSerializer.deserialize(bytes);
+
+                if (grade != null) {
+                    for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+                        if (fragment instanceof GradesFragment) {
+                            GradesFragment f = (GradesFragment) fragment;
+                            if (f.getTermID() == grade.getTermID()) {
+                                f.onActivityResult(requestCode, resultCode, data);
+                            }
+                        }
+                    }
+                }
+            }
+            if(requestCode == AppCore.RequestCodes.REQUEST_UPDATE_GRADE) {
+                byte[] bytes = data.getByteArrayExtra("oldGrade");
+                Grade grade = (Grade) AppSerializer.deserialize(bytes);
+
+                if (grade != null) {
+                    for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+                        if (fragment instanceof GradesFragment) {
+                            GradesFragment f = (GradesFragment) fragment;
+                            if (f.getTermID() == grade.getTermID()) {
+                                f.onActivityResult(requestCode, resultCode, data);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     private static class Adapter extends FragmentPagerAdapter {

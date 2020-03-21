@@ -1,6 +1,7 @@
 package de.zitzmanncedric.abicalc.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -19,13 +20,14 @@ import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.api.list.ListableObject;
 import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
 import de.zitzmanncedric.abicalc.views.SubjectListItemView;
+import lombok.Getter;
 import lombok.Setter;
 
 public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSubjectListAdapter.ViewHolder> implements DatasetInterface<ListableObject> {
     private static final String TAG = "AdvancedSubjectListAdap";
 
     private Context context;
-    private ArrayList<ListableObject> dataset;
+    @Getter private ArrayList<ListableObject> dataset;
     @Setter private RecyclerView correspondingRecyclerView;
     @Setter private OnListItemCallback onCallback;
 
@@ -138,9 +140,37 @@ public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSub
 
     @Override
     public void update(ListableObject old, ListableObject updated) {
-        int index = this.dataset.indexOf(old);
-        this.dataset.set(index, updated);
-        this.notifyItemChanged(index);
+        if(updated instanceof Grade) {
+            Grade grade = (Grade) updated;
+
+            int index = 0;
+            for(ListableObject object : this.dataset) {
+                if(object instanceof Grade) {
+                    if(((Grade) object).getId() == grade.getId()) {
+                        index = this.dataset.indexOf(object);
+                    }
+                }
+            }
+
+            this.dataset.set(index, updated);
+            this.notifyItemChanged(index);
+        }
+
+        if(updated instanceof Subject) {
+            Subject subject = (Subject) updated;
+
+            int index = 0;
+            for(ListableObject object : this.dataset) {
+                if(object instanceof Subject) {
+                    if(((Subject) object).getId() == subject.getId()) {
+                        index = this.dataset.indexOf(object);
+                    }
+                }
+            }
+
+            this.dataset.set(index, updated);
+            this.notifyItemChanged(index);
+        }
     }
 
     @Override

@@ -72,22 +72,19 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
             seminar.setAside("--");
         }
 
-        ArrayList<ListableObject> intensifiedDummy = new ArrayList<>();
-        ArrayList<ListableObject> basicsDummy = new ArrayList<>();
-
         intensifiedView = view.findViewById(R.id.app_grid_intensified);
         basicsView = view.findViewById(R.id.app_grid_basics);
         seminarView = view.findViewById(R.id.app_grid_seminar);
 
-        intensifiedAdapter = new RecyclerGridAdapter(view.getContext(), termID, intensifiedDummy);
-        basicsAdapter = new RecyclerGridAdapter(view.getContext(), termID, basicsDummy);
+        intensifiedAdapter = new RecyclerGridAdapter(getContext(), termID, new ArrayList<>());
+        basicsAdapter = new RecyclerGridAdapter(getContext(), termID, new ArrayList<>());
 
         intensifiedAdapter.setItemCallback(this);
-        intensifiedView.setLayoutManager(new GridLayoutManager(view.getContext(), 3));
+        intensifiedView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         intensifiedView.setAdapter(intensifiedAdapter);
 
         basicsAdapter.setItemCallback(this);
-        basicsView.setLayoutManager(new GridLayoutManager(view.getContext(), 3));
+        basicsView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         basicsView.setAdapter(basicsAdapter);
 
         {
@@ -102,12 +99,12 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
             protected ArrayList<Subject> doWork() {
                 ArrayList<Subject> elements = new ArrayList<>();
 
-                for(Subject subject : AppDatabase.getInstance().getUserSubjects()) {
-                    if(termID != 4) {
+                for (Subject subject : AppDatabase.getInstance().getUserSubjects()) {
+                    if (termID != 4) {
                         elements.add(subject);
                         publishProgress(subject);
                     } else {
-                        if(subject.isExam()) {
+                        if (subject.isExam()) {
                             elements.add(subject);
                             publishProgress(subject);
                         }
@@ -115,7 +112,7 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
 
                     try {
                         Thread.sleep(100);
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
@@ -124,7 +121,7 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
 
             @Override
             protected void onProgressUpdate(Subject subject) {
-                if(subject.isIntensified()) intensifiedAdapter.add(subject);
+                if (subject.isIntensified()) intensifiedAdapter.add(subject);
                 else basicsAdapter.add(subject);
             }
 

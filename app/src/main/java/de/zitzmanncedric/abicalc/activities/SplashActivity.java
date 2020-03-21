@@ -29,7 +29,6 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         if(AppCore.Setup.isSetupPassed()) {
-            // TODO: Start MainActivity
             startActivity(new Intent(SplashActivity.this, MainActivity.class));
             finish();
         } else {

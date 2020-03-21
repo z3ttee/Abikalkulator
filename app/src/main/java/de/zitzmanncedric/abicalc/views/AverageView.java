@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import java.text.DecimalFormat;
+import java.util.Locale;
 
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.api.calculation.Average;

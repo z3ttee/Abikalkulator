@@ -47,10 +47,6 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
     public static final int AMOUNT_EXAMS_MAX = 5;     // 5
     public static final int AMOUNT_ORAL_EXAMS_MAX = 2;
 
-    // TODO
-    private final int AMOUNT_INTENSIFIED_EXAMS_MAX = 5;
-    private final int AMOUNT_NORMALS_EXAMS_MAX = 2;
-
     private FrameLayout appFragmentContainer;
 
     private AppButton addSubjectBtn;
