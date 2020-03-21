@@ -22,14 +22,16 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                style="@style/Headline.h1"
-                android:layout_width="wrap_content"
+            <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="@dimen/window_padding"
-                android:paddingTop="@dimen/window_padding"
-                android:paddingEnd="@dimen/window_padding"
-                android:text="@string/app_name" />
+                android:backgroundTint="@android:color/white">
+
+                <de.zitzmanncedric.abicalc.views.AppActionBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.appbar.AppBarLayout>
 
             <TextView
                 style="@style/TextAppearance"

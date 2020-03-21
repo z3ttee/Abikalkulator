@@ -3,22 +3,14 @@ package de.zitzmanncedric.abicalc.sheets;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.ContextThemeWrapper;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,8 +22,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.R;
@@ -57,9 +47,13 @@ public class ChooseSubjectSheet extends BottomSheetDialog implements OnListItemC
 
     private RecyclerView recyclerView;
     private TextView titleView;
-    private CheckBox checkBox;
+    private CheckBox checkBoxExam;
+    private CheckBox checkBoxOralExam;
 
     private SimpleSubjectListAdapter adapter;
+
+    @Setter private boolean onlyOralExam = false;
+    @Setter private boolean onlyWrittenExam = false;
 
     private String title;
     @Setter private OnSubjectChosenListener onSubjectChosenListener;
@@ -94,12 +88,27 @@ public class ChooseSubjectSheet extends BottomSheetDialog implements OnListItemC
 
         titleView = findViewById(R.id.sheet_title);
         recyclerView = findViewById(R.id.sheet_list);
-        checkBox = findViewById(R.id.sheet_checkbox);
+        checkBoxExam = findViewById(R.id.sheet_checkbox_exam);
+        checkBoxOralExam = findViewById(R.id.sheet_checkbox_oralexam);
 
         adapter = new SimpleSubjectListAdapter(new ArrayList<>(11), disabled);
         adapter.setOnCallback(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(adapter);
+
+        checkBoxOralExam.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(onlyOralExam) {
+                checkBoxExam.setChecked(isChecked);
+            }
+            if(isChecked) {
+                checkBoxExam.setChecked(true);
+            }
+        });
+        checkBoxExam.setOnCheckedChangeListener(((buttonView, isChecked) -> {
+            if(!isChecked || onlyWrittenExam) {
+                checkBoxOralExam.setChecked(false);
+            }
+        }));
     }
 
     @Override
@@ -107,6 +116,15 @@ public class ChooseSubjectSheet extends BottomSheetDialog implements OnListItemC
         super.onCreate(savedInstanceState);
 
         getBehavior().setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
+
+        if(onlyOralExam) {
+            checkBoxExam.setEnabled(false);
+            checkBoxExam.setAlpha(0.5f);
+        }
+        if(onlyWrittenExam) {
+            checkBoxOralExam.setEnabled(false);
+            checkBoxOralExam.setAlpha(0.5f);
+        }
 
         Needle.onBackgroundThread().withThreadPoolSize(1).execute(new UiRelatedProgressTask<Void, Subject>() {
             @Override
@@ -192,7 +210,8 @@ public class ChooseSubjectSheet extends BottomSheetDialog implements OnListItemC
         try {
             if(object instanceof Subject) {
                 Subject subject = (Subject) object;
-                subject.setExam(checkBox.isChecked());
+                subject.setExam(checkBoxExam.isChecked());
+                subject.setOralExam(checkBoxOralExam.isChecked());
 
                 if (this.onSubjectChosenListener != null)
                     this.onSubjectChosenListener.onSubjectChosen(subject);

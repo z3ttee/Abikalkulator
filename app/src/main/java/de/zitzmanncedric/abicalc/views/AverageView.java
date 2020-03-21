@@ -5,12 +5,21 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import java.text.DecimalFormat;
+
 import de.zitzmanncedric.abicalc.R;
+import de.zitzmanncedric.abicalc.api.calculation.Average;
+import needle.Needle;
 
 public class AverageView extends LinearLayout {
+
+    private TextView subtitle;
+    private TextView amount;
+
     public AverageView(Context context) {
         super(context);
         init(context, null);
@@ -31,7 +40,16 @@ public class AverageView extends LinearLayout {
         if(inflater != null) {
             View view = inflater.inflate(R.layout.view_averageview, this);
 
+            subtitle = findViewById(R.id.averageview_subtitle);
+            amount = findViewById(R.id.average_amount);
 
+            Average.getAllPoints((result) -> subtitle.setText(context.getString(R.string.exp_points).replace("%points%", String.valueOf(result))));
+            Average.getGeneral((result -> amount.setText(new DecimalFormat("0.0").format(result))));
         }
+    }
+
+    public void recalculate(){
+        Average.getAllPoints((result) -> subtitle.setText(getContext().getString(R.string.exp_points).replace("%points%", String.valueOf(result))));
+        Average.getGeneral((result -> amount.setText(new DecimalFormat("0.0").format(result))));
     }
 }

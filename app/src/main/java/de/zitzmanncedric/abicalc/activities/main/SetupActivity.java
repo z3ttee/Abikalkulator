@@ -45,6 +45,7 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
     public static final int AMOUNT_INTENSIFIED = 5;   // 5
     public static final int AMOUNT_NORMALS = 6;       // 6
     public static final int AMOUNT_EXAMS_MAX = 5;     // 5
+    public static final int AMOUNT_ORAL_EXAMS_MAX = 2;
 
     // TODO
     private final int AMOUNT_INTENSIFIED_EXAMS_MAX = 5;
@@ -57,6 +58,9 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
 
     public ArrayList<Subject> intensified = new ArrayList<>();
     public ArrayList<Subject> normals = new ArrayList<>();
+
+    public int COUNT_ORAL_EXAMS = 0;
+    public int COUNT_WRITTEN_EXAMS = 0;
 
     /**
      * Baut die Aktivität auf
@@ -96,6 +100,27 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
         ChooseSubjectSheet sheet = new ChooseSubjectSheet(this, disabled);
         sheet.setTitle(getString(R.string.label_chose_subject));
         sheet.setOnSubjectChosenListener(this);
+
+        int count_oral = 0;
+        int count_written = 0;
+
+        for(Subject subject : disabled) {
+            if(subject.isExam()) {
+                if(subject.isOralExam()){
+                    ++count_oral;
+                } else {
+                    ++count_written;
+                }
+            }
+        }
+
+        if(count_written >= 3) {
+            sheet.setOnlyOralExam(true);
+        }
+        if(count_oral >= 2) {
+            sheet.setOnlyWrittenExam(true);
+        }
+
         sheet.show();
     }
 
@@ -172,15 +197,6 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
                 finish();
             }
         });
-
-        new Handler().post(() -> {
-
-        });
-
-        /*Intent data = new Intent();
-        data.putExtra("subjects", bytes);
-        setResult(AppCore.ResultCodes.RESULT_OK, data);
-        finish();*/
     }
 
     /**
@@ -210,10 +226,18 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
         if(fragment instanceof AddIntensifiedFragment) {
             subject.setIntensified(true);
             intensified.add(subject);
+
+            if(subject.isExam()) {
+                if(subject.isOralExam()) ++COUNT_ORAL_EXAMS;
+                else ++COUNT_WRITTEN_EXAMS;
+            }
+
             if(intensified.size() == AMOUNT_INTENSIFIED) {
                 addSubjectBtn.setEnabled(false);
                 continueSetupBtn.setEnabled(true);
             }
+
+
 
             // Send info to fragment
             ((AddIntensifiedFragment) fragment).onActivityToFragment(this, subject, AppCore.ActionCodes.ACTION_LIST_ADDITEM);
@@ -221,6 +245,12 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
         if(fragment instanceof AddNormalFragment) {
             subject.setIntensified(false);
             normals.add(subject);
+
+            if(subject.isExam()) {
+                if(subject.isOralExam()) ++COUNT_ORAL_EXAMS;
+                else ++COUNT_WRITTEN_EXAMS;
+            }
+
             if(normals.size() == AMOUNT_NORMALS) {
                 addSubjectBtn.setEnabled(false);
                 continueSetupBtn.setEnabled(true);

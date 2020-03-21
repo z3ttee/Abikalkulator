@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 
@@ -18,7 +19,8 @@ public class QuickSubjectEditDialog extends Dialog implements View.OnClickListen
     private Subject subject;
     @Setter private DialogCallback callback;
 
-    private CheckBox checkBox;
+    private CheckBox checkBoxExam;
+    private CheckBox checkBoxOralExam;
 
     public QuickSubjectEditDialog(@NonNull Context context, @NonNull Subject subject) {
         super(context);
@@ -29,17 +31,31 @@ public class QuickSubjectEditDialog extends Dialog implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_quicksubjectedit);
-        checkBox = findViewById(R.id.dialog_checkbox);
+        checkBoxExam = findViewById(R.id.dialog_checkbox_exam);
+        checkBoxOralExam = findViewById(R.id.dialog_checkbox_oralexam);
 
-        checkBox.setChecked(subject.isExam());
+        checkBoxExam.setChecked(subject.isExam());
+        checkBoxOralExam.setChecked(subject.isOralExam());
 
         AppButton btnPositive = findViewById(R.id.dialog_btn_positive);
         btnPositive.setOnClickListener(this);
+
+        checkBoxOralExam.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(isChecked) {
+                checkBoxExam.setChecked(true);
+            }
+        });
+        checkBoxExam.setOnCheckedChangeListener(((buttonView, isChecked) -> {
+            if(!isChecked) {
+                checkBoxOralExam.setChecked(false);
+            }
+        }));
     }
 
     @Override
     public void dismiss() {
-        subject.setExam(checkBox.isChecked());
+        subject.setExam(checkBoxExam.isChecked());
+        subject.setOralExam(checkBoxOralExam.isChecked());
         if(callback != null) callback.onCallback(subject);
         super.dismiss();
     }

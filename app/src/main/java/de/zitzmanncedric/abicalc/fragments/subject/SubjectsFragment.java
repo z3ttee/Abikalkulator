@@ -79,8 +79,8 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
         basicsView = view.findViewById(R.id.app_grid_basics);
         seminarView = view.findViewById(R.id.app_grid_seminar);
 
-        intensifiedAdapter = new RecyclerGridAdapter(view.getContext(), intensifiedDummy);
-        basicsAdapter = new RecyclerGridAdapter(view.getContext(), basicsDummy);
+        intensifiedAdapter = new RecyclerGridAdapter(view.getContext(), termID, intensifiedDummy);
+        basicsAdapter = new RecyclerGridAdapter(view.getContext(), termID, basicsDummy);
 
         intensifiedAdapter.setItemCallback(this);
         intensifiedView.setLayoutManager(new GridLayoutManager(view.getContext(), 3));
@@ -91,7 +91,7 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
         basicsView.setAdapter(basicsAdapter);
 
         {
-            RecyclerGridAdapter adapter = new RecyclerGridAdapter(view.getContext(), new ArrayList<>(Collections.singletonList(seminar)));
+            RecyclerGridAdapter adapter = new RecyclerGridAdapter(view.getContext(), termID, new ArrayList<>(Collections.singletonList(seminar)));
             adapter.setItemCallback(this);
             seminarView.setLayoutManager(new GridLayoutManager(view.getContext(), 3));
             seminarView.setAdapter(adapter);

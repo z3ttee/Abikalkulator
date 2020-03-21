@@ -6,6 +6,7 @@ import android.content.res.XmlResourceParser;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -19,8 +20,11 @@ import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.api.Grade;
 import de.zitzmanncedric.abicalc.api.Seminar;
 import de.zitzmanncedric.abicalc.api.Subject;
+import de.zitzmanncedric.abicalc.api.calculation.Average;
+import de.zitzmanncedric.abicalc.broadcast.AverageUpdatedBroadcaster;
 import de.zitzmanncedric.abicalc.broadcast.GradeBroadcaster;
 import lombok.Getter;
+import needle.Needle;
 
 /**
  * Verwaltet die Datenbank der App
@@ -70,25 +74,49 @@ public class AppDatabase extends SQLiteOpenHelper {
         // Load users subjects
         Cursor cursor = getReadableDatabase().query(TABLE_SUBJECTS, new String[]{"*"}, "", new String[0], null, null, null);
         if(cursor != null) {
+
+            Log.i(TAG, "AppDatabase: "+cursor.getCount());
+
             if(cursor.moveToFirst()) {
                 do {
                     int subjectIDIndex = cursor.getColumnIndex("subjectID");
                     int examIndex = cursor.getColumnIndex("exam");
+                    int oralExamIndex = cursor.getColumnIndex("oralExam");
                     int intensifiedIndex = cursor.getColumnIndex("intensified");
-                    int quickAverageIndex = cursor.getColumnIndex("quickAverage");
+
+                    int quickAvgT1Index = cursor.getColumnIndex("quickAvgT1");
+                    int quickAvgT2Index = cursor.getColumnIndex("quickAvgT2");
+                    int quickAvgT3Index = cursor.getColumnIndex("quickAvgT3");
+                    int quickAvgT4Index = cursor.getColumnIndex("quickAvgT4");
+                    int quickAvgTAIndex = cursor.getColumnIndex("quickAvgTA");
+
                     int cacheKeyIndex = cursor.getColumnIndex("cacheKey");
 
                     int subjectID = cursor.getInt(subjectIDIndex);
                     boolean exam = cursor.getInt(examIndex) == 1;
+                    boolean oralExam = cursor.getInt(oralExamIndex) == 1;
                     boolean intensified = cursor.getInt(intensifiedIndex) == 1;
-                    int quickAverage = cursor.getInt(quickAverageIndex);
+
+                    int quickAvgT1 = cursor.getInt(quickAvgT1Index);
+                    int quickAvgT2 = cursor.getInt(quickAvgT2Index);
+                    int quickAvgT3 = cursor.getInt(quickAvgT3Index);
+                    int quickAvgT4 = cursor.getInt(quickAvgT4Index);
+                    int quickAvgTA = cursor.getInt(quickAvgTAIndex);
+
                     long cacheKey = cursor.getLong(cacheKeyIndex);
 
                     try {
                         Subject subject = appSubjects.get(subjectID);
                         subject.setExam(exam);
+                        subject.setOralExam(oralExam);
                         subject.setIntensified(intensified);
-                        subject.setQuickAverage(quickAverage);
+
+                        subject.setQuickAvgT1(quickAvgT1);
+                        subject.setQuickAvgT2(quickAvgT2);
+                        subject.setQuickAvgT3(quickAvgT3);
+                        subject.setQuickAvgT4(quickAvgT4);
+                        subject.setQuickAvgTA(quickAvgTA);
+
                         subject.setCacheKey(cacheKey);
 
                         userSubjects.add(subject);
@@ -108,8 +136,15 @@ public class AppDatabase extends SQLiteOpenHelper {
                 "id INTEGER NOT NULL, " +
                 "subjectID INTEGER NOT NULL, " +
                 "exam BOOLEAN NOT NULL," +
+                "oralExam BOOLEAN NOT NULL," +
                 "intensified BOOLEAN NOT NULL," +
-                "quickAverage INTEGER NOT NULL," +
+
+                "quickAvgT1 INTEGER NOT NULL," +
+                "quickAvgT2 INTEGER NOT NULL," +
+                "quickAvgT3 INTEGER NOT NULL," +
+                "quickAvgT4 INTEGER NOT NULL," +
+                "quickAvgTA INTEGER NOT NULL," +
+
                 "cacheKey LONG NOT NULL," +
                 "PRIMARY KEY(id), UNIQUE(subjectID));");
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS `"+TABLE_GRADES+"` (" +
@@ -149,9 +184,18 @@ public class AppDatabase extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put("subjectID", subject.getId());
         values.put("exam", subject.isExam());
+        values.put("oralExam", subject.isOralExam());
         values.put("intensified", subject.isIntensified());
-        values.put("quickAverage", subject.getQuickAverage());
+
+        values.put("quickAvgT1", subject.getQuickAvgT1());
+        values.put("quickAvgT2", subject.getQuickAvgT2());
+        values.put("quickAvgT3", subject.getQuickAvgT3());
+        values.put("quickAvgT4", subject.getQuickAvgT4());
+        values.put("quickAvgTA", subject.getQuickAvgTA());
+
         values.put("cacheKey", System.currentTimeMillis());
+
+        Log.i(TAG, "createSubjectEntry: created entry for "+subject.getTitle());
 
         // Return ID of entry
         return getWritableDatabase().insert(TABLE_SUBJECTS, null, values);
@@ -166,10 +210,43 @@ public class AppDatabase extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put("subjectID", subject.getId());
         values.put("exam", subject.isExam());
+        values.put("oralExam", subject.isOralExam());
         values.put("intensified", subject.isIntensified());
-        values.put("quickAverage", subject.getQuickAverage());
+
+        values.put("quickAvgT1", subject.getQuickAvgT1());
+        values.put("quickAvgT2", subject.getQuickAvgT2());
+        values.put("quickAvgT3", subject.getQuickAvgT3());
+        values.put("quickAvgT4", subject.getQuickAvgT4());
+        values.put("quickAvgTA", subject.getQuickAvgTA());
+
         values.put("cacheKey", System.currentTimeMillis());
 
+        return getWritableDatabase().updateWithOnConflict(TABLE_SUBJECTS, values, "subjectID=?", new String[]{""+subject.getId()}, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    public int updateQuickAverage(Subject subject, int termID, int quickAvg) {
+        ContentValues values = new ContentValues();
+        int index = getUserSubjects().indexOf(subject);
+
+        switch (termID) {
+            case 0:
+                subject.setQuickAvgT1(quickAvg);
+                values.put("quickAvgT1", quickAvg);
+            case 1:
+                subject.setQuickAvgT2(quickAvg);
+                values.put("quickAvgT2", quickAvg);
+            case 2:
+                subject.setQuickAvgT3(quickAvg);
+                values.put("quickAvgT3", quickAvg);
+            case 3:
+                subject.setQuickAvgT4(quickAvg);
+                values.put("quickAvgT4", quickAvg);
+            case 4:
+                subject.setQuickAvgTA(quickAvg);
+                values.put("quickAvgTA", quickAvg);
+        }
+
+        getUserSubjects().set(index, subject);
         return getWritableDatabase().updateWithOnConflict(TABLE_SUBJECTS, values, "subjectID=?", new String[]{""+subject.getId()}, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
@@ -210,7 +287,7 @@ public class AppDatabase extends SQLiteOpenHelper {
         values.put("termID", grade.getTermID());
 
         long id = getWritableDatabase().insert(TABLE_GRADES, null, values);
-        AppDatabase.getInstance().notifyGradesChanged(subjectID);
+        AppDatabase.getInstance().notifyGradesChanged(subjectID, grade.getTermID());
 
         // TODO: Change to new term
         // AppCore.getSharedPreferences().edit().putInt("currentTerm", grade.getTermID()).apply();
@@ -232,14 +309,14 @@ public class AppDatabase extends SQLiteOpenHelper {
         values.put("termID", grade.getTermID());
 
         long l = getWritableDatabase().updateWithOnConflict(TABLE_GRADES, values, "id=?", new String[]{String.valueOf(grade.getId())}, SQLiteDatabase.CONFLICT_REPLACE);
-        AppDatabase.getInstance().notifyGradesChanged(subjectID);
+        AppDatabase.getInstance().notifyGradesChanged(subjectID, grade.getTermID());
         return l;
     }
 
     public int removeGrade(Grade grade) {
         int i = getWritableDatabase().delete(TABLE_GRADES, "id=?", new String[]{String.valueOf(grade.getId())});
         Subject subject = AppDatabase.getInstance().getUserSubjectByID(grade.getSubjectID());
-        AppDatabase.getInstance().notifyGradesChanged(subject);
+        AppDatabase.getInstance().notifyGradesChanged(subject.getId(), grade.getTermID());
         return i;
     }
 
@@ -310,29 +387,30 @@ public class AppDatabase extends SQLiteOpenHelper {
         return grades;
     }
 
-    /**
-     *
-     * @param subject
-     */
     // TODO: Calculate new average in background
-    public void notifyGradesChanged(Subject subject){
+    /*public void notifyGradesChanged(Subject subject){
         try {
             GradeBroadcaster.getInstance().broadcastUpdate(1, "Hello World");
             // Toast.makeText(AppCore.getInstance().getApplicationContext(), subject.getTitle()+" updated.", Toast.LENGTH_SHORT).show();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-    public void notifyGradesChanged(int subjectID){
+    }*/
+
+    public void notifyGradesChanged(int subjectID, int termID){
         try {
             GradeBroadcaster.getInstance().broadcastUpdate(1, "Hello World");
             if (subjectID != Seminar.getInstance().getSubjectID()) {
                 Subject subject = getUserSubjectByID(subjectID);
+
+                Average.getOfTermAndSubject(subject, termID, (result -> {
+                    updateQuickAverage(subject, termID, result);
+                }));
+
                 Toast.makeText(AppCore.getInstance().getApplicationContext(), subject.getTitle() + " updated.", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(AppCore.getInstance().getApplicationContext(), "Seminarfach updated.", Toast.LENGTH_SHORT).show();
             }
-            // Toast.makeText(AppCore.getInstance().getApplicationContext(), subject.getTitle()+" updated.", Toast.LENGTH_SHORT).show();
         } catch (Exception ex){
             ex.printStackTrace();
         }

@@ -11,6 +11,7 @@
     android:orientation="vertical">
 
     <de.zitzmanncedric.abicalc.views.AverageView
+        android:id="@+id/app_averageview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/window_padding"

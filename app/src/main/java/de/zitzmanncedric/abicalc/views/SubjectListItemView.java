@@ -182,10 +182,10 @@ public class SubjectListItemView extends LinearLayout implements View.OnClickLis
         }
     }
 
-    public static interface OnDeleteCallback {
+    public interface OnDeleteCallback {
         void onDeleteItem();
     }
-    public static interface OnEditCallback {
+    public interface OnEditCallback {
         void onEditItem();
     }
 }

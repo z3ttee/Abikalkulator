@@ -41,16 +41,17 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/averageview_title"
             style="@style/Headline.h5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Subject title" />
+            android:text="@string/exp_overallpoints" />
 
         <TextView
             style="@style/Headline.h4"
+            android:id="@+id/averageview_subtitle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Subtitle" />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

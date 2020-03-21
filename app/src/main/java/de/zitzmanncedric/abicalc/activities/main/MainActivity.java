@@ -2,12 +2,15 @@ package de.zitzmanncedric.abicalc.activities.main;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -50,6 +53,12 @@ public class MainActivity extends AppCompatActivity {
         AppFragments.replaceFragment(getSupportFragmentManager(), fragmentContainer, new OverviewFragment(), true, null, 0, R.anim.fragment_scaleout);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
     public void goHome(View view) {
         if(getSupportFragmentManager().getFragments().get(0) instanceof OverviewFragment) return;
 
@@ -85,17 +94,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Note hinzufügen
-        if(requestCode == AppCore.RequestCodes.REQUEST_ADD_GRADE) {
-            if(resultCode == AppCore.ResultCodes.RESULT_OK){
-                // Note wurde hinzugefügt
-                // TODO: Show something?
+        Fragment currentFragment = getSupportFragmentManager().getFragments().get(0);
+        if(currentFragment instanceof OverviewFragment) {
+            if(requestCode == AppCore.RequestCodes.REQUEST_ADD_GRADE) {
+                if(resultCode == AppCore.ResultCodes.RESULT_OK) {
+                    currentFragment.onActivityResult(requestCode, resultCode, data);
+                }
             }
-
         }
-        // Toast.makeText(this, resultCode, Toast.LENGTH_SHORT).show();
+
+
     }
 }

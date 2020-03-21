@@ -1,7 +1,7 @@
 package de.zitzmanncedric.abicalc.adapter;
 
 import android.content.Context;
-import android.os.Handler;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.AppUtils;
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.api.Subject;
+import de.zitzmanncedric.abicalc.api.calculation.Average;
 import de.zitzmanncedric.abicalc.api.list.ListableObject;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
 import de.zitzmanncedric.abicalc.listener.OnButtonTouchListener;
@@ -24,14 +24,17 @@ import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
 import lombok.Setter;
 
 public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapter.ViewHolder> implements DatasetInterface<ListableObject> {
+    private static final String TAG = "RecyclerGridAdapter";
 
     private Context context;
     private ArrayList<ListableObject> dataset;
     @Setter private OnListItemCallback itemCallback;
+    private int termID;
 
-    public RecyclerGridAdapter(Context context, ArrayList<ListableObject> dataset) {
+    public RecyclerGridAdapter(Context context, int termID, ArrayList<ListableObject> dataset) {
         this.context = context;
         this.dataset = dataset;
+        this.termID = termID;
     }
 
     @NonNull
@@ -63,7 +66,7 @@ public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapte
         if(obj instanceof Subject) {
             Subject subject = (Subject) obj;
             holder.titleView.setText(AppDatabase.getInstance().getSubjectShorts().containsKey(subject.getId()) ? AppDatabase.getInstance().getSubjectShorts().get(subject.getId()) : subject.getTitle());
-            holder.pointsView.setText(String.valueOf(subject.getQuickAverage()));
+            holder.pointsView.setText(String.valueOf(Average.getQuickAverageOfTerm(subject, termID)));
             if (((Subject) obj).isExam()) {
                 holder.container.setBackground(context.getDrawable(R.drawable.background_listitem_selected));
             }
@@ -101,6 +104,7 @@ public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapte
     @Override
     public void update(ListableObject old, ListableObject updated) {
         int index = this.dataset.indexOf(old);
+
         this.dataset.set(index, updated);
         this.notifyItemChanged(index);
     }

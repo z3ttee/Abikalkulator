@@ -40,14 +40,17 @@ import de.zitzmanncedric.abicalc.fragments.subject.GradesFragment;
 import de.zitzmanncedric.abicalc.fragments.subject.SubjectsFragment;
 import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
 import de.zitzmanncedric.abicalc.utils.AppSerializer;
+import de.zitzmanncedric.abicalc.views.AverageView;
 
 /**
  * Teil des Hauptbildschirms. Zeigt die Übersicht über alle Fächer an, sowie voraussichtlicher Abiturschnitt
  * @author Cedric Zitzmann
  */
 public class OverviewFragment extends Fragment {
+    private static final String TAG = "OverviewFragment";
 
     private ViewPager fragmentPager;
+    private AverageView averageView;
 
     /**
      * Standard-Konstruktor der Klasse (wird benötigt durch die Erbung von Fragment)
@@ -65,26 +68,49 @@ public class OverviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
 
-        TabLayout tabLayout = view.findViewById(R.id.app_tabbar);
+        /*TabLayout tabLayout = view.findViewById(R.id.app_tabbar);
         fragmentPager = view.findViewById(R.id.app_fragment_pager);
 
-        fragmentPager.setAdapter(new Adapter(getChildFragmentManager(), getContext()));
+        fragmentPager.setAdapter(new Adapter(getChildFragmentManager(), view.getContext()));
+        tabLayout.setupWithViewPager(fragmentPager);
+
+        int currentTerm = AppCore.getSharedPreferences().getInt("currentTerm", 0);
+        new Handler().post(() -> {
+            fragmentPager.setCurrentItem(currentTerm, true);
+        });*/
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //setup();
+    }
+
+    private void setup() {
+        TabLayout tabLayout = getView().findViewById(R.id.app_tabbar);
+        fragmentPager = getView().findViewById(R.id.app_fragment_pager);
+        averageView = getView().findViewById(R.id.app_averageview);
+
+        fragmentPager.setAdapter(new Adapter(getChildFragmentManager(), getView().getContext()));
         tabLayout.setupWithViewPager(fragmentPager);
 
         int currentTerm = AppCore.getSharedPreferences().getInt("currentTerm", 0);
         new Handler().post(() -> {
             fragmentPager.setCurrentItem(currentTerm, true);
         });
-        return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        int currentTerm = AppCore.getSharedPreferences().getInt("currentTerm", 0);
+        setup();
+        averageView.recalculate();
+        /*int currentTerm = AppCore.getSharedPreferences().getInt("currentTerm", 0);
         new Handler().post(() -> {
             fragmentPager.setCurrentItem(currentTerm, true);
-        });
+        });*/
+
     }
 
     private static class Adapter extends FragmentPagerAdapter {
@@ -136,6 +162,16 @@ public class OverviewFragment extends Fragment {
         @Override
         public CharSequence getPageTitle(int position) {
             return titles.get(position);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == AppCore.RequestCodes.REQUEST_ADD_GRADE){
+            if(resultCode == AppCore.ResultCodes.RESULT_OK) {
+                setup();
+            }
         }
     }
 }

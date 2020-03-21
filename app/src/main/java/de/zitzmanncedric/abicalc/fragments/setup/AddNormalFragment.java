@@ -74,8 +74,19 @@ public class AddNormalFragment extends Fragment implements OnActivityToFragment,
     @Override
     public void onItemDeleted(ListableObject object) {
         if(object instanceof Subject) {
+            Subject subject = (Subject) object;
+
             setupActivity.normals.remove(object);
             adapter.remove(object);
+
+            if(subject.isExam()) {
+                if(subject.isOralExam()) {
+                    setupActivity.COUNT_ORAL_EXAMS-=1;
+                } else {
+                    setupActivity.COUNT_WRITTEN_EXAMS-=1;
+                }
+            }
+
             setupActivity.onFragmentToActivity(this, object, AppCore.ActionCodes.ACTION_LIST_REMOVEITEM);
         }
     }
@@ -90,6 +101,14 @@ public class AddNormalFragment extends Fragment implements OnActivityToFragment,
                     int index = setupActivity.normals.indexOf(subject);
                     setupActivity.normals.set(index, sbj);
                     adapter.update(subject, sbj);
+
+                    if(subject.isExam()) {
+                        if(subject.isOralExam()) {
+                            setupActivity.COUNT_ORAL_EXAMS-=1;
+                        } else {
+                            setupActivity.COUNT_WRITTEN_EXAMS-=1;
+                        }
+                    }
                 });
                 dialog.show();
             }

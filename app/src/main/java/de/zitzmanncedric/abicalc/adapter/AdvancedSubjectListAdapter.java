@@ -85,7 +85,15 @@ public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSub
             holder.itemView.setShowDelete(true);
             holder.itemView.setShowPoints(false);
             holder.itemView.setTitle(subject.getTitle());
-            holder.itemView.setSubtitle((subject.isExam() ? context.getString(R.string.exp_examsubject) : ""));
+
+            if(subject.isExam()) {
+                if(subject.isOralExam()) {
+                    holder.itemView.setSubtitle(holder.itemView.getContext().getString(R.string.exp_oralexamsubject));
+                } else {
+                    holder.itemView.setSubtitle(holder.itemView.getContext().getString(R.string.exp_examsubject));
+                }
+            }
+
             holder.itemView.setPositionInList(position);
             holder.itemView.setCorrespondingDataset(dataset);
             holder.itemView.setOnClickListener((view) -> {

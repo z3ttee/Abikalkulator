@@ -14,11 +14,18 @@
 
     <CheckBox
         style="@style/CheckBox"
-        android:id="@+id/dialog_checkbox"
+        android:id="@+id/dialog_checkbox_exam"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/label_markAsExam"
-        android:layout_marginTop="@dimen/default_padding"
+        android:layout_marginTop="@dimen/default_padding"/>
+
+    <CheckBox
+        style="@style/CheckBox"
+        android:id="@+id/dialog_checkbox_oralexam"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/label_markAsOralExam"
         android:layout_marginBottom="@dimen/default_padding_large"/>
 
     <LinearLayout

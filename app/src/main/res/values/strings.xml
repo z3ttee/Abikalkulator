@@ -5,6 +5,7 @@
     <string name="label_chose_normal">Wähle deine anderen Kurse (6)</string>
     <string name="label_chose_subject">Wähle einen Kurs</string>
     <string name="label_markAsExam">Als Prüfungsfach merken</string>
+    <string name="label_markAsOralExam">Als mündliches Prüfungsfach merken</string>
     <string name="label_settingup_app">Die App wird eingerichtet… Es erfolgt ein Neustart</string>
     <string name="label_yourintensified">Deine Leistungskurse</string>
     <string name="label_yournormals">Deine Nebenkurse</string>
@@ -28,8 +29,11 @@
     <string name="btn_add">Hinzufügen</string>
 
     <string name="exp_examsubject">Prüfungsfach</string>
+    <string name="exp_oralexamsubject">Mündliche Prüfung</string>
     <string name="exp_term">%. Term</string>
     <string name="exp_abi">Abitur</string>
+    <string name="exp_overallpoints">Deine Punktzahl</string>
+    <string name="exp_points">%points%/900Pkt.</string>
 
     <string name="error_headline">Whooops!</string>
     <string name="error_limitforsubject_reached">Limit für dieses Fach erreicht!</string>

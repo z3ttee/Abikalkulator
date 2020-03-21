@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,8 +92,19 @@ public class AddIntensifiedFragment extends Fragment implements OnActivityToFrag
     @Override
     public void onItemDeleted(ListableObject object) {
         if(object instanceof Subject) {
+            Subject subject = (Subject) object;
+
             setupActivity.intensified.remove(object);
             adapter.remove(object);
+
+            if(subject.isExam()) {
+                if(subject.isOralExam()) {
+                    setupActivity.COUNT_ORAL_EXAMS-=1;
+                } else {
+                    setupActivity.COUNT_WRITTEN_EXAMS-=1;
+                }
+            }
+
             setupActivity.onFragmentToActivity(this, object, AppCore.ActionCodes.ACTION_LIST_REMOVEITEM);
         }
     }
@@ -101,13 +113,13 @@ public class AddIntensifiedFragment extends Fragment implements OnActivityToFrag
     public void onItemEdit(final ListableObject object) {
         try {
             if(object instanceof Subject) {
-                Subject subject = (Subject) object;
+                Subject old = (Subject) object;
 
-                QuickSubjectEditDialog dialog = new QuickSubjectEditDialog(getContext(), subject);
+                QuickSubjectEditDialog dialog = new QuickSubjectEditDialog(getContext(), old);
                 dialog.setCallback(sbj -> {
-                    int index = setupActivity.intensified.indexOf(subject);
+                    int index = setupActivity.intensified.indexOf(old);
                     setupActivity.intensified.set(index, sbj);
-                    adapter.update(subject, sbj);
+                    adapter.update(old, sbj);
                 });
                 dialog.show();
             }
