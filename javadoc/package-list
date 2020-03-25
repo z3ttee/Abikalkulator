@@ -4,6 +4,7 @@ de.zitzmanncedric.abicalc.activities.main
 de.zitzmanncedric.abicalc.activities.subject
 de.zitzmanncedric.abicalc.adapter
 de.zitzmanncedric.abicalc.api
+de.zitzmanncedric.abicalc.api.calculation
 de.zitzmanncedric.abicalc.api.list
 de.zitzmanncedric.abicalc.broadcast
 de.zitzmanncedric.abicalc.database
