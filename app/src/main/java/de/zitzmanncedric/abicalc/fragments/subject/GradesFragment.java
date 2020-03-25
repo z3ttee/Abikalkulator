@@ -58,7 +58,7 @@ public class GradesFragment extends Fragment implements OnListItemCallback {
         View view = inflater.inflate(R.layout.fragment_grades, container, false);
 
         RecyclerView recyclerView = view.findViewById(R.id.grades_list);
-        adapter = new AdvancedSubjectListAdapter(view.getContext(), new ArrayList<>(), this);
+        adapter = new AdvancedSubjectListAdapter(new ArrayList<>(), this);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(adapter);
 

@@ -57,7 +57,7 @@ public class SeminarActivity extends AppCompatActivity implements View.OnClickLi
         actionBar.getCloseView().setOnClickListener(this);
 
         recyclerView = findViewById(R.id.app_grid_seminars);
-        adapter = new AdvancedSubjectListAdapter(this, new ArrayList<>(), this);
+        adapter = new AdvancedSubjectListAdapter(new ArrayList<>(), this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 

@@ -3,14 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/window_padding">
+    android:layout_height="match_parent">
 
     <TextView
         style="@style/Headline.h4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/headline_edit_subject"/>
+        android:text="@string/headline_edit_subject"
+        android:textAlignment="center"/>
 
     <CheckBox
         style="@style/CheckBox"
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/label_markAsExam"
-        android:layout_marginTop="@dimen/default_padding"/>
+        android:layout_marginTop="@dimen/default_padding_large"/>
 
     <CheckBox
         style="@style/CheckBox"

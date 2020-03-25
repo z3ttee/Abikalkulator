@@ -3,14 +3,14 @@
 
     <subject id="0" title="@string/subject_math" />
     <subject id="1" title="@string/subject_english" />
-    <subject id="2" title="@string/subject_pe" />
-    <subject id="3" title="@string/subject_chemistry" />
-    <subject id="4" title="@string/subject_german" />
-    <subject id="5" title="@string/subject_informatics" />
-    <subject id="6" title="@string/subject_economics" short="Wir. &amp; Recht"/>
-    <subject id="7" title="@string/subject_history" />
-    <subject id="8" title="@string/subject_french" />
-    <subject id="9" title="@string/subject_art" />
-    <subject id="10" title="@string/subject_religion" />
+    <subject id="2" title="@string/subject_chemistry" />
+    <subject id="3" title="@string/subject_german" />
+    <subject id="4" title="@string/subject_informatics" />
+    <subject id="5" title="@string/subject_economics" short="Wir. &amp; Recht"/>
+    <subject id="6" title="@string/subject_history" />
+    <subject id="7" title="@string/subject_french" />
+    <subject id="8" title="@string/subject_art" />
+    <subject id="9" title="@string/subject_religion" />
+    <subject id="10" title="@string/subject_pe" />
 
 </resources>

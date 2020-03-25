@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -12,6 +13,7 @@ import androidx.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.util.Locale;
 
+import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.api.calculation.Average;
 import needle.Needle;
@@ -43,14 +45,18 @@ public class AverageView extends LinearLayout {
 
             subtitle = findViewById(R.id.averageview_subtitle);
             amount = findViewById(R.id.average_amount);
-
-            Average.getAllPoints((result) -> subtitle.setText(context.getString(R.string.exp_points).replace("%points%", String.valueOf(result))));
-            Average.getGeneral((result -> amount.setText(new DecimalFormat("0.0").format(result))));
         }
     }
 
-    public void recalculate(){
-        Average.getAllPoints((result) -> subtitle.setText(getContext().getString(R.string.exp_points).replace("%points%", String.valueOf(result))));
-        Average.getGeneral((result -> amount.setText(new DecimalFormat("0.0").format(result))));
+    public void recalculate(ProgressBar progressBar){
+        progressBar.animate().alpha(1f).setDuration(AppCore.getInstance().getResources().getInteger(R.integer.anim_speed_quickly));
+        Average.getAllPoints((result) -> {
+            subtitle.setText(getContext().getString(R.string.exp_points).replace("%points%", String.valueOf(result)));
+            Average.getGeneral((r -> {
+                amount.setText(String.valueOf(r).substring(0, 3));
+                progressBar.animate().alpha(0f).setDuration(AppCore.getInstance().getResources().getInteger(R.integer.anim_speed_quickly)).setStartDelay(50);
+            }));
+        });
+
     }
 }

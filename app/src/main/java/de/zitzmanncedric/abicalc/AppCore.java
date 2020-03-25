@@ -7,11 +7,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.widget.Toast;
 
 import de.zitzmanncedric.abicalc.activities.SplashActivity;
-import de.zitzmanncedric.abicalc.api.calculation.Average;
 import de.zitzmanncedric.abicalc.broadcast.GradeBroadcaster;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
 import lombok.Getter;
@@ -78,6 +76,8 @@ public class AppCore extends Application {
         public static int REQUEST_ADD_SUBJECT = 1;
         public static int REQUEST_ADD_GRADE = 2;
         public static int REQUEST_UPDATE_GRADE = 3;
+        public static int REQUEST_VIEW_SUBJECT = 4;
+        public static int REQUEST_UPDATE_VIEWS = 5;
     }
 
     /**

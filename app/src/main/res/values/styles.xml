@@ -104,6 +104,9 @@
     <!-- Checkbox -->
     <style name="CheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
         <item name="android:textAppearance">@style/TextAppearance.Label</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:paddingTop">@dimen/default_padding</item>
+        <item name="android:paddingBottom">@dimen/default_padding</item>
     </style>
 
     <!-- SpinnerDesign -->
@@ -138,5 +141,11 @@
         <item name="maxImageSize">14dp</item>
         <item name="rippleColor">@color/colorAccentDark</item>
         <item name="backgroundTint">@color/colorAccent</item>
+    </style>
+
+    <!-- Animations -->
+    <style name="dialog_scale">
+        <item name="android:windowEnterAnimation">@anim/dialog_scaleup</item>
+        <item name="android:windowExitAnimation">@anim/dialog_scaledown</item>
     </style>
 </resources>

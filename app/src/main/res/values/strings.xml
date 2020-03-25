@@ -41,7 +41,7 @@
     <string name="error_missing_exams">Du musst 5 Kurse als Prüfungsfach markieren. Deine vorherige Auswahl erreichst du, indem du auf den ZURÜCK-Pfeil deines Smartphones drückst.</string>
     <string name="error_setup_cancelled">Du hast das Setup abgebrochen. Die App kann ohne Einrichtung nicht genutzt werden.</string>
 
-    <string name="headline_edit_subject">Schnellbearbeitung</string>
+    <string name="headline_edit_subject">Fach bearbeiten</string>
     <string name="headline_add_grade">Neue Note hinzufügen</string>
     <string name="headline_edit_grade">Einzelnote bearbeiten</string>
 

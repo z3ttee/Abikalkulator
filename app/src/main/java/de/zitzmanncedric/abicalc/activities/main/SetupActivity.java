@@ -5,25 +5,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.AppFragments;
-import de.zitzmanncedric.abicalc.activities.SplashActivity;
 import de.zitzmanncedric.abicalc.api.Grade;
 import de.zitzmanncedric.abicalc.api.Seminar;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
 import de.zitzmanncedric.abicalc.dialogs.ProgressDialog;
-import de.zitzmanncedric.abicalc.utils.AppSerializer;
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.fragments.setup.AddIntensifiedFragment;
@@ -40,12 +35,10 @@ import needle.UiRelatedTask;
  * @author Cedric Zitzmann
  */
 public class SetupActivity extends AppCompatActivity implements OnSubjectChosenListener, OnFragmentToActivity {
-    private static final String TAG = "SetupActivity";
 
     public static final int AMOUNT_INTENSIFIED = 5;   // 5
     public static final int AMOUNT_NORMALS = 6;       // 6
     public static final int AMOUNT_EXAMS_MAX = 5;     // 5
-    public static final int AMOUNT_ORAL_EXAMS_MAX = 2;
 
     private FrameLayout appFragmentContainer;
 
@@ -54,9 +47,6 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
 
     public ArrayList<Subject> intensified = new ArrayList<>();
     public ArrayList<Subject> normals = new ArrayList<>();
-
-    public int COUNT_ORAL_EXAMS = 0;
-    public int COUNT_WRITTEN_EXAMS = 0;
 
     /**
      * Baut die Aktivität auf
@@ -97,27 +87,54 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
         sheet.setTitle(getString(R.string.label_chose_subject));
         sheet.setOnSubjectChosenListener(this);
 
-        int count_oral = 0;
-        int count_written = 0;
+        if(getCountWrittenExams() >= 3) {
+            sheet.setOnlyOralExam(true);
+        }
+        if(getCountOralExams() >= 2) {
+            sheet.setOnlyWrittenExam(true);
+        }
 
-        for(Subject subject : disabled) {
+        sheet.show();
+    }
+
+    /**
+     * Ermittelt Anzahl von ausgewählten schriftlichen Prüfungsfächer
+     * @return Integer
+     */
+    public int getCountWrittenExams() {
+        ArrayList<Subject> subjects = new ArrayList<>(intensified);
+
+        int count_written = 0;
+        for(Subject subject : subjects) {
             if(subject.isExam()) {
-                if(subject.isOralExam()){
-                    ++count_oral;
-                } else {
+                if(!subject.isOralExam()){
                     ++count_written;
                 }
             }
         }
 
-        if(count_written >= 3) {
-            sheet.setOnlyOralExam(true);
-        }
-        if(count_oral >= 2) {
-            sheet.setOnlyWrittenExam(true);
+        return count_written;
+    }
+
+    /**
+     * Ermittelt Anzahl von ausgewählten mündlichen Prüfungsfächer
+     * @return Integer
+     */
+    public int getCountOralExams() {
+        ArrayList<Subject> subjects = new ArrayList<>();
+        subjects.addAll(intensified);
+        subjects.addAll(normals);
+
+        int count_oral = 0;
+        for(Subject subject : subjects) {
+            if(subject.isExam()) {
+                if(subject.isOralExam()){
+                    ++count_oral;
+                }
+            }
         }
 
-        sheet.show();
+        return count_oral;
     }
 
     /**
@@ -196,14 +213,6 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
     }
 
     /**
-     * Schließt die Aktivität und zeigt einen Fehler an, wenn beim Einrichten einer aufgetreten ist
-     */
-    private void showError() {
-        setResult(AppCore.ResultCodes.RESULT_FAILED);
-        finish();
-    }
-
-    /**
      * Prüft, ob die Einrichtung über "Zurück" des Smartphones abgebrochen wurde
      */
     @Override
@@ -218,22 +227,16 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
      */
     @Override
     public void onSubjectChosen(Subject subject) {
+
         Fragment fragment = getSupportFragmentManager().getFragments().get(getSupportFragmentManager().getFragments().size()-1);
         if(fragment instanceof AddIntensifiedFragment) {
             subject.setIntensified(true);
             intensified.add(subject);
 
-            if(subject.isExam()) {
-                if(subject.isOralExam()) ++COUNT_ORAL_EXAMS;
-                else ++COUNT_WRITTEN_EXAMS;
-            }
-
             if(intensified.size() == AMOUNT_INTENSIFIED) {
                 addSubjectBtn.setEnabled(false);
                 continueSetupBtn.setEnabled(true);
             }
-
-
 
             // Send info to fragment
             ((AddIntensifiedFragment) fragment).onActivityToFragment(this, subject, AppCore.ActionCodes.ACTION_LIST_ADDITEM);
@@ -241,11 +244,6 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
         if(fragment instanceof AddNormalFragment) {
             subject.setIntensified(false);
             normals.add(subject);
-
-            if(subject.isExam()) {
-                if(subject.isOralExam()) ++COUNT_ORAL_EXAMS;
-                else ++COUNT_WRITTEN_EXAMS;
-            }
 
             if(normals.size() == AMOUNT_NORMALS) {
                 addSubjectBtn.setEnabled(false);

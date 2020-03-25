@@ -1,6 +1,5 @@
 package de.zitzmanncedric.abicalc.dialogs;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.ProgressBar;
@@ -11,7 +10,7 @@ import androidx.annotation.Nullable;
 
 import de.zitzmanncedric.abicalc.R;
 
-public class ProgressDialog extends Dialog {
+public class ProgressDialog extends AppDialog {
 
     private ProgressBar progressBar;
     private TextView textView;
@@ -19,13 +18,12 @@ public class ProgressDialog extends Dialog {
     private String title = "";
 
     public ProgressDialog(@NonNull Context context) {
-        super(context);
+        super(context, R.layout.dialog_loading);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_loading);
 
         progressBar = findViewById(R.id.dialog_progressbar);
         textView = findViewById(R.id.dialog_title);

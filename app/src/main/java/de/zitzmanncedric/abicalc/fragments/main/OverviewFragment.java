@@ -10,36 +10,22 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.R;
-import de.zitzmanncedric.abicalc.activities.subject.ViewSubjectActivity;
-import de.zitzmanncedric.abicalc.adapter.RecyclerGridAdapter;
-import de.zitzmanncedric.abicalc.api.Seminar;
-import de.zitzmanncedric.abicalc.api.Subject;
-import de.zitzmanncedric.abicalc.api.list.ListableObject;
-import de.zitzmanncedric.abicalc.database.AppDatabase;
-import de.zitzmanncedric.abicalc.fragments.subject.GradesFragment;
 import de.zitzmanncedric.abicalc.fragments.subject.SubjectsFragment;
-import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
-import de.zitzmanncedric.abicalc.utils.AppSerializer;
 import de.zitzmanncedric.abicalc.views.AverageView;
 
 /**
@@ -47,10 +33,10 @@ import de.zitzmanncedric.abicalc.views.AverageView;
  * @author Cedric Zitzmann
  */
 public class OverviewFragment extends Fragment {
-    private static final String TAG = "OverviewFragment";
 
     private ViewPager fragmentPager;
     private AverageView averageView;
+    private ProgressBar progressBar;
 
     /**
      * Standard-Konstruktor der Klasse (wird benötigt durch die Erbung von Fragment)
@@ -68,51 +54,41 @@ public class OverviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
 
-        /*TabLayout tabLayout = view.findViewById(R.id.app_tabbar);
         fragmentPager = view.findViewById(R.id.app_fragment_pager);
+        TabLayout tabLayout = view.findViewById(R.id.app_tabbar);
+        averageView = view.findViewById(R.id.app_averageview);
+        progressBar = view.findViewById(R.id.app_progressbar);
 
         fragmentPager.setAdapter(new Adapter(getChildFragmentManager(), view.getContext()));
         tabLayout.setupWithViewPager(fragmentPager);
 
-        int currentTerm = AppCore.getSharedPreferences().getInt("currentTerm", 0);
-        new Handler().post(() -> {
+        new Handler().postDelayed(() -> {
+            int currentTerm = AppCore.getSharedPreferences().getInt("currentTerm", 0);
             fragmentPager.setCurrentItem(currentTerm, true);
-        });*/
+        }, 50);
         return view;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        //setup();
-    }
-
-    private void setup() {
-        TabLayout tabLayout = getView().findViewById(R.id.app_tabbar);
-        fragmentPager = getView().findViewById(R.id.app_fragment_pager);
-        averageView = getView().findViewById(R.id.app_averageview);
-
-        fragmentPager.setAdapter(new Adapter(getChildFragmentManager(), getView().getContext()));
-        tabLayout.setupWithViewPager(fragmentPager);
-
-        int currentTerm = AppCore.getSharedPreferences().getInt("currentTerm", 0);
-        new Handler().post(() -> {
-            fragmentPager.setCurrentItem(currentTerm, true);
-        });
-    }
-
+    /**
+     * Beim Fortsetzen der Aktivität wird der Notendurchschnitt neu berechnet
+     */
     @Override
     public void onResume() {
         super.onResume();
-        setup();
-        averageView.recalculate();
+        new Handler().post(() -> averageView.recalculate(progressBar));
     }
 
+    /**
+     * Adapterklasse, um zwischen einzelnen Halbjahren zu wechseln
+     */
     private static class Adapter extends FragmentPagerAdapter {
-        private static final String TAG = "Adapter";
-
         private ArrayList<String> titles;
 
+        /**
+         * Konstruktor der Klasse
+         * @param fm Von Android benötigt
+         * @param context Von Android benötigt
+         */
         Adapter(@NonNull FragmentManager fm, Context context) {
             super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
@@ -125,11 +101,20 @@ public class OverviewFragment extends Fragment {
             ));
         }
 
+        /**
+         * Gibt die Zahl der Halbjahre zurück
+         * @return Integer (5)
+         */
         @Override
         public int getCount() {
             return 5;
         }
 
+        /**
+         * Gibt das Fragment zurück, welches ausgewählt wurde
+         * @param position Position in Reihenfolge
+         * @return Ausgewähltes Fragment
+         */
         @NonNull
         @Override
         public Fragment getItem(int position) {
@@ -153,6 +138,11 @@ public class OverviewFragment extends Fragment {
             return fragment;
         }
 
+        /**
+         * Gibt den Titel des Fragments zurück, um es in der Tabbar anzuzeigen
+         * @param position Position in Reihenfolge
+         * @return Titel des Fragments
+         */
         @Nullable
         @Override
         public CharSequence getPageTitle(int position) {
@@ -160,12 +150,40 @@ public class OverviewFragment extends Fragment {
         }
     }
 
+    /**
+     * Registriert, ob einen neue Note über das Hauptfenster hinzugefügt wurde. Leitet das Resultat an das zugehörige Fragment weiter, um das Element in der Liste zu aktualisieren
+     * @param requestCode Code zur Identifizierung der Anfrage
+     * @param resultCode Code zur Identifizierung des Ergebnistyps
+     * @param data Datenobjekt, welches die hinzugefügte Note enthält
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == AppCore.RequestCodes.REQUEST_ADD_GRADE){
-            if(resultCode == AppCore.ResultCodes.RESULT_OK) {
-                setup();
+        if(data != null) {
+            if (requestCode == AppCore.RequestCodes.REQUEST_ADD_GRADE) {
+                if (resultCode == AppCore.ResultCodes.RESULT_OK) {
+                    try {
+                        for (Fragment fragment : getChildFragmentManager().getFragments()) {
+                            if (fragment instanceof SubjectsFragment) {
+                                SubjectsFragment f = (SubjectsFragment) fragment;
+                                f.onActivityResult(requestCode, resultCode, data);
+                            }
+                        }
+
+                        averageView.recalculate(progressBar);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        if (requestCode == AppCore.RequestCodes.REQUEST_VIEW_SUBJECT) {
+            for (Fragment fragment : getChildFragmentManager().getFragments()) {
+                if (fragment instanceof SubjectsFragment) {
+                    SubjectsFragment f = (SubjectsFragment) fragment;
+                    f.onActivityResult(AppCore.RequestCodes.REQUEST_UPDATE_VIEWS, resultCode, null);
+                }
             }
         }
     }

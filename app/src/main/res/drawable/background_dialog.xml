@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="@android:color/white" />
-    <padding android:top="@dimen/default_padding_large" android:bottom="@dimen/default_padding_large" android:left="@dimen/default_padding_large" android:right="@dimen/default_padding_large" />
+    <padding android:top="@dimen/window_padding" android:bottom="@dimen/window_padding" android:left="@dimen/window_padding" android:right="@dimen/window_padding" />
     <corners android:radius="@dimen/window_padding" />
 </shape>

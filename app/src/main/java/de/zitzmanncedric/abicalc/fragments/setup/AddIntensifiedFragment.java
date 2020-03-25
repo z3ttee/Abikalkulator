@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,6 @@ import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
 import de.zitzmanncedric.abicalc.views.AppButton;
 
 public class AddIntensifiedFragment extends Fragment implements OnActivityToFragment, OnListItemCallback {
-    private static final String TAG = "AddIntensifiedFragment";
 
     private AppButton continueSetupBtn;
     private AppButton addSubjectBtn;
@@ -50,7 +48,7 @@ public class AddIntensifiedFragment extends Fragment implements OnActivityToFrag
             recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
             ArrayList<ListableObject> objects = new ArrayList<>(((SetupActivity) getActivity()).intensified);
-            adapter = new AdvancedSubjectListAdapter(getContext(), objects);
+            adapter = new AdvancedSubjectListAdapter(objects);
 
             adapter.setOnCallback(this);
             adapter.setCorrespondingRecyclerView(recyclerView);
@@ -94,18 +92,10 @@ public class AddIntensifiedFragment extends Fragment implements OnActivityToFrag
         if(object instanceof Subject) {
             Subject subject = (Subject) object;
 
-            setupActivity.intensified.remove(object);
-            adapter.remove(object);
-
-            if(subject.isExam()) {
-                if(subject.isOralExam()) {
-                    setupActivity.COUNT_ORAL_EXAMS-=1;
-                } else {
-                    setupActivity.COUNT_WRITTEN_EXAMS-=1;
-                }
+            if(setupActivity.intensified.remove(object)) {
+                adapter.remove(object);
+                setupActivity.onFragmentToActivity(this, object, AppCore.ActionCodes.ACTION_LIST_REMOVEITEM);
             }
-
-            setupActivity.onFragmentToActivity(this, object, AppCore.ActionCodes.ACTION_LIST_REMOVEITEM);
         }
     }
 
@@ -114,8 +104,9 @@ public class AddIntensifiedFragment extends Fragment implements OnActivityToFrag
         try {
             if(object instanceof Subject) {
                 Subject old = (Subject) object;
+                old.setIntensified(true);
 
-                QuickSubjectEditDialog dialog = new QuickSubjectEditDialog(getContext(), old);
+                QuickSubjectEditDialog dialog = new QuickSubjectEditDialog(getContext(), old, setupActivity);
                 dialog.setCallback(sbj -> {
                     int index = setupActivity.intensified.indexOf(old);
                     setupActivity.intensified.set(index, sbj);

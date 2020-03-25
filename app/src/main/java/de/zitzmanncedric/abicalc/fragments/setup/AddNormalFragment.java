@@ -26,7 +26,6 @@ import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
 import de.zitzmanncedric.abicalc.views.AppButton;
 
 public class AddNormalFragment extends Fragment implements OnActivityToFragment, OnListItemCallback {
-    private static final String TAG = "AddNormalFragment";
 
     private AppButton continueSetupBtn;
     private AppButton addSubjectBtn;
@@ -49,7 +48,7 @@ public class AddNormalFragment extends Fragment implements OnActivityToFragment,
             recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
             ArrayList<ListableObject> objects = new ArrayList<>(((SetupActivity) getActivity()).normals);
-            adapter = new AdvancedSubjectListAdapter(getContext(), objects);
+            adapter = new AdvancedSubjectListAdapter(objects);
 
             adapter.setOnCallback(this);
             adapter.setCorrespondingRecyclerView(recyclerView);
@@ -74,20 +73,10 @@ public class AddNormalFragment extends Fragment implements OnActivityToFragment,
     @Override
     public void onItemDeleted(ListableObject object) {
         if(object instanceof Subject) {
-            Subject subject = (Subject) object;
-
-            setupActivity.normals.remove(object);
-            adapter.remove(object);
-
-            if(subject.isExam()) {
-                if(subject.isOralExam()) {
-                    setupActivity.COUNT_ORAL_EXAMS-=1;
-                } else {
-                    setupActivity.COUNT_WRITTEN_EXAMS-=1;
-                }
+            if(setupActivity.normals.remove(object)) {
+                adapter.remove(object);
+                setupActivity.onFragmentToActivity(this, object, AppCore.ActionCodes.ACTION_LIST_REMOVEITEM);
             }
-
-            setupActivity.onFragmentToActivity(this, object, AppCore.ActionCodes.ACTION_LIST_REMOVEITEM);
         }
     }
 
@@ -96,19 +85,13 @@ public class AddNormalFragment extends Fragment implements OnActivityToFragment,
         try {
             if(object instanceof Subject) {
                 Subject subject = (Subject) object;
-                QuickSubjectEditDialog dialog = new QuickSubjectEditDialog(getContext(), subject);
+                subject.setIntensified(false);
+
+                QuickSubjectEditDialog dialog = new QuickSubjectEditDialog(getContext(), subject, setupActivity);
                 dialog.setCallback(sbj -> {
                     int index = setupActivity.normals.indexOf(subject);
                     setupActivity.normals.set(index, sbj);
                     adapter.update(subject, sbj);
-
-                    if(subject.isExam()) {
-                        if(subject.isOralExam()) {
-                            setupActivity.COUNT_ORAL_EXAMS-=1;
-                        } else {
-                            setupActivity.COUNT_WRITTEN_EXAMS-=1;
-                        }
-                    }
                 });
                 dialog.show();
             }

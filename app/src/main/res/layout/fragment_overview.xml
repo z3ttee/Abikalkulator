@@ -2,13 +2,22 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
-    android:paddingTop="@dimen/window_padding"
+
     android:paddingBottom="0dp"
     android:orientation="vertical">
+
+    <ProgressBar
+        android:id="@+id/app_progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-7.5dp"
+        android:alpha="1"
+        android:indeterminate="true" />
 
     <de.zitzmanncedric.abicalc.views.AverageView
         android:id="@+id/app_averageview"

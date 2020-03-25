@@ -18,16 +18,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <de.zitzmanncedric.abicalc.views.AppButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Hello"/>
-
-        <de.zitzmanncedric.abicalc.views.AppButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="there"/>
-
     </de.zitzmanncedric.abicalc.views.AppButtonList>
 
 </LinearLayout>

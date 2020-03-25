@@ -13,6 +13,7 @@ import de.zitzmanncedric.abicalc.api.Seminar;
 import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
 import needle.Needle;
+import needle.UiRelatedTask;
 
 public class Average {
     private static final String TAG = "Average";
@@ -52,12 +53,9 @@ public class Average {
 
             // Return average of all others if these are the only grades
             if(thirdFactor.isEmpty()) {
-                Log.i(TAG, "getOfTermAndSubject: thirds empty.");
-                Log.i(TAG, "getOfTermAndSubject: "+normalFactor.size());
                 for(Grade grade : normalFactor) {
                     avg += grade.getValue();
                 }
-                Log.i(TAG, "getOfTermAndSubject: "+avg);
                 avg = Math.round((float) avg / (float) normalFactor.size());
                 callback.onCalcFinished(avg);
                 return;
@@ -128,12 +126,26 @@ public class Average {
      * Berechnet Gesamtnote im Hintergrund aus. Es werden die 4 schlechtesten Fächer automatisch gestrichen aus jedem Halbjahr eins.
      * @param callback Um auf Rückgabe zurückzugreifen
      */
-    public static void getGeneral(CalcCallback<Float> callback){
-        Needle.onBackgroundThread().execute(() -> {
-            float avg;
-            int points = getAllPointsSync();
-            avg = (5.6667f) - (points / 180f); // N = 17/3 – (E / 180)
-            callback.onCalcFinished(avg);
+    public static void getGeneral(CalcCallback<Double> callback){
+        Needle.onBackgroundThread().execute(new UiRelatedTask<Double>() {
+            @Override
+            protected Double doWork() {
+                double avg;
+                int points = getAllPointsSync();
+
+                // Durchschnitt von 0.9 und weniger vermeiden
+                if(points > 822) {
+                    avg = 1.0;
+                } else {
+                    avg = (double) 17 / 3 - ((double) points / (double) 180); // N = 17/3 – (E / 180)
+                }
+                return avg;
+            }
+
+            @Override
+            protected void thenDoUiRelatedWork(Double result) {
+                callback.onCalcFinished(result);
+            }
         });
     }
 
@@ -142,9 +154,16 @@ public class Average {
      * @param callback Um auf Rückgabe zurückzugreifen
      */
     public static void getAllPoints(CalcCallback<Integer> callback) {
-        Needle.onBackgroundThread().execute(() -> {
-            int points = getAllPointsSync();
-            callback.onCalcFinished(points);
+        Needle.onBackgroundThread().execute(new UiRelatedTask<Integer>() {
+            @Override
+            protected Integer doWork() {
+                return getAllPointsSync();
+            }
+
+            @Override
+            protected void thenDoUiRelatedWork(Integer result) {
+                callback.onCalcFinished(result);
+            }
         });
     }
 
@@ -152,7 +171,7 @@ public class Average {
      * Berechnet Gesamtpunktezahl im gleichen Thread. Es werden die 4 schlechtesten Fächer automatisch gestrichen aus jedem Halbjahr eins.
      * @return Gibt direkten Wert zurück
      */
-    public static int getAllPointsSync() {
+    public static synchronized int getAllPointsSync() {
         int points = 0;
         for(Subject subject : AppDatabase.getInstance().getUserSubjects()) {
             points += subject.getQuickAvgT1()+subject.getQuickAvgT2()+subject.getQuickAvgT3()+subject.getQuickAvgT4();

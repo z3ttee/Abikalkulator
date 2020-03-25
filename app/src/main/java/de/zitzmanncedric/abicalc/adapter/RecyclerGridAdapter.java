@@ -6,6 +6,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -47,13 +48,15 @@ public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapte
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         ListableObject obj = dataset.get(position);
 
-        holder.container.setAnimation(AppUtils.getListItemEnterAnim());
+        Animation animation = AppUtils.getListItemEnterAnim();
+        animation.setStartOffset(100*position);
+        holder.container.setAnimation(animation);
 
         TypedValue value = new TypedValue();
         context.getTheme().resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, value, true);
         holder.container.setForeground(context.getDrawable(value.resourceId));
         holder.container.setClipToOutline(true);
-        holder.container.setOnTouchListener(new OnButtonTouchListener(0.96f));
+        holder.container.setOnTouchListener(new OnButtonTouchListener(0.94f));
         holder.container.setOnClickListener(v -> {
             if(itemCallback != null) itemCallback.onItemClicked(obj);
         });
@@ -103,10 +106,26 @@ public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapte
 
     @Override
     public void update(ListableObject old, ListableObject updated) {
-        int index = this.dataset.indexOf(old);
+        if(updated instanceof Subject) {
+            Subject subject = (Subject) updated;
+
+            int index = 0;
+            for(ListableObject object : this.dataset) {
+                if(object instanceof Subject) {
+                    if(((Subject) object).getId() == subject.getId()) {
+                        index = this.dataset.indexOf(object);
+                    }
+                }
+            }
+
+            this.dataset.set(index, updated);
+            this.notifyItemChanged(index);
+        }
+
+        /*int index = this.dataset.indexOf(old);
 
         this.dataset.set(index, updated);
-        this.notifyItemChanged(index);
+        this.notifyItemChanged(index);*/
     }
 
     @Override
