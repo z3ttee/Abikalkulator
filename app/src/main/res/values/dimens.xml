@@ -9,6 +9,7 @@
     <item name="list_bottom_padding" type="dimen">30dp</item>
 
     <item name="icon_size" type="dimen">32dp</item>
+    <item name="icon_size_large" type="dimen">45dp</item>
     <item name="icon_padding" type="dimen">6dp</item>
 
     <item name="listitem_radius" type="dimen">16dp</item>

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Abikalkulator</string>
+    <string name="app_info">v1.0-beta02 - © 2020</string>
 
     <string name="label_chose_intensified">Wähle deine Leistungskurse (5)</string>
     <string name="label_chose_normal">Wähle deine anderen Kurse (6)</string>
@@ -44,6 +45,7 @@
     <string name="headline_edit_subject">Fach bearbeiten</string>
     <string name="headline_add_grade">Neue Note hinzufügen</string>
     <string name="headline_edit_grade">Einzelnote bearbeiten</string>
+    <string name="headline_settings">Einstellungen</string>
 
     <string name="subject_math">Mathematik</string>
     <string name="subject_english">Englisch</string>
@@ -69,4 +71,15 @@
     <string name="menu_home">Übersicht</string>
     <string name="menu_goals">Ziele</string>
     <string name="menu_settings">Einstellungen</string>
+
+    <string name="settings_seminar">Seminarfacheinstellungen</string>
+    <string name="settings_seminar_desc">Einbringen und Fach ersetzen</string>
+    <string name="settings_subjects">Deine Fächer</string>
+    <string name="settings_subjects_desc">Fächer bearbeiten und ersetzen</string>
+    <string name="settings_goals">Deine Ziele</string>
+    <string name="settings_goals_desc">Standard-Punkte, Ziel-Abi, Ziel-Punkte</string>
+    <string name="settings_share">App teilen</string>
+    <string name="settings_share_desc">Auf WhatsApp, Facebook u.a. teilen</string>
+    <string name="settings_privacy">Datenschutz &amp; Sicherheit</string>
+    <string name="settings_privacy_desc">Datenschutzerklärung anzeigen</string>
 </resources>

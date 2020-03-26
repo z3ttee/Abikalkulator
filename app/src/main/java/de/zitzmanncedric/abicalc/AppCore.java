@@ -24,6 +24,7 @@ public class AppCore extends Application {
 
     @Getter private static AppCore instance;
     @Getter private static SharedPreferences sharedPreferences;
+    @Getter private static final String appInfo = "";
 
     /**
      * Bildet instanz der App

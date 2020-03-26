@@ -11,13 +11,26 @@
     <TextView
         style="@style/Headline.h4"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Einstellungen" />
+        android:layout_height="wrap_content"
+        android:text="@string/headline_settings" />
 
-    <de.zitzmanncedric.abicalc.views.AppButtonList
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_settings"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:nestedScrollingEnabled="false"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/window_padding" />
 
-    </de.zitzmanncedric.abicalc.views.AppButtonList>
+    <TextView
+        style="@style/TextAppearance"
+        android:id="@+id/app_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/window_padding"
+        android:text="@string/app_info"
+        android:textAlignment="center"
+        android:textSize="10sp"
+        tools:ignore="SmallSp" />
 
 </LinearLayout>
