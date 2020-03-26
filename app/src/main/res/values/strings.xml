@@ -9,8 +9,9 @@
     <string name="label_markAsOralExam">Als mündliches Prüfungsfach merken</string>
     <string name="label_settingup_app">Die App wird eingerichtet… Es erfolgt ein Neustart</string>
     <string name="label_yourintensified">Deine Leistungskurse</string>
-    <string name="label_yournormals">Deine Nebenkurse</string>
+    <string name="label_yourbasics">Deine Nebenkurse</string>
     <string name="label_yourseminar">Dein Seminarfach</string>
+    <string name="label_yourexams">Deine Prüfungsfächer</string>
     <string name="label_chose_term">Wähle das Halbjahr</string>
     <string name="label_chose_grade">Erhaltene Punktzahl</string>
     <string name="label_chose_type">Art der Note</string>

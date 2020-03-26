@@ -48,19 +48,6 @@ public class Subject extends ListableObject implements Serializable, Cloneable {
         this.terms = terms;
     }
 
-    @Override
-    public SubjectListItemView getListItemView(Context context) {
-        SubjectListItemView itemView = new SubjectListItemView(context);
-
-        itemView.setTitle(getTitle());
-        itemView.setSubtitle((isExam() ? context.getString(R.string.exp_examsubject) : ""));
-        itemView.setPoints(quickAvgT1);
-        itemView.setShowPoints(true);
-        itemView.setShowEdit(false);
-        itemView.setShowDelete(false);
-        return itemView;
-    }
-
     @NonNull
     @Override
     public Object clone() throws CloneNotSupportedException {

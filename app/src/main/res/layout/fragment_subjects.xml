@@ -8,45 +8,8 @@
     android:paddingStart="@dimen/window_padding"
     android:paddingEnd="@dimen/window_padding">
 
-    <TextView
-        style="@style/TextAppearance.Label"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/default_padding"
-        android:text="@string/label_yourintensified" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/app_grid_intensified"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:nestedScrollingEnabled="false" />
-
-    <TextView
-        style="@style/TextAppearance.Label"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/window_padding"
-        android:layout_marginBottom="@dimen/default_padding"
-        android:text="@string/label_yourseminar" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/app_grid_seminar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:nestedScrollingEnabled="false" />
-
-    <TextView
-        style="@style/TextAppearance.Label"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/window_padding"
-        android:layout_marginBottom="@dimen/default_padding"
-        android:text="@string/label_yourintensified" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/app_grid_basics"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -38,13 +39,10 @@ import needle.UiRelatedProgressTask;
  * @author Cedric Zitzmann
  */
 public class SubjectsFragment extends Fragment implements OnListItemCallback {
-    private static final String TAG = "SubjectsFragment";
 
     @Getter private int termID;
 
-    private RecyclerGridAdapter intensifiedAdapter;
-    private RecyclerGridAdapter basicsAdapter;
-    private RecyclerGridAdapter seminarAdapter;
+    private RecyclerGridAdapter adapter;
 
     public SubjectsFragment() {}
     public SubjectsFragment(int termID) {
@@ -65,26 +63,16 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
         Seminar.getInstance().setAside(String.valueOf(Average.getSeminarSync()));
 
         RecyclerView intensifiedView = view.findViewById(R.id.app_grid_intensified);
-        RecyclerView basicsView = view.findViewById(R.id.app_grid_basics);
-        RecyclerView seminarView = view.findViewById(R.id.app_grid_seminar);
 
-        intensifiedAdapter = new RecyclerGridAdapter(getContext(), termID, new ArrayList<>(5));
-        basicsAdapter = new RecyclerGridAdapter(getContext(), termID, new ArrayList<>(6));
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
 
-        intensifiedAdapter.setItemCallback(this);
-        intensifiedView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        intensifiedView.setAdapter(intensifiedAdapter);
+        adapter = new RecyclerGridAdapter(getContext(), termID, layoutManager);
 
-        basicsAdapter.setItemCallback(this);
-        basicsView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        basicsView.setAdapter(basicsAdapter);
+        adapter.setItemCallback(this);
+        intensifiedView.setLayoutManager(layoutManager);
+        intensifiedView.setAdapter(adapter);
 
-        seminarAdapter = new RecyclerGridAdapter(getContext(), termID, new ArrayList<>(new ArrayList<>(Collections.singleton(Seminar.getInstance()))));
-        seminarAdapter.setItemCallback(this);
-        seminarView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        seminarView.setAdapter(seminarAdapter);
-
-        Needle.onBackgroundThread().withThreadPoolSize(2).execute(new UiRelatedProgressTask<Void, Subject>() {
+        Needle.onBackgroundThread().withThreadPoolSize(1).execute(new UiRelatedProgressTask<Void, Subject>() {
             @Override
             protected Void doWork() {
                 for (Subject subject : AppDatabase.getInstance().getUserSubjects()) {
@@ -95,14 +83,21 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
                             publishProgress(subject);
                         }
                     }
+
+                    try {
+                        Thread.sleep(20);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
+
+
                 return null;
             }
 
             @Override
             protected void onProgressUpdate(Subject subject) {
-                if (subject.isIntensified()) intensifiedAdapter.add(subject);
-                else basicsAdapter.add(subject);
+                adapter.add(subject);
             }
 
             @Override
@@ -114,7 +109,7 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
     @Override
     public void onResume() {
         super.onResume();
-        seminarAdapter.update(Seminar.getInstance(), Seminar.getInstance());
+        adapter.update(Seminar.getInstance(), Seminar.getInstance());
     }
 
     /**
@@ -178,11 +173,7 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
                         Grade grade = (Grade) AppSerializer.deserialize(data.getByteArrayExtra("grade"));
                         Subject subject = AppDatabase.getInstance().getUserSubjectByID(grade.getSubjectID());
 
-                        if(subject.isIntensified()) {
-                            intensifiedAdapter.update(subject, subject);
-                        } else {
-                            basicsAdapter.update(subject, subject);
-                        }
+                        adapter.update(subject, subject);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -198,11 +189,13 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
         }
 
         if(requestCode == AppCore.RequestCodes.REQUEST_UPDATE_VIEWS) {
-            intensifiedAdapter.notifyDataSetChanged();
+            Seminar.getInstance().setAside(String.valueOf(Average.getSeminarSync()));
+            adapter.notifyDataSetChanged();
+            /*intensifiedAdapter.notifyDataSetChanged();
             basicsAdapter.notifyDataSetChanged();
 
             Seminar.getInstance().setAside(String.valueOf(Average.getSeminarSync()));
-            seminarAdapter.set(new ArrayList<>(Collections.singletonList(Seminar.getInstance())));
+            seminarAdapter.set(new ArrayList<>(Collections.singletonList(Seminar.getInstance())));*/
         }
     }
 }

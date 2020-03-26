@@ -44,11 +44,6 @@ public class Grade extends ListableObject implements Serializable, Cloneable {
         this.dateCreated = date;
     }
 
-    @Override
-    public SubjectListItemView getListItemView(Context context) {
-        return null;
-    }
-
     /**
      * Enum zum Festlegen eines Notentyps
      */

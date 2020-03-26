@@ -1,8 +1,5 @@
 package de.zitzmanncedric.abicalc.api.list;
 
-import android.content.Context;
-
-import de.zitzmanncedric.abicalc.views.SubjectListItemView;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +15,4 @@ public abstract class ListableObject {
         this.subtitle = subtitle;
         this.aside = aside;
     }
-
-    public abstract SubjectListItemView getListItemView(Context context);
 }

@@ -23,11 +23,6 @@ public class Seminar extends ListableObject {
         instance = this;
     }
 
-    @Override
-    public SubjectListItemView getListItemView(Context context) {
-        return null;
-    }
-
     public static Seminar getInstance() {
         if (instance == null) instance = new Seminar();
         return instance;
