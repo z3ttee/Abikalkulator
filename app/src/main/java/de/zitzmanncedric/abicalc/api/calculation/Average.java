@@ -42,7 +42,6 @@ public class Average {
 
             // Return average of KAs if these are the only grades
             if(normalFactor.isEmpty()) {
-                Log.i(TAG, "getOfTermAndSubject: normals empty.");
                 for(Grade grade : thirdFactor) {
                     avg += grade.getValue();
                 }
@@ -176,7 +175,6 @@ public class Average {
         for(Subject subject : AppDatabase.getInstance().getUserSubjects()) {
             points += subject.getQuickAvgT1()+subject.getQuickAvgT2()+subject.getQuickAvgT3()+subject.getQuickAvgT4();
             if(subject.isExam()) {
-                // TODO: Seminarfach einbringen beachten
                 if(!(Seminar.getInstance().isMinded() && Seminar.getInstance().getReplacedSubjectID() == subject.getId())) {
                     points += subject.getQuickAvgTA() * 4;
                 }

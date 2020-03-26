@@ -25,7 +25,9 @@ import java.util.Arrays;
 
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.R;
+import de.zitzmanncedric.abicalc.api.Grade;
 import de.zitzmanncedric.abicalc.fragments.subject.SubjectsFragment;
+import de.zitzmanncedric.abicalc.utils.AppSerializer;
 import de.zitzmanncedric.abicalc.views.AverageView;
 
 /**
@@ -62,10 +64,10 @@ public class OverviewFragment extends Fragment {
         fragmentPager.setAdapter(new Adapter(getChildFragmentManager(), view.getContext()));
         tabLayout.setupWithViewPager(fragmentPager);
 
-        new Handler().postDelayed(() -> {
+        new Handler().post(() -> {
             int currentTerm = AppCore.getSharedPreferences().getInt("currentTerm", 0);
-            fragmentPager.setCurrentItem(currentTerm, true);
-        }, 50);
+            fragmentPager.setCurrentItem(currentTerm, false);
+        });
         return view;
     }
 
@@ -75,7 +77,11 @@ public class OverviewFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        new Handler().post(() -> averageView.recalculate(progressBar));
+        new Handler().post(() -> {
+            averageView.recalculate(progressBar);
+
+
+        });
     }
 
     /**
@@ -163,6 +169,8 @@ public class OverviewFragment extends Fragment {
             if (requestCode == AppCore.RequestCodes.REQUEST_ADD_GRADE) {
                 if (resultCode == AppCore.ResultCodes.RESULT_OK) {
                     try {
+                        Grade grade = (Grade) AppSerializer.deserialize(data.getByteArrayExtra("grade"));
+
                         for (Fragment fragment : getChildFragmentManager().getFragments()) {
                             if (fragment instanceof SubjectsFragment) {
                                 SubjectsFragment f = (SubjectsFragment) fragment;
@@ -170,6 +178,7 @@ public class OverviewFragment extends Fragment {
                             }
                         }
 
+                        fragmentPager.setCurrentItem(grade.getTermID(), true);
                         averageView.recalculate(progressBar);
                     } catch (Exception ex) {
                         ex.printStackTrace();

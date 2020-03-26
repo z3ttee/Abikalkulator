@@ -163,7 +163,7 @@ public class GradeEditorActivity extends AppCompatActivity implements View.OnCli
                         items.add(getString(R.string.exp_abi));
                         return;
                     }
-                    if (subject.isExam()) {
+                    if (subject.isExam() && Seminar.getInstance().getReplacedSubjectID() != subject.getId()) {
                         items.add(getString(R.string.exp_abi));
                     }
                 }

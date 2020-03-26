@@ -286,8 +286,7 @@ public class AppDatabase extends SQLiteOpenHelper {
         long id = getWritableDatabase().insert(TABLE_GRADES, null, values);
         AppDatabase.getInstance().notifyGradesChanged(subjectID, grade.getTermID());
 
-        // TODO: Change to new term
-        // AppCore.getSharedPreferences().edit().putInt("currentTerm", grade.getTermID()).apply();
+        AppCore.getSharedPreferences().edit().putInt("currentTerm", grade.getTermID()).apply();
         return id;
     }
 

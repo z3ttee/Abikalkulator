@@ -24,7 +24,6 @@ public class SettingsSeminarActivity extends AppCompatActivity implements View.O
 
     private AppActionBar actionBar;
     private Spinner replaceSubjectView;
-    private Switch mindSeminarView;
     private TextView labelSpinnerReplace;
 
     private ArrayList<Subject> oralExams = new ArrayList<>();
@@ -36,7 +35,7 @@ public class SettingsSeminarActivity extends AppCompatActivity implements View.O
 
         actionBar = findViewById(R.id.app_toolbar);
         replaceSubjectView = findViewById(R.id.spinner_replace);
-        mindSeminarView = findViewById(R.id.switch_mind_seminar);
+        Switch mindSeminarView = findViewById(R.id.switch_mind_seminar);
         labelSpinnerReplace = findViewById(R.id.label_spinner_replace);
 
         setSupportActionBar(actionBar);

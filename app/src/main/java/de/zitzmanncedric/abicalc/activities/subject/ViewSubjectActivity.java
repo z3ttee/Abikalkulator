@@ -93,16 +93,10 @@ public class ViewSubjectActivity extends AppCompatActivity implements View.OnCli
     private void reSetup(){
         fragmentPager.setAdapter(new Adapter(getSupportFragmentManager(), this, subject));
         tabLayout.setupWithViewPager(fragmentPager, true);
-        new Handler().post(() -> fragmentPager.setCurrentItem(termID, false));
-    }
-
-    /**
-     * Lädt Noten, wenn Aktivität fortgesetzt wird
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
-        termID = AppCore.getSharedPreferences().getInt("currentTerm", 0);
+        new Handler().post(() -> {
+            Toast.makeText(this, String.valueOf(termID), Toast.LENGTH_SHORT).show();
+            fragmentPager.setCurrentItem(termID, false);
+        });
     }
 
     @Override
@@ -170,7 +164,7 @@ public class ViewSubjectActivity extends AppCompatActivity implements View.OnCli
 
         @Override
         public int getCount() {
-            return (subject.isExam() ? 5 : 4);
+            return (subject.isExam() && Seminar.getInstance().getReplacedSubjectID() != subject.getId() ? 5 : 4);
         }
 
         @NonNull

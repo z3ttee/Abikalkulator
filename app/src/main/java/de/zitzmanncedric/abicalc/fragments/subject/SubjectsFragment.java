@@ -91,7 +91,7 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
                     if (termID != 4) {
                         publishProgress(subject);
                     } else {
-                        if (subject.isExam()) {
+                        if (subject.isExam() && Seminar.getInstance().getReplacedSubjectID() != subject.getId()) {
                             publishProgress(subject);
                         }
                     }
