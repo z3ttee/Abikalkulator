@@ -11,11 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.R;
@@ -71,8 +67,15 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
         adapter.setItemCallback(this);
         intensifiedView.setLayoutManager(layoutManager);
         intensifiedView.setAdapter(adapter);
+        return view;
+    }
 
-        Needle.onBackgroundThread().withThreadPoolSize(1).execute(new UiRelatedProgressTask<Void, Subject>() {
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.update(Seminar.getInstance(), Seminar.getInstance());
+
+        Needle.onBackgroundThread().withThreadPoolSize(2).execute(new UiRelatedProgressTask<Void, Subject>() {
             @Override
             protected Void doWork() {
                 for (Subject subject : AppDatabase.getInstance().getUserSubjects()) {
@@ -83,15 +86,7 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
                             publishProgress(subject);
                         }
                     }
-
-                    try {
-                        Thread.sleep(20);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                 }
-
-
                 return null;
             }
 
@@ -103,13 +98,6 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
             @Override
             protected void thenDoUiRelatedWork(Void v) { }
         });
-        return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        adapter.update(Seminar.getInstance(), Seminar.getInstance());
     }
 
     /**
