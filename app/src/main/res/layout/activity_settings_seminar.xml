@@ -1,9 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.settings.SettingsSeminarActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <de.zitzmanncedric.abicalc.views.AppActionBar
+            android:id="@+id/app_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/window_padding"
+        android:paddingStart="@dimen/window_padding"
+        android:paddingEnd="@dimen/window_padding"
+        android:orientation="vertical"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <TextView
+            style="@style/Headline.h5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_seminar" />
+
+        <Switch
+            android:id="@+id/switch_mind_seminar"
+            android:layout_marginTop="@dimen/default_padding_large"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:background="@drawable/background_listitem"
+            android:textAppearance="@style/TextAppearance"
+            android:paddingTop="@dimen/default_padding_large"
+            android:paddingBottom="@dimen/default_padding_large"
+            android:text="@string/label_mind_seminar"
+            android:textSize="14sp"/>
+
+        <TextView
+            style="@style/TextAppearance.Label"
+            android:id="@+id/label_spinner_replace"
+            android:layout_marginTop="@dimen/default_padding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_replace_oralexam" />
+
+        <Spinner
+            android:id="@+id/spinner_replace"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:dropDownWidth="match_parent"
+            android:foreground="@color/listitem_border" />
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

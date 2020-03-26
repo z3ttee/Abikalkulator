@@ -177,8 +177,13 @@ public class Average {
             points += subject.getQuickAvgT1()+subject.getQuickAvgT2()+subject.getQuickAvgT3()+subject.getQuickAvgT4();
             if(subject.isExam()) {
                 // TODO: Seminarfach einbringen beachten
-                points += subject.getQuickAvgTA()*4;
+                if(!(Seminar.getInstance().isMinded() && Seminar.getInstance().getReplacedSubjectID() == subject.getId())) {
+                    points += subject.getQuickAvgTA() * 4;
+                }
             }
+        }
+        if(Seminar.getInstance().isMinded()) {
+            points += getSeminarSync()*4;
         }
 
         HashMap<Integer, Subject> striked = getStrikedSync();
@@ -221,7 +226,7 @@ public class Average {
 
                     if(subject.isExam()){
                         if(subject.isOralExam()) {
-                            if(i == 3) {
+                            if(i == 3 && Seminar.getInstance().getReplacedSubjectID() != subject.getId()) {
                                 candidatesIterator.remove();
                             }
                         } else {

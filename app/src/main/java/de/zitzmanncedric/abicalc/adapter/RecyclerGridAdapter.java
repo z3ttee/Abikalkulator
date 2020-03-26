@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import de.zitzmanncedric.abicalc.AppUtils;
 import de.zitzmanncedric.abicalc.R;
+import de.zitzmanncedric.abicalc.api.Seminar;
 import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.api.calculation.Average;
 import de.zitzmanncedric.abicalc.api.list.ListableObject;
@@ -71,11 +72,19 @@ public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapte
             holder.titleView.setText(AppDatabase.getInstance().getSubjectShorts().containsKey(subject.getId()) ? AppDatabase.getInstance().getSubjectShorts().get(subject.getId()) : subject.getTitle());
             holder.pointsView.setText(String.valueOf(Average.getQuickAverageOfTerm(subject, termID)));
             if (((Subject) obj).isExam()) {
-                holder.container.setBackground(context.getDrawable(R.drawable.background_listitem_selected));
+                if(!(Seminar.getInstance().isMinded() && Seminar.getInstance().getReplacedSubjectID() == ((Subject) obj).getId())) {
+                    holder.container.setBackground(context.getDrawable(R.drawable.background_listitem_selected));
+                }
             }
         } else {
             holder.titleView.setText(String.valueOf(obj.getTitle()));
             holder.pointsView.setText(String.valueOf(obj.getAside()));
+
+            if(obj instanceof Seminar) {
+                if(Seminar.getInstance().isMinded()) {
+                    holder.container.setBackground(context.getDrawable(R.drawable.background_listitem_selected));
+                }
+            }
         }
     }
 

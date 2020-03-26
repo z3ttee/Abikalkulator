@@ -7,6 +7,7 @@ import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.api.list.ListableObject;
 import de.zitzmanncedric.abicalc.views.SubjectListItemView;
 import lombok.Getter;
+import lombok.Setter;
 
 public class Seminar extends ListableObject {
 
@@ -30,5 +31,18 @@ public class Seminar extends ListableObject {
     public static Seminar getInstance() {
         if (instance == null) instance = new Seminar();
         return instance;
+    }
+
+    public void setMinded(boolean b) {
+        AppCore.getSharedPreferences().edit().putBoolean("seminarMinded", b).apply();
+    }
+    public boolean isMinded(){
+        return AppCore.getSharedPreferences().getBoolean("seminarMinded", false);
+    }
+    public int getReplacedSubjectID(){
+        return AppCore.getSharedPreferences().getInt("seminarReplacedSubject", -2);
+    }
+    public void setReplacedSubjectID(int subjectID) {
+        AppCore.getSharedPreferences().edit().putInt("seminarReplacedSubject", subjectID).apply();
     }
 }

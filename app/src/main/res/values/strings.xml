@@ -16,6 +16,8 @@
     <string name="label_chose_type">Art der Note</string>
     <string name="label_being_saved">Wird gespeichert…</string>
     <string name="label_grades_missing">Keine Noten gefunden.</string>
+    <string name="label_mind_seminar">Seminarfach einbringen</string>
+    <string name="label_replace_oralexam">Mündl. Prüfungsfach ersetzen</string>
 
     <string name="paragraph_welcome">Wir bedanken uns, dass du dein Vertrauen in uns steckst. Bevor du starten kannst, benötigen wir aber noch einige Informationen. Bitte gib uns deshalb Auskunft über deine Kursbelegung. Beachte, dass du 5 Kurse als Prüfungsfach markieren solltest.</string>
 
@@ -82,4 +84,8 @@
     <string name="settings_share_desc">Auf WhatsApp, Facebook u.a. teilen</string>
     <string name="settings_privacy">Datenschutz &amp; Sicherheit</string>
     <string name="settings_privacy_desc">Datenschutzerklärung anzeigen</string>
+    <string name="settings_reset">Zurücksetzen</string>
+    <string name="settings_reset_desc">App-Daten löschen</string>
+
+    <string name="notice_settings_saved">Einstellungen gespeichert</string>
 </resources>

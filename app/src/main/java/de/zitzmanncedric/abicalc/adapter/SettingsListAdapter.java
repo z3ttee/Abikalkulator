@@ -2,12 +2,14 @@ package de.zitzmanncedric.abicalc.adapter;
 
 import android.util.Log;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import de.zitzmanncedric.abicalc.AppUtils;
 import de.zitzmanncedric.abicalc.api.settings.SettingsItem;
 import de.zitzmanncedric.abicalc.views.SettingsListItemView;
 
@@ -42,6 +44,11 @@ public class SettingsListAdapter extends RecyclerView.Adapter<SettingsListAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         SettingsItem item = this.dataset.get(position);
+
+        Animation animation = AppUtils.getListItemEnterAnim();
+        animation.setStartOffset(100*position);
+
+        holder.itemView.setAnimation(animation);
 
         holder.itemView.setName(item.getName());
         holder.itemView.setDescription(item.getDescription());
