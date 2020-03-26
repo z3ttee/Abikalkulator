@@ -39,7 +39,6 @@ import de.zitzmanncedric.abicalc.utils.AppSerializer;
 import de.zitzmanncedric.abicalc.views.AppActionBar;
 
 public class ViewSubjectActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final String TAG = "ViewSubjectActivity";
 
     private ViewPager fragmentPager;
     private TabLayout tabLayout;
@@ -94,8 +93,7 @@ public class ViewSubjectActivity extends AppCompatActivity implements View.OnCli
         fragmentPager.setAdapter(new Adapter(getSupportFragmentManager(), this, subject));
         tabLayout.setupWithViewPager(fragmentPager, true);
         new Handler().post(() -> {
-            Toast.makeText(this, String.valueOf(termID), Toast.LENGTH_SHORT).show();
-            fragmentPager.setCurrentItem(termID, false);
+            fragmentPager.setCurrentItem(termID, true);
         });
     }
 
