@@ -49,6 +49,7 @@
     <string name="headline_add_grade">Neue Note hinzufügen</string>
     <string name="headline_edit_grade">Einzelnote bearbeiten</string>
     <string name="headline_settings">Einstellungen</string>
+    <string name="headline_subjects">Deine Kursbelegung</string>
 
     <string name="subject_math">Mathematik</string>
     <string name="subject_english">Englisch</string>
@@ -62,6 +63,11 @@
     <string name="subject_art">Kunst</string>
     <string name="subject_religion">Religion</string>
     <string name="subject_seminar">Seminarfach</string>
+    <string name="subject_geo">Geografie</string>
+    <string name="subject_soz">Sozialkunde</string>
+    <string name="subject_music">Musik</string>
+    <string name="subject_physics">Physik</string>
+    <string name="subject_bio">Biologie</string>
 
     <string name="type_lk">Leistungskontrolle</string>
     <string name="type_ka">Kursarbeit</string>

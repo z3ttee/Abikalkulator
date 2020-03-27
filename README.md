@@ -6,7 +6,6 @@ Eigener Code: [https://github.com/z3ttee/abikalkulator-android/tree/master/app/s
 Download: [https://github.com/z3ttee/abikalkulator-android/releases](https://github.com/z3ttee/abikalkulator-android/releases)
 
 # TODO
-* Einstellung: Seminarfach einbringen und dafür mündl. Fach streichen
 * Einstellung: Standardpunktezahl
 * Einstellung: Ziel-Notenschnitt
 * Goals-Menu: Zeigt Ziel an, schlägt Fächerstreichung vor (ungenauer Algorithmus)
