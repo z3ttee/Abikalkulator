@@ -73,10 +73,10 @@ public class AppCore extends Application {
      */
     public static class RequestCodes {
         public static int REQUEST_SETUP = 0;
-        public static int REQUEST_ADD_SUBJECT = 1;
-        public static int REQUEST_ADD_GRADE = 2;
-        public static int REQUEST_UPDATE_GRADE = 3;
-        public static int REQUEST_VIEW_SUBJECT = 4;
+        public static int REQUEST_ADD_GRADE = 1;
+        public static int REQUEST_UPDATE_GRADE = 2;
+        public static int REQUEST_VIEW_SUBJECT = 3;
+        public static int REQUEST_UPDATE_SUBJECT = 4;
         public static int REQUEST_UPDATE_VIEWS = 5;
     }
 

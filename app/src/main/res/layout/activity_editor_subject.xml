@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.subject.SubjectEditorActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
+
+        <de.zitzmanncedric.abicalc.views.AppActionBar
+            android:id="@+id/app_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/window_padding"
+        android:paddingStart="@dimen/window_padding"
+        android:paddingEnd="@dimen/window_padding"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView"
+            style="@style/Headline.h4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/headline_edit_subject"/>
+
+        <TextView
+            style="@style/TextAppearance.Label"
+            android:id="@+id/label_subjectspinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_chose_subject"
+            android:layout_marginTop="@dimen/default_padding_large"
+            android:layout_marginBottom="@dimen/default_padding"/>
+
+        <Spinner
+            style="@style/Spinner"
+            android:id="@+id/spinner_subjects"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:dropDownWidth="match_parent"
+            android:spinnerMode="dropdown"
+            android:paddingStart="@dimen/default_padding"
+            android:paddingEnd="@dimen/default_padding"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/default_padding_large">
+
+            <TextView
+                style="@style/TextAppearance.Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_more_settings"
+                />
+
+            <TextView
+                style="@style/TextAppearance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/error_cant_be_edited"
+                android:alpha="0.4"
+                android:layout_marginTop="-4dp"
+                android:textSize="12sp"/>
+
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/checkbox_markasexam"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/label_markAsExam"
+            android:textAppearance="@style/TextAppearance.Label"/>
+        <CheckBox
+            android:id="@+id/checkbox_markasoralexam"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/default_padding"
+            android:text="@string/label_markAsOralExam"
+            android:textAppearance="@style/TextAppearance.Label"/>
+    </LinearLayout>
+
+</LinearLayout>

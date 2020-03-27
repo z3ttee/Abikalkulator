@@ -67,6 +67,11 @@ public class AppDatabase extends SQLiteOpenHelper {
             ex.printStackTrace();
         }
 
+        reloadSubjects();
+    }
+
+    public void reloadSubjects(){
+        userSubjects.clear();
         // Load users subjects
         Cursor cursor = getReadableDatabase().query(TABLE_SUBJECTS, new String[]{"*"}, "", new String[0], null, null, null);
         if(cursor != null) {
@@ -142,7 +147,7 @@ public class AppDatabase extends SQLiteOpenHelper {
                 "quickAvgTA INTEGER NOT NULL," +
 
                 "cacheKey LONG NOT NULL," +
-                "PRIMARY KEY(id), UNIQUE(subjectID));");
+                "PRIMARY KEY(id));");
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS `"+TABLE_GRADES+"` (" +
                 "id INTEGER NOT NULL, " +
                 "termID INTEGER NOT NULL, " +
@@ -220,6 +225,79 @@ public class AppDatabase extends SQLiteOpenHelper {
         return getWritableDatabase().updateWithOnConflict(TABLE_SUBJECTS, values, "subjectID=?", new String[]{""+subject.getId()}, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
+    /**
+     * Ermittelt die ID des Datenbankeintrags eines Fachs
+     * @param subject Fach, dessen ID ermittelt werden soll
+     * @return ID des Datenbankeintrags
+     */
+    private int getSubjectDatabaseID(Subject subject) {
+        Cursor cursor = getReadableDatabase().query(TABLE_SUBJECTS, new String[]{"id"}, "subjectID=?", new String[]{String.valueOf(subject.getId())}, null, null, null);
+        if(cursor != null) {
+            if(cursor.moveToFirst()) {
+                int idIndex = cursor.getColumnIndex("id");
+                return cursor.getInt(idIndex);
+            }
+            cursor.close();
+        }
+        return 0;
+    }
+
+    /**
+     * Ersetzt ein vorhandenes Fach mit einem anderen. Existieren beide Fächer bereits, so werden sie getauscht
+     * @param oldSubject Datenobjekt des alten Fachs
+     * @param newSubject Datenobjekt des neuen Fachs
+     */
+    public void replaceSubject(Subject oldSubject, Subject newSubject) {
+        if(subjectExists(newSubject.getId())) {
+
+            int databaseIDOld = getSubjectDatabaseID(oldSubject);
+            int databaseIDNew = getSubjectDatabaseID(newSubject);
+
+            int idOld = oldSubject.getId();
+            int idNew = newSubject.getId();
+
+            {
+                // Neues Fach durch altes Fach ersetzen
+                ContentValues values = new ContentValues();
+                values.put("subjectID", idOld);
+                values.put("quickAvgT1", oldSubject.getQuickAvgT1());
+                values.put("quickAvgT2", oldSubject.getQuickAvgT2());
+                values.put("quickAvgT3", oldSubject.getQuickAvgT3());
+                values.put("quickAvgT4", oldSubject.getQuickAvgT4());
+                values.put("quickAvgTA", oldSubject.getQuickAvgTA());
+
+                getWritableDatabase().updateWithOnConflict(TABLE_SUBJECTS, values, "id=?", new String[]{String.valueOf(databaseIDNew)}, SQLiteDatabase.CONFLICT_REPLACE);
+            }
+            {
+                // Altes Fach durch neues Fach ersetzen
+                ContentValues values = new ContentValues();
+                values.put("subjectID", idNew);
+                values.put("quickAvgT1", newSubject.getQuickAvgT1());
+                values.put("quickAvgT2", newSubject.getQuickAvgT2());
+                values.put("quickAvgT3", newSubject.getQuickAvgT3());
+                values.put("quickAvgT4", newSubject.getQuickAvgT4());
+                values.put("quickAvgTA", newSubject.getQuickAvgTA());
+
+                getWritableDatabase().updateWithOnConflict(TABLE_SUBJECTS, values, "id=?", new String[]{String.valueOf(databaseIDOld)}, SQLiteDatabase.CONFLICT_REPLACE);
+            }
+        } else {
+            // Alte Noten von oldSubject zu newSubject hinzufügen + oldSubject löschen
+            ContentValues values = new ContentValues();
+            values.put("subjectID", newSubject.getId());
+
+            getWritableDatabase().updateWithOnConflict(TABLE_SUBJECTS, values, "subjectID=?", new String[]{String.valueOf(oldSubject.getId())}, SQLiteDatabase.CONFLICT_REPLACE);
+            getWritableDatabase().updateWithOnConflict(TABLE_GRADES, values, "subjectID=?", new String[]{String.valueOf(oldSubject.getId())}, SQLiteDatabase.CONFLICT_REPLACE);
+            getWritableDatabase().delete(TABLE_SUBJECTS, "subjectID=?", new String[]{String.valueOf(oldSubject.getId())});
+        }
+    }
+
+    /**
+     * Speichert den Durchschnitt des Halbjahres eines Fachs in der Datenbank, um ihn nicht beim Laden des Fachs erneut errechnen zu müssen.
+     * @param subject Datenobjekt des betreffenden Fachs
+     * @param termID Halbjahres-ID
+     * @param quickAvg Durchschnittswert
+     * @return ID des veränderten Eintrags
+     */
     public int updateQuickAverage(Subject subject, int termID, int quickAvg) {
         ContentValues values = new ContentValues();
         int index = getUserSubjects().indexOf(subject);
@@ -246,6 +324,11 @@ public class AppDatabase extends SQLiteOpenHelper {
         return getWritableDatabase().updateWithOnConflict(TABLE_SUBJECTS, values, "subjectID=?", new String[]{""+subject.getId()}, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
+    /**
+     * Ermittelt ein Fach anhand der gegebenen ID
+     * @param id ID des gesuchten Fachs
+     * @return Datenobjekt des gefundenen Fachs
+     */
     public Subject getUserSubjectByID(int id) {
         for(Subject subject : userSubjects) {
             if(subject.getId() == id) {
@@ -256,9 +339,9 @@ public class AppDatabase extends SQLiteOpenHelper {
     }
 
     /**
-     *
-     * @param subjectID
-     * @return
+     * Prüft, ob ein Fach bereits in der Datenbank existiert
+     * @param subjectID ID des zu prüfenden Fachs
+     * @return true, wenn das Fach existiert, andernfalls wird false zurückgegeben
      */
     public boolean subjectExists(int subjectID) {
         Cursor cursor = getReadableDatabase().query(TABLE_SUBJECTS, new String[]{"id"}, "subjectID=?", new String[]{String.valueOf(subjectID)}, null, null, null);
@@ -273,7 +356,6 @@ public class AppDatabase extends SQLiteOpenHelper {
      * @param grade
      * @return
      */
-    // TODO
     public long createGrade(int subjectID, Grade grade) {
         ContentValues values = new ContentValues();
         values.put("subjectID", subjectID);

@@ -82,6 +82,8 @@ public class OverviewFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        progressBar.animate().alpha(1f).setDuration(AppCore.getInstance().getResources().getInteger(R.integer.anim_speed_quickly));
+        averageView.recalculate(() -> progressBar.animate().alpha(0f).setDuration(AppCore.getInstance().getResources().getInteger(R.integer.anim_speed_quickly)).setStartDelay(50));
     }
 
     /**

@@ -1,6 +1,7 @@
 package de.zitzmanncedric.abicalc.adapter;
 
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +31,7 @@ public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSub
     @Getter private ArrayList<ListableObject> dataset;
     @Setter private RecyclerView correspondingRecyclerView;
     @Setter private OnListItemCallback onCallback;
+    private boolean deletable = true;
 
     /**
      * Konstruktor der Klasse
@@ -47,6 +49,17 @@ public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSub
     public AdvancedSubjectListAdapter(ArrayList<ListableObject> dataset, OnListItemCallback onCallback) {
         this.dataset = dataset;
         this.onCallback = onCallback;
+    }
+
+    /**
+     * Optionaler Konstruktor der Klasse. Setzt gleichzeitig ein Callback-Interface
+     * @param dataset Bestimmt die Elemente, die in einer Liste angezeigt werden
+     * @param onCallback Setzt ein Callback-Interface, um Interaktion mit Elementen abzufangen
+     */
+    public AdvancedSubjectListAdapter(ArrayList<ListableObject> dataset, OnListItemCallback onCallback, boolean deletable) {
+        this.dataset = dataset;
+        this.onCallback = onCallback;
+        this.deletable = deletable;
     }
 
     /**
@@ -70,7 +83,9 @@ public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSub
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         ListableObject obj = dataset.get(position);
 
-        holder.itemView.setAnimation(AppUtils.getListItemEnterAnim());
+        Animation animation = AppUtils.getListItemEnterAnim();
+        animation.setStartOffset(10*position);
+        holder.itemView.setAnimation(animation);
 
         if(obj instanceof Grade) {
             Grade grade = (Grade) obj;
@@ -104,7 +119,9 @@ public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSub
             Subject subject = (Subject) obj;
 
             holder.itemView.setShowEdit(true);
-            holder.itemView.setShowDelete(true);
+            if(deletable) {
+                holder.itemView.setShowDelete(true);
+            }
             holder.itemView.setShowPoints(false);
             holder.itemView.setTitle(subject.getTitle());
 
@@ -120,6 +137,7 @@ public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSub
 
             holder.itemView.setPositionInList(position);
             holder.itemView.setCorrespondingDataset(dataset);
+            holder.itemView.setOnTouchListener(new OnButtonTouchListener());
             holder.itemView.setOnClickListener((view) -> {
                 if(onCallback != null) onCallback.onItemClicked(subject);
             });

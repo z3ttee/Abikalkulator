@@ -51,7 +51,7 @@ public class GradeEditorActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_edit_grade);
+        setContentView(R.layout.activity_editor_grade);
         super.onCreate(savedInstanceState);
 
         subjectSpinner = findViewById(R.id.spinner_subjects);

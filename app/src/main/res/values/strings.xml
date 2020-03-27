@@ -19,6 +19,7 @@
     <string name="label_grades_missing">Keine Noten gefunden.</string>
     <string name="label_mind_seminar">Seminarfach einbringen</string>
     <string name="label_replace_oralexam">Mündl. Prüfungsfach ersetzen</string>
+    <string name="label_more_settings">Weitere Einstellungen</string>
 
     <string name="paragraph_welcome">Wir bedanken uns, dass du dein Vertrauen in uns steckst. Bevor du starten kannst, benötigen wir aber noch einige Informationen. Bitte gib uns deshalb Auskunft über deine Kursbelegung. Beachte, dass du 5 Kurse als Prüfungsfach markieren solltest.</string>
 
@@ -44,12 +45,14 @@
     <string name="error_occured">Es ist ein irreparabler Fehler aufgetreten. Die App wird geschlossen.</string>
     <string name="error_missing_exams">Du musst 5 Kurse als Prüfungsfach markieren. Deine vorherige Auswahl erreichst du, indem du auf den ZURÜCK-Pfeil deines Smartphones drückst.</string>
     <string name="error_setup_cancelled">Du hast das Setup abgebrochen. Die App kann ohne Einrichtung nicht genutzt werden.</string>
+    <string name="error_cant_be_edited">Das kann nicht bearbeitet werden.</string>
 
-    <string name="headline_edit_subject">Fach bearbeiten</string>
     <string name="headline_add_grade">Neue Note hinzufügen</string>
     <string name="headline_edit_grade">Einzelnote bearbeiten</string>
+    <string name="headline_edit_subject">Kurs bearbeiten</string>
     <string name="headline_settings">Einstellungen</string>
     <string name="headline_subjects">Deine Kursbelegung</string>
+    <string name="headline_yousure">Bist du sicher?</string>
 
     <string name="subject_math">Mathematik</string>
     <string name="subject_english">Englisch</string>
@@ -94,5 +97,7 @@
     <string name="settings_reset">Zurücksetzen</string>
     <string name="settings_reset_desc">App-Daten löschen</string>
 
+    <string name="notice_settings_beingsaved">Einstellungen werden gespeichert…</string>
     <string name="notice_settings_saved">Einstellungen gespeichert</string>
+    <string name="notice_replace_subjects">Bist du sicher, dass du diese Fächer tauschen möchtest? Noten, die nicht mehr brauchbar sind, werden dann gelöscht.</string>
 </resources>

@@ -3,6 +3,7 @@ package de.zitzmanncedric.abicalc.dialogs;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.ViewGroup;
 import android.view.Window;
 
 import androidx.annotation.LayoutRes;
@@ -27,6 +28,7 @@ public abstract class AppDialog extends Dialog {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(contentview);
+
 
     }
 
