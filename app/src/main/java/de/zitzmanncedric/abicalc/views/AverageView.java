@@ -48,15 +48,18 @@ public class AverageView extends LinearLayout {
         }
     }
 
-    public void recalculate(ProgressBar progressBar){
-        progressBar.animate().alpha(1f).setDuration(AppCore.getInstance().getResources().getInteger(R.integer.anim_speed_quickly));
+    public void recalculate(ProgressCallback callback){
         Average.getAllPoints((result) -> {
             subtitle.setText(getContext().getString(R.string.exp_points).replace("%points%", String.valueOf(result)));
             Average.getGeneral((r -> {
                 amount.setText(String.valueOf(r).substring(0, 3));
-                progressBar.animate().alpha(0f).setDuration(AppCore.getInstance().getResources().getInteger(R.integer.anim_speed_quickly)).setStartDelay(50);
+                callback.onFinish();
             }));
         });
 
+    }
+
+    public interface ProgressCallback {
+        void onFinish();
     }
 }

@@ -8,10 +8,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.R;
@@ -67,18 +71,12 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
         adapter.setItemCallback(this);
         intensifiedView.setLayoutManager(layoutManager);
         intensifiedView.setAdapter(adapter);
-        return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        adapter.update(Seminar.getInstance(), Seminar.getInstance());
 
         Needle.onBackgroundThread().withThreadPoolSize(2).execute(new UiRelatedProgressTask<Void, Subject>() {
             @Override
             protected Void doWork() {
-                for (Subject subject : AppDatabase.getInstance().getUserSubjects()) {
+                List<Subject> subjects = AppDatabase.getInstance().getUserSubjects();
+                for (Subject subject : subjects) {
                     if (termID != 4) {
                         publishProgress(subject);
                     } else {
@@ -98,6 +96,13 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
             @Override
             protected void thenDoUiRelatedWork(Void v) { }
         });
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.update(Seminar.getInstance(), Seminar.getInstance());
     }
 
     /**

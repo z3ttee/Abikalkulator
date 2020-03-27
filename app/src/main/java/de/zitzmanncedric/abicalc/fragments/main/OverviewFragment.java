@@ -29,6 +29,7 @@ import de.zitzmanncedric.abicalc.api.Grade;
 import de.zitzmanncedric.abicalc.fragments.subject.SubjectsFragment;
 import de.zitzmanncedric.abicalc.utils.AppSerializer;
 import de.zitzmanncedric.abicalc.views.AverageView;
+import needle.Needle;
 
 /**
  * Teil des Hauptbildschirms. Zeigt die Übersicht über alle Fächer an, sowie voraussichtlicher Abiturschnitt
@@ -61,13 +62,17 @@ public class OverviewFragment extends Fragment {
         averageView = view.findViewById(R.id.app_averageview);
         progressBar = view.findViewById(R.id.app_progressbar);
 
-        fragmentPager.setAdapter(new Adapter(getChildFragmentManager(), view.getContext()));
-        tabLayout.setupWithViewPager(fragmentPager);
+        progressBar.animate().alpha(1f).setDuration(AppCore.getInstance().getResources().getInteger(R.integer.anim_speed_quickly));
 
-        new Handler().post(() -> {
+        new Handler().postDelayed(() -> {
+            fragmentPager.setAdapter(new Adapter(getChildFragmentManager(), view.getContext()));
+            tabLayout.setupWithViewPager(fragmentPager);
+            fragmentPager.setOffscreenPageLimit(5);
             int currentTerm = AppCore.getSharedPreferences().getInt("currentTerm", 0);
             fragmentPager.setCurrentItem(currentTerm, false);
-        });
+
+            averageView.recalculate(() -> progressBar.animate().alpha(0f).setDuration(AppCore.getInstance().getResources().getInteger(R.integer.anim_speed_quickly)).setStartDelay(50));
+        }, getResources().getInteger(R.integer.anim_speed)-10);
         return view;
     }
 
@@ -77,11 +82,6 @@ public class OverviewFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        new Handler().post(() -> {
-            averageView.recalculate(progressBar);
-
-
-        });
     }
 
     /**
@@ -179,7 +179,7 @@ public class OverviewFragment extends Fragment {
                         }
 
                         fragmentPager.setCurrentItem(grade.getTermID(), true);
-                        averageView.recalculate(progressBar);
+                        averageView.recalculate(() -> progressBar.animate().alpha(0f).setDuration(AppCore.getInstance().getResources().getInteger(R.integer.anim_speed_quickly)).setStartDelay(50));
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
