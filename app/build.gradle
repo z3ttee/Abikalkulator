@@ -7,8 +7,8 @@ android {
         applicationId "de.zitzmanncedric.abicalc"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 3
-        versionName "v1.0-beta03"
+        versionCode 4
+        versionName "v1.0-beta04"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
