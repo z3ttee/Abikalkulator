@@ -6,6 +6,4 @@ Eigener Code: [https://github.com/z3ttee/abikalkulator-android/tree/master/app/s
 Download: [https://github.com/z3ttee/abikalkulator-android/releases](https://github.com/z3ttee/abikalkulator-android/releases)
 
 # TODO
-* Einstellung: Standardpunktezahl
-* Einstellung: Ziel-Notenschnitt
 * Goals-Menu: Zeigt Ziel an, schlägt Fächerstreichung vor (ungenauer Algorithmus)
