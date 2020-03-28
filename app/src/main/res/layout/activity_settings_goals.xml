@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.settings.SettingsGoalsActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
+
+        <de.zitzmanncedric.abicalc.views.AppActionBar
+            android:id="@+id/app_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/window_padding_large"
+        android:paddingStart="@dimen/window_padding"
+        android:paddingEnd="@dimen/window_padding">
+
+        <TextView
+            style="@style/Headline.h4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/headline_settings_goals" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_input_defaultpoints"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_listitem"
+            android:foreground="?attr/selectableItemBackground"
+            android:layout_marginTop="@dimen/window_padding"
+            android:layout_marginBottom="@dimen/default_padding">
+
+            <TextView
+                style="@style/TextAppearance.Label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:gravity="center_vertical"
+                android:text="@string/label_default_points"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/input_default_points"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/input_default_points"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_input"
+                android:backgroundTint="@color/listitem_border"
+                android:ems="10"
+                android:inputType="number"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_input_goalavg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_listitem"
+            android:foreground="?attr/selectableItemBackground"
+            android:layout_marginBottom="@dimen/default_padding">
+
+            <TextView
+                style="@style/TextAppearance.Label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:gravity="center_vertical"
+                android:text="@string/label_goalavg"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/input_goalavg"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/input_goalavg"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_input"
+                android:backgroundTint="@color/listitem_border"
+                android:ems="10"
+                android:inputType="numberDecimal"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container_input_goalpoints"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_listitem"
+            android:foreground="?attr/selectableItemBackground"
+            android:layout_marginBottom="@dimen/default_padding">
+
+            <TextView
+                style="@style/TextAppearance.Label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:gravity="center_vertical"
+                android:text="@string/label_goalpoints"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/input_goalpoints"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/input_goalpoints"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_input"
+                android:backgroundTint="@color/listitem_border"
+                android:ems="10"
+                android:inputType="number"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</LinearLayout>

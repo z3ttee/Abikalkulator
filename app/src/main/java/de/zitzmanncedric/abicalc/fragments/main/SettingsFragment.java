@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.R;
+import de.zitzmanncedric.abicalc.activities.settings.SettingsGoalsActivity;
 import de.zitzmanncedric.abicalc.activities.settings.SettingsSeminarActivity;
 import de.zitzmanncedric.abicalc.activities.settings.SettingsSubjectsActivity;
 import de.zitzmanncedric.abicalc.adapter.SettingsListAdapter;
@@ -29,9 +30,6 @@ import needle.Needle;
 import needle.UiRelatedProgressTask;
 
 public class SettingsFragment extends Fragment implements SettingsListAdapter.Callback {
-
-    private RecyclerView list;
-    private SettingsListAdapter adapter;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -46,18 +44,18 @@ public class SettingsFragment extends Fragment implements SettingsListAdapter.Ca
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        list = view.findViewById(R.id.recyclerview_settings);
+        RecyclerView list = view.findViewById(R.id.recyclerview_settings);
 
         ArrayList<SettingsItem> items = new ArrayList<>();
         items.add(new SettingsItem(R.string.settings_seminar, R.string.settings_seminar_desc, view.getContext().getDrawable(R.drawable.ic_student)));
         items.add(new SettingsItem(R.string.settings_subjects, R.string.settings_subjects_desc, view.getContext().getDrawable(R.drawable.ic_schedule)));
-        // TODO: Settings
-        // items.add(new SettingsItem(R.string.settings_goals, R.string.settings_goals_desc, view.getContext().getDrawable(R.drawable.ic_award)));
+        items.add(new SettingsItem(R.string.settings_goals, R.string.settings_goals_desc, view.getContext().getDrawable(R.drawable.ic_award)));
+        // TODO: Share option
         // items.add(new SettingsItem(R.string.settings_share, R.string.settings_share_desc, view.getContext().getDrawable(R.drawable.ic_share)));
         items.add(new SettingsItem(R.string.settings_privacy, R.string.settings_privacy_desc, view.getContext().getDrawable(R.drawable.ic_shield)));
         items.add(new SettingsItem(R.string.settings_reset, R.string.settings_reset_desc, view.getContext().getDrawable(R.drawable.ic_refresh)));
 
-        adapter = new SettingsListAdapter(items, this);
+        SettingsListAdapter adapter = new SettingsListAdapter(items, this);
         list.setLayoutManager(new LinearLayoutManager(getContext()));
         list.setAdapter(adapter);
     }
@@ -72,6 +70,10 @@ public class SettingsFragment extends Fragment implements SettingsListAdapter.Ca
             case R.string.settings_subjects:
                 Intent subjects = new Intent(getContext(), SettingsSubjectsActivity.class);
                 startActivity(subjects);
+                break;
+            case R.string.settings_goals:
+                Intent goals = new Intent(getContext(), SettingsGoalsActivity.class);
+                startActivity(goals);
                 break;
             case R.string.settings_privacy:
                 String url = "https://abi.zitzmann-cedric.de/privacy";

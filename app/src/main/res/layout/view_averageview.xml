@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/average_amount"
+            android:id="@+id/averageview_amount"
             style="@style/Headline.h2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
         android:layout_marginStart="@dimen/window_padding"
         android:layout_marginEnd="@dimen/window_padding"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageView"
+        app:layout_constraintEnd_toStartOf="@+id/averageview_goal"
         app:layout_constraintStart_toEndOf="@+id/linearLayout3"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -55,7 +55,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/averageview_goal"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
         app:layout_constraintBottom_toBottomOf="parent"
