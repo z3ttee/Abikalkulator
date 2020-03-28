@@ -76,7 +76,7 @@ public class SettingsFragment extends Fragment implements SettingsListAdapter.Ca
                 startActivity(goals);
                 break;
             case R.string.settings_privacy:
-                String url = "https://abi.zitzmann-cedric.de/privacy";
+                String url = "https://zitzmann-cedric.de/projects/abikalkulator/privacy/";
                 Intent openUrl = new Intent(Intent.ACTION_VIEW);
                 openUrl.setData(Uri.parse(url));
                 startActivity(openUrl);
