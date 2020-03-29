@@ -1,12 +1,13 @@
 de.zitzmanncedric.abicalc
 de.zitzmanncedric.abicalc.activities
 de.zitzmanncedric.abicalc.activities.main
+de.zitzmanncedric.abicalc.activities.settings
 de.zitzmanncedric.abicalc.activities.subject
 de.zitzmanncedric.abicalc.adapter
 de.zitzmanncedric.abicalc.api
 de.zitzmanncedric.abicalc.api.calculation
 de.zitzmanncedric.abicalc.api.list
-de.zitzmanncedric.abicalc.broadcast
+de.zitzmanncedric.abicalc.api.settings
 de.zitzmanncedric.abicalc.database
 de.zitzmanncedric.abicalc.dialogs
 de.zitzmanncedric.abicalc.fragments.main

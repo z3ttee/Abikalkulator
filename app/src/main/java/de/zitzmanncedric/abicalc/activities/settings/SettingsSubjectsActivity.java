@@ -19,14 +19,21 @@ import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.api.list.ListableObject;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
 import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
-import de.zitzmanncedric.abicalc.utils.AppSerializer;
 import de.zitzmanncedric.abicalc.views.AppActionBar;
 
+/**
+ * Klasse zur Behandlung des Einstellungs-Menü für die Kursbelegung
+ * @author Cedric Zitzmann
+ */
 public class SettingsSubjectsActivity extends AppCompatActivity implements OnListItemCallback, View.OnClickListener {
 
     private AppActionBar actionBarView;
     private AdvancedSubjectListAdapter adapter;
 
+    /**
+     * Von Android implementiert. Methode zum Aufbauen des Fensters. Es werden alle Einstellungen geladen und angezeigt
+     * @param savedInstanceState Von Android übergeben (nicht genutzt)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +51,10 @@ public class SettingsSubjectsActivity extends AppCompatActivity implements OnLis
         subjectsListView.setAdapter(adapter);
     }
 
+    /**
+     * Wenn das Element angeklickt wurde, wird der Kurseditor gestartet und das Element an die neue Aktivität übergeben.
+     * @param object Betroffenes Listenelement
+     */
     @Override
     public void onItemClicked(ListableObject object) {
         if(object instanceof Subject) {
@@ -54,16 +65,36 @@ public class SettingsSubjectsActivity extends AppCompatActivity implements OnLis
             startActivityForResult(intent, AppCore.RequestCodes.REQUEST_UPDATE_SUBJECT);
         }
     }
+
+    /**
+     * Wenn auf den "Bearbeiten"-Button gedrückt wurde, erfolgt das gleiche Ereignis wie beim anklicken des gesamten Elements
+     * @param object Betroffenes Listenelement
+     */
     @Override
     public void onItemEdit(ListableObject object) {
         onItemClicked(object);
     }
 
+    /**
+     * Nicht benötigt
+     * @param object Betroffenes Listenelement
+     */
     @Override
     public void onItemDeleted(ListableObject object) { }
+
+    /**
+     * Nicht benötigt
+     * @param object Betroffenes Listenelement
+     */
     @Override
     public void onItemLongClicked(ListableObject object) { }
 
+    /**
+     * Von Android implementiert. Fängt das Resultat durch eine geschlossene Aktivität ab. Bei Erfolg, wird die Liste der Fächer aktualisiert
+     * @param requestCode Code, zur Identifizierung der Anfrage
+     * @param resultCode Code, zur Identifizierung des Resultats
+     * @param data Zurückgegebene Daten
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -74,6 +105,10 @@ public class SettingsSubjectsActivity extends AppCompatActivity implements OnLis
         }
     }
 
+    /**
+     * Fängt das Klick-Event des "Zurück"-Buttons in der Toolbar ab. Dabei wird die Aktivität geschlossen.
+     * @param v Angeklickter Button
+     */
     @Override
     public void onClick(View v) {
         if(v.getId() == actionBarView.getCloseView().getId()){

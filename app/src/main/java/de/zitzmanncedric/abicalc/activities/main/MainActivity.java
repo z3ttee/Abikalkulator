@@ -23,11 +23,19 @@ import de.zitzmanncedric.abicalc.fragments.main.GoalsFragment;
 import de.zitzmanncedric.abicalc.fragments.main.OverviewFragment;
 import de.zitzmanncedric.abicalc.fragments.main.SettingsFragment;
 
+/**
+ * Klasse zur Behandlung des Hauptmenüs
+ * @author Cedric Zitzmann
+ */
 public class MainActivity extends AppCompatActivity {
 
     private FrameLayout fragmentContainer;
     private ImageButton homeBtn, goalsBtn, settingsBtn;
 
+    /**
+     * Von Android implementiert. Methode zum Aufbauen des Fensters
+     * @param savedInstanceState Von Android übergeben (nicht genutzt)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
         AppFragments.replaceFragment(getSupportFragmentManager(), fragmentContainer, new OverviewFragment(), true, null, 0, R.anim.fragment_scaleout, R.anim.fragment_scalein, R.anim.fragment_scaleout);
     }
 
+    /**
+     * Wechselt in die Übersicht über alle Fächer
+     * @param view Angeklickter Button
+     */
     public void goHome(View view) {
         if(getSupportFragmentManager().getFragments().get(0) instanceof OverviewFragment) return;
 
@@ -57,6 +69,11 @@ public class MainActivity extends AppCompatActivity {
 
         AppFragments.replaceFragment(getSupportFragmentManager(), fragmentContainer, new OverviewFragment(), true, null, R.anim.fragment_scalein, R.anim.fragment_scaleout, R.anim.fragment_scalein, R.anim.fragment_scaleout);
     }
+
+    /**
+     * Wechselt in die Übersicht über alle Ziele
+     * @param view Angeklickter Button
+     */
     public void goGoals(View view) {
         if(getSupportFragmentManager().getFragments().get(0) instanceof GoalsFragment) return;
 
@@ -66,6 +83,11 @@ public class MainActivity extends AppCompatActivity {
 
         AppFragments.replaceFragment(getSupportFragmentManager(), fragmentContainer, new GoalsFragment(), true, null, R.anim.fragment_scalein, R.anim.fragment_scaleout, R.anim.fragment_scalein, R.anim.fragment_scaleout);
     }
+
+    /**
+     * Wechselt in die Übersicht über alle Einstellungen
+     * @param view Angeklickter Button
+     */
     public void goSettings(View view) {
         if(getSupportFragmentManager().getFragments().get(0) instanceof SettingsFragment) return;
 
@@ -76,12 +98,22 @@ public class MainActivity extends AppCompatActivity {
         AppFragments.replaceFragment(getSupportFragmentManager(), fragmentContainer, new SettingsFragment(), true, null, R.anim.fragment_scalein, R.anim.fragment_scaleout, R.anim.fragment_scalein, R.anim.fragment_scaleout);
     }
 
+    /**
+     * Funktion zum starten des Noteneditors, wenn auf den "Hinzufügen"-Knopf im Hauptmenü gedrückt wurde
+     * @param view Angeklickter Button
+     */
     public void addGrade(View view) {
         Intent intent = new Intent(this, GradeEditorActivity.class);
         intent.putExtra("action", "add");
         startActivityForResult(intent, AppCore.RequestCodes.REQUEST_ADD_GRADE);
     }
 
+    /**
+     * Von Android implementiert. Fängt das Resultat durch eine geschlossene Aktivität ab. Bei Erfolg werden betreffende Bereiche aktualisiert.
+     * @param requestCode Code, zur Identifizierung der Anfrage
+     * @param resultCode Code, zur Identifizierung des Resultats
+     * @param data Zurückgegebene Daten
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

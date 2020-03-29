@@ -20,6 +20,10 @@ import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
 import de.zitzmanncedric.abicalc.views.AppActionBar;
 
+/**
+ * Klasse zur Behandlung des Einstellungs-Menü für das Seminarfach
+ * @author Cedric Zitzmann
+ */
 public class SettingsSeminarActivity extends AppCompatActivity implements View.OnClickListener {
 
     private AppActionBar actionBar;
@@ -28,6 +32,10 @@ public class SettingsSeminarActivity extends AppCompatActivity implements View.O
 
     private ArrayList<Subject> oralExams = new ArrayList<>();
 
+    /**
+     * Von Android implementiert. Methode zum Aufbauen des Fensters. Es werden alle Einstellungen geladen und angezeigt
+     * @param savedInstanceState Von Android übergeben (nicht genutzt)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +97,10 @@ public class SettingsSeminarActivity extends AppCompatActivity implements View.O
         }
     }
 
+    /**
+     * Bei Bedarf, kann mit dieser Funktion die Option zum Auswählen eines zu ersetzenden Fachs aktiviert oder deaktiviert werden.
+     * @param hide Boolean-Wert, legt fest ob Elemente versteckt werden sollen
+     */
     private void toggleReplacement(boolean hide) {
         if(hide) {
             labelSpinnerReplace.animate().alpha(0.5f).setDuration(getResources().getInteger(R.integer.anim_speed_quickly));
@@ -101,12 +113,19 @@ public class SettingsSeminarActivity extends AppCompatActivity implements View.O
         }
     }
 
+    /**
+     * Von Android implementiert. Fängt die Schließung des aktuellen Fensters ab. Der Benutzer wird über das Speichern seiner Daten informiert
+     */
     @Override
     public void finish() {
         Toast.makeText(this, getString(R.string.notice_settings_saved), Toast.LENGTH_SHORT).show();
         super.finish();
     }
 
+    /**
+     * Fängt das Klick-Event des "Zurück"-Buttons in der Toolbar ab. Dabei wird die Aktivität geschlossen.
+     * @param v Angeklickter Button
+     */
     @Override
     public void onClick(View v) {
         if(v.getId() == actionBar.getCloseView().getId()) {

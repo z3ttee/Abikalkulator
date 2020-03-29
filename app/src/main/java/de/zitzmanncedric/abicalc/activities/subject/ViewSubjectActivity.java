@@ -6,19 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -27,17 +21,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import de.zitzmanncedric.abicalc.AppCore;
-import de.zitzmanncedric.abicalc.AppFragments;
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.api.Grade;
 import de.zitzmanncedric.abicalc.api.Seminar;
 import de.zitzmanncedric.abicalc.api.Subject;
-import de.zitzmanncedric.abicalc.api.Term;
-import de.zitzmanncedric.abicalc.database.AppDatabase;
 import de.zitzmanncedric.abicalc.fragments.subject.GradesFragment;
 import de.zitzmanncedric.abicalc.utils.AppSerializer;
 import de.zitzmanncedric.abicalc.views.AppActionBar;
 
+/**
+ * Klasse zur Behandlung der Notenübersicht eines Fachs
+ * @author Cedric Zitzmann
+ */
 public class ViewSubjectActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ViewPager fragmentPager;
@@ -47,6 +42,10 @@ public class ViewSubjectActivity extends AppCompatActivity implements View.OnCli
 
     private FloatingActionButton fab;
 
+    /**
+     * Von Android implementiert. Methode zum Aufbauen des Fensters
+     * @param savedInstanceState Von Android übergeben (nicht genutzt)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +73,10 @@ public class ViewSubjectActivity extends AppCompatActivity implements View.OnCli
         reSetup();
     }
 
+    /**
+     * Fängt alle Klick-Events im Fenster ab. Das Fenster wird beim Klick auf "Zurück" in der Toolbar geschlossen. Wird auf "Hinzufügen" geklickt, so öffnet sich der Noteneditor und eine neue Note kann erstellt werden.
+     * @param v Angeklickter Button
+     */
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.btn_close) {
@@ -89,6 +92,9 @@ public class ViewSubjectActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    /**
+     * Sorgt für das erneute Einrichten der Notenansicht
+     */
     private void reSetup(){
         fragmentPager.setAdapter(new Adapter(getSupportFragmentManager(), this, subject));
         tabLayout.setupWithViewPager(fragmentPager, true);
@@ -97,6 +103,12 @@ public class ViewSubjectActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
+    /**
+     * Von Android implementiert. Fängt das Resultat durch eine geschlossene Aktivität ab. Bei Erfolg werden betreffende Bereiche aktualisiert.
+     * @param requestCode Code, zur Identifizierung der Anfrage
+     * @param resultCode Code, zur Identifizierung des Resultats
+     * @param data Zurückgegebene Daten
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -141,12 +153,20 @@ public class ViewSubjectActivity extends AppCompatActivity implements View.OnCli
 
     }
 
+    /**
+     * Adapter der Liste. Sorgt für die Darstellung der Übersicht im ViewPager in Verbindung mit der Tabbar
+     */
     private static class Adapter extends FragmentPagerAdapter {
-        private static final String TAG = "Adapter";
 
         private ArrayList<String> titles;
         private Subject subject;
 
+        /**
+         * Konstruktor der Klasse. Lädt die Titel aller Elemente der Tabbar
+         * @param fm FragmentManager zum Verwalten der Fragmente
+         * @param context Context, zum Laden der Strings aus den App-Resourcen
+         * @param subject Betreffendes Fach
+         */
         Adapter(@NonNull FragmentManager fm, Context context, Subject subject) {
             super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
             this.subject = subject;
@@ -160,11 +180,20 @@ public class ViewSubjectActivity extends AppCompatActivity implements View.OnCli
             ));
         }
 
+        /**
+         * Gibt die Anzahl der Halbjahre an, um diese in der Tabbar anwählbar zu machen
+         * @return Anzahl als Integer
+         */
         @Override
         public int getCount() {
             return (subject.isExam() && Seminar.getInstance().getReplacedSubjectID() != subject.getId() ? 5 : 4);
         }
 
+        /**
+         * Ermittelt die Notenübersicht eines angewählten Halbjahres
+         * @param position Angeklickte Position in der Tabbar oder ausgewählte Position durch den ViewPager
+         * @return Fragment
+         */
         @NonNull
         @Override
         public Fragment getItem(int position) {
@@ -187,6 +216,11 @@ public class ViewSubjectActivity extends AppCompatActivity implements View.OnCli
             return fragment;
         }
 
+        /**
+         * Ermittelt den Seitentitel eines Halbjahres zum Anzeigen in der Tabbar
+         * @param position Position in der Reihenfolge der Fragmente
+         * @return Titel als CharSequence
+         */
         @Nullable
         @Override
         public CharSequence getPageTitle(int position) {

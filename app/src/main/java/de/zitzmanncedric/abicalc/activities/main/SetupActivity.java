@@ -31,7 +31,7 @@ import needle.Needle;
 import needle.UiRelatedTask;
 
 /**
- * Verwaltung der Ersteinrichtung der App
+ * Klasse zur Behandlung des Ersteinrichtungs-Menü.
  * @author Cedric Zitzmann
  */
 public class SetupActivity extends AppCompatActivity implements OnSubjectChosenListener, OnFragmentToActivity {
@@ -49,8 +49,8 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
     public ArrayList<Subject> normals = new ArrayList<>();
 
     /**
-     * Baut die Aktivität auf
-     * @param savedInstanceState Von Android übergeben
+     * Von Android implementiert. Methode zum Aufbauen des Fensters
+     * @param savedInstanceState Von Android übergeben (nicht genutzt)
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +75,8 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
     }
 
     /**
-     * Wird ausgeführt, wenn "Fach hinzufügen" gedrückt wurde. Ruft damit das BottomSheet auf, um ein Fach hinzuzufügen
-     * @param view Übergibt das Button-Element
+     * Wird ausgeführt, wenn "Fach hinzufügen" gedrückt wurde. Ruft damit das BottomSheet (Liste mit Fächern) auf, um ein Fach hinzuzufügen
+     * @param view Angeklickter Button
      */
     public void addSubject(View view){
         ArrayList<Subject> disabled = new ArrayList<>();
@@ -99,7 +99,7 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
 
     /**
      * Ermittelt Anzahl von ausgewählten schriftlichen Prüfungsfächer
-     * @return Integer
+     * @return Anzahl als Integer
      */
     public int getCountWrittenExams() {
         ArrayList<Subject> subjects = new ArrayList<>(intensified);
@@ -118,7 +118,7 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
 
     /**
      * Ermittelt Anzahl von ausgewählten mündlichen Prüfungsfächer
-     * @return Integer
+     * @return Anzahl als Integer
      */
     public int getCountOralExams() {
         ArrayList<Subject> subjects = new ArrayList<>();
@@ -138,8 +138,8 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
     }
 
     /**
-     * Wird ausgeführt, um in der Einrichtung fortzufahren, oder um dieses zu beenden
-     * @param view Übergibt das Button-Element
+     * Wird ausgeführt, um in der Einrichtung fortzufahren, oder um diese zu beenden
+     * @param view Angeklickter Button
      */
     public void continueSetup(View view) {
         Fragment fragment = getSupportFragmentManager().getFragments().get(getSupportFragmentManager().getFragments().size()-1);
@@ -158,7 +158,7 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
     }
 
     /**
-     * Funktion zum beenden der Einrichtung, wird aufgerufen durch continueSetup() wenn im letzten Schritt der Einrichtung. Hier werden alle Eingaben überprüft.
+     * Funktion zum beenden der Einrichtung. Wird aufgerufen durch continueSetup(), wenn sich der Nutzer im letzten Schritt der Einrichtung befindet. Hier werden alle Eingaben überprüft und gespeichert.
      */
     private void finishSetup() {
         // Validate input, check for exams
@@ -213,7 +213,7 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
     }
 
     /**
-     * Prüft, ob die Einrichtung über "Zurück" des Smartphones abgebrochen wurde
+     * Von Android implementiert. Setzt das Resultat der Aktivität auf "Abgebrochen", wenn die Einrichtung über den "Zurück"-Button des Smartphones abgebrochen wurde.
      */
     @Override
     public void onBackPressed() {
@@ -223,11 +223,10 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
 
     /**
      * Sobald ein Fach/Kurs ausgewählt wurde, wird dieses zur Liste der ausgewählten hinzugefügt (passend der Kategorie Leistungs- oder Grundkurs
-     * @param subject Übergibt das Fach, welches ausgewählt wurde
+     * @param subject Ausgewähltes Fach
      */
     @Override
     public void onSubjectChosen(Subject subject) {
-
         Fragment fragment = getSupportFragmentManager().getFragments().get(getSupportFragmentManager().getFragments().size()-1);
         if(fragment instanceof AddIntensifiedFragment) {
             subject.setIntensified(true);
@@ -257,7 +256,7 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
 
     /**
      * Dient der Kommunikation zwischen übergeordneter Aktivität
-     * @param fragment Dient der Verifzierung, woher die Daten stammen
+     * @param fragment Dient der Verifizierung, woher die Daten stammen
      * @param object Übergibt das betreffende Datenobjekt
      * @param actionCode Legt die Aktion fest. Bestimmt wie mit dem Datenobjekt verfahren werden soll
      */

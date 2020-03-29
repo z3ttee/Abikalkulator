@@ -21,9 +21,16 @@ import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
 import de.zitzmanncedric.abicalc.dialogs.ProgressDialog;
 
+/**
+ * Klasse zur Behandlung des Starten der App
+ * @author Cedric Zitzmann
+ */
 public class SplashActivity extends AppCompatActivity {
-    private static final String TAG = "SplashActivity";
 
+    /**
+     * Von Android implementiert. Methode zum Aufbauen des Fensters. Der Benutzer wird ins Hauptmenü weitergeleitet, wenn er die Ersteinrichtung bereits abgeschlossen hat. Andernfalls erfolgt die Weiterleitung zur Ersteinrichtung.
+     * @param savedInstanceState Von Android übergeben (nicht genutzt)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +44,12 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Von Android implementiert. Fängt das Resultat durch eine geschlossene Aktivität ab. Bei Erfolg wird der Benutzer ins Hauptmenü geleitet. Tritt ein Fehler auf, wird der Nutzer benachrichtigt und die App geschlossen, weil ohne Ersteinrichtung die App nicht nutzbar ist.
+     * @param requestCode Code, zur Identifizierung der Anfrage
+     * @param resultCode Code, zur Identifizierung des Resultats
+     * @param data Zurückgegebene Daten
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -59,6 +72,9 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Private Funktion der Klasse zum Anzeigen des Fehlers.
+     */
     private void showError() {
         AlertDialog dialog = new AlertDialog.Builder(this).setTitle(getString(R.string.error_headline)).setMessage(getString(R.string.error_occured)).create();
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.btn_ok), null, (dialog1, which) -> {

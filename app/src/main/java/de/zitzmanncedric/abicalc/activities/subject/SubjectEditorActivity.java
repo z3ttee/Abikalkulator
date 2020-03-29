@@ -2,15 +2,12 @@ package de.zitzmanncedric.abicalc.activities.subject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -28,21 +25,23 @@ import de.zitzmanncedric.abicalc.views.AppButton;
 import needle.Needle;
 import needle.UiRelatedTask;
 
+/**
+ * Klasse zur Behandlung des Kurseditors
+ * @author Cedric Zitzmann
+ */
 public class SubjectEditorActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
-    private static final String TAG = "SubjectEditorActivity";
 
     private AppActionBar actionBar;
     private Spinner spinnerSubjectsView;
-    private CheckBox markAsExamView;
-    private CheckBox markAsOralExamView;
-
-    private int COUNT_WRITTEN_EXAMS = 0;
-    private int COUNT_ORAL_EXAMS = 0;
 
     private Subject subject;
     private ArrayList<String> spinnerItems = new ArrayList<>();
     private ArrayList<Subject> subjects;
 
+    /**
+     * Von Android implementiert. Methode zum Aufbauen des Fensters. Lädt und zeigt alle Einstellungen an.
+     * @param savedInstanceState Von Android übergeben (nicht genutzt)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,16 +55,12 @@ public class SubjectEditorActivity extends AppCompatActivity implements View.OnC
         setSupportActionBar(actionBar);
 
         spinnerSubjectsView = findViewById(R.id.spinner_subjects);
-        markAsExamView = findViewById(R.id.checkbox_markasexam);
-        markAsOralExamView = findViewById(R.id.checkbox_markasoralexam);
+        CheckBox markAsExamView = findViewById(R.id.checkbox_markasexam);
+        CheckBox markAsOralExamView = findViewById(R.id.checkbox_markasoralexam);
 
         subjects = new ArrayList<>(AppDatabase.getInstance().appSubjects.values());
         for(Subject subject : subjects) {
             spinnerItems.add(subject.getTitle());
-            if(subject.isExam()) {
-                if(subject.isOralExam()) ++COUNT_ORAL_EXAMS;
-                else ++COUNT_WRITTEN_EXAMS;
-            }
         }
 
         Intent intent = getIntent();
@@ -90,6 +85,10 @@ public class SubjectEditorActivity extends AppCompatActivity implements View.OnC
         markAsOralExamView.animate().alpha(0.5f).setDuration(getResources().getInteger(R.integer.anim_speed_quickly));
     }
 
+    /**
+     * Fängt alle Klick-Events im Fenster ab. Es wird entweder das Fenster geschlossen, oder alle Einstellungen übernommen.
+     * @param v Angeklickter Button
+     */
     @Override
     public void onClick(View v) {
         if(v.getId() == actionBar.getCloseView().getId()) {
@@ -128,6 +127,13 @@ public class SubjectEditorActivity extends AppCompatActivity implements View.OnC
         }
     }
 
+    /**
+     * Wenn ein Element in der Dropdown-Liste ausgewählt wurde, wird geprüft, ob sich dieses vom vorherigen unterscheidet. Da es zur Löschung von Noten kommen kann, wird dem Nutzer eine Warnung angezeigt.
+     * @param parent Elternelement der Liste
+     * @param view Angeklicktes Element
+     * @param position Position des Elements in der Liste
+     * @param id ID des Elements
+     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Subject sbj = subjects.get(position);
@@ -156,6 +162,10 @@ public class SubjectEditorActivity extends AppCompatActivity implements View.OnC
         }
     }
 
+    /**
+     * Unwichtig. Wird nicht benutzt
+     * @param parent Elternelement der Liste
+     */
     @Override
     public void onNothingSelected(AdapterView<?> parent) { }
 }

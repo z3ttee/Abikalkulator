@@ -4,9 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -23,8 +20,11 @@ import de.zitzmanncedric.abicalc.views.AppActionBar;
 import needle.Needle;
 import needle.UiRelatedTask;
 
+/**
+ * Klasse zur Behandlung des Einstellungs-Menü für die eigenen Ziele
+ * @author Cedric Zitzmann
+ */
 public class SettingsGoalsActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final String TAG = "SettingsGoalsActivity";
 
     private AppActionBar actionBar;
 
@@ -34,6 +34,10 @@ public class SettingsGoalsActivity extends AppCompatActivity implements View.OnC
 
     private boolean keyboardActive = false;
 
+    /**
+     * Von Android implementiert. Methode zum Aufbauen des Fensters. Es werden alle Einstellungen geladen und angezeigt
+     * @param savedInstanceState Von Android übergeben (nicht genutzt)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,12 +97,19 @@ public class SettingsGoalsActivity extends AppCompatActivity implements View.OnC
         });
     }
 
+    /**
+     * Unwichtig
+     */
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         keyboardActive = false;
     }
 
+    /**
+     * Registriert alle Klicks auf Buttons im aktuellen Fenster.
+     * @param v Angeklickter Button
+     */
     @Override
     public void onClick(View v) {
         if(v.getId() == actionBar.getCloseView().getId()) {

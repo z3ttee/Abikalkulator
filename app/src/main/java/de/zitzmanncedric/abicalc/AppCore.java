@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.widget.Toast;
 
 import de.zitzmanncedric.abicalc.activities.SplashActivity;
-import de.zitzmanncedric.abicalc.broadcast.GradeBroadcaster;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
 import lombok.Getter;
 
@@ -36,7 +35,6 @@ public class AppCore extends Application {
         sharedPreferences = getSharedPreferences(getPackageName(), MODE_PRIVATE);
 
         AppDatabase.createInstance(this, 1);
-        GradeBroadcaster.getInstance();
     }
 
     /**

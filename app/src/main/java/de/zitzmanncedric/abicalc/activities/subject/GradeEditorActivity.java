@@ -26,7 +26,6 @@ import de.zitzmanncedric.abicalc.utils.AppSerializer;
 import de.zitzmanncedric.abicalc.views.AppActionBar;
 
 public class GradeEditorActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final String TAG = "GradeEditorActivity";
 
     private AppActionBar actionBar;
 
@@ -34,10 +33,6 @@ public class GradeEditorActivity extends AppCompatActivity implements View.OnCli
     private Spinner termSpinner;
     private Spinner typeSpinner;
     private NumberPicker amountPicker;
-
-    private TextView labelSubjectsSpinner;
-    private TextView labelTermSpinner;
-    private TextView labelTypeSpinner;
 
     private int subjectID = 0;
     private int termID = 0;
@@ -49,6 +44,10 @@ public class GradeEditorActivity extends AppCompatActivity implements View.OnCli
 
     private Grade grade;
 
+    /**
+     * Von Android implementiert. Methode zum Aufbauen des Fensters. Bei Bedarf werden alle bisherigen Daten geladen und angezeigt, wenn eine Note zum bearbeiten übergeben wurde. Andernfalls kann eine neue Note erstellt werden. Nicht veränderbare Einstellungen werden ausgeblendet
+     * @param savedInstanceState Von Android übergeben (nicht genutzt)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_editor_grade);
@@ -58,9 +57,10 @@ public class GradeEditorActivity extends AppCompatActivity implements View.OnCli
         termSpinner = findViewById(R.id.spinner_terms);
         typeSpinner = findViewById(R.id.spinner_type);
         amountPicker = findViewById(R.id.picker_grade_value);
-        labelSubjectsSpinner = findViewById(R.id.label_subjectspinner);
-        labelTermSpinner = findViewById(R.id.label_termspinner);
-        labelTypeSpinner = findViewById(R.id.label_typespinner);
+
+        TextView labelSubjectsSpinner = findViewById(R.id.label_subjectspinner);
+        TextView labelTermSpinner = findViewById(R.id.label_termspinner);
+        TextView labelTypeSpinner = findViewById(R.id.label_typespinner);
 
         actionBar = findViewById(R.id.app_toolbar);
         setSupportActionBar(actionBar);
@@ -150,6 +150,10 @@ public class GradeEditorActivity extends AppCompatActivity implements View.OnCli
             }
     }
 
+    /**
+     * Private Funktion der Klasse. Sorgt dafür, dass passend zur Fachauswahl die möglichen Halbjahre zur Dropdown-Liste hinzugefügt werden und nun zur Auswahl stehen
+     * @param subject Betroffenes Fach
+     */
     private void populateTermSpinner(@Nullable Subject subject) {
         List<String> items = new ArrayList<>();
         if(seminar) {
@@ -173,6 +177,11 @@ public class GradeEditorActivity extends AppCompatActivity implements View.OnCli
         termSpinner.setAdapter(adapter);
         if(!seminar) termSpinner.setSelection(termID);
     }
+
+    /**
+     * Private Funktion der Klasse. Sorgt dafür, dass passend zur Fachauswahl die Notentypen zur Dropdownliste hinzugefügt werden
+     * @param subject Betroffenes Fach
+     */
     private void populateTypeSpinner(@Nullable Subject subject) {
         List<String> items = new ArrayList<>();
 
@@ -204,6 +213,10 @@ public class GradeEditorActivity extends AppCompatActivity implements View.OnCli
         else typeSpinner.setSelection(typeID-4);
     }
 
+    /**
+     * Fängt Klick-Events im Fenster ab. Beim anklicken des "Zurück"-Buttons in der Toolbar wird das Fenster geschlossen. Wird auf "Speichern" in der Toolbar geklickt, so werden die Einstellungen übernommen.
+     * @param v Angeklickter Button
+     */
     @Override
     public void onClick(View v) {
         if(v.getId() == actionBar.getCloseView().getId()) {
@@ -220,6 +233,9 @@ public class GradeEditorActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    /**
+     * Setzt das Resultat des Fensters auf "Abgebrochen". Dient der weiteren Verarbeitung in anderen Fenstern
+     */
     @Override
     public void onBackPressed() {
         setResult(AppCore.ResultCodes.RESULT_CANCELLED);
@@ -227,7 +243,7 @@ public class GradeEditorActivity extends AppCompatActivity implements View.OnCli
     }
 
     /**
-     * Funktion für "Hinzufügen"-Button. Übermittelt Daten an übergeordnete Aktivität
+     * Funktion für "Hinzufügen"-Button. Übermittelt Daten an übergeordnete Aktivität und erstellt eine neue Note
      */
     private void addGrade() {
         Intent intent = new Intent();
@@ -260,7 +276,7 @@ public class GradeEditorActivity extends AppCompatActivity implements View.OnCli
     }
 
     /**
-     * Funktion für "Hinzufügen"-Button. Übermittelt Daten an übergeordnete Aktivität
+     * Funktion für "Hinzufügen"-Button. Speichert alle Änderungen an einer Note
      */
     private void editGrade() {
         Intent intent = new Intent();
@@ -273,8 +289,6 @@ public class GradeEditorActivity extends AppCompatActivity implements View.OnCli
 
         try {
             Grade newGrade = new Grade(grade.getId(), grade.getSubjectID(), grade.getTermID(), grade.getValue(), grade.getType());
-
-            Log.i(TAG, "editGrade: "+(newGrade == grade));
 
             int typeID = typeSpinner.getSelectedItemPosition();
             int value = amountPicker.getValue();

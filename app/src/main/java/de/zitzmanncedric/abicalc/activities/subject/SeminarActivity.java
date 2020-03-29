@@ -2,22 +2,17 @@ package de.zitzmanncedric.abicalc.activities.subject;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -36,15 +31,21 @@ import de.zitzmanncedric.abicalc.views.AppActionBar;
 import needle.Needle;
 import needle.UiRelatedProgressTask;
 
+/**
+ * Klasse zur Darstellung aller Seminarfachnoten
+ * @author Cedric Zitzmann
+ */
 public class SeminarActivity extends AppCompatActivity implements View.OnClickListener, OnListItemCallback {
-    private static final String TAG = "SeminarActivity";
 
-    private RecyclerView recyclerView;
     private AdvancedSubjectListAdapter adapter;
 
     private TextView noticeView;
     private LinearLayout wrapper;
 
+    /**
+     * Von Android implementiert. Methode zum Aufbauen des Fensters. Sind keine Noten vorhanden, wird eine Meldung angezeigt. Andernfalls werden alle Noten geladen und angezeigt
+     * @param savedInstanceState Von Android übergeben (nicht genutzt)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +57,7 @@ public class SeminarActivity extends AppCompatActivity implements View.OnClickLi
         actionBar.setShowClose(true);
         actionBar.getCloseView().setOnClickListener(this);
 
-        recyclerView = findViewById(R.id.app_grid_seminars);
+        RecyclerView recyclerView = findViewById(R.id.app_grid_seminars);
         adapter = new AdvancedSubjectListAdapter(new ArrayList<>(), this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
@@ -80,6 +81,9 @@ public class SeminarActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    /**
+     * Funktion zum Laden der Noten und das anschließende Anzeigen in der Liste
+     */
     private void populate(){
         adapter.clear();
 
@@ -109,6 +113,10 @@ public class SeminarActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
+    /**
+     * Fängt alle Klick-Events im Fenster ab. Das Fenster wird beim Klick auf "Zurück" in der Toolbar geschlossen
+     * @param v Angeklickter Button
+     */
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.btn_close) {
@@ -116,6 +124,12 @@ public class SeminarActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    /**
+     * Von Android implementiert. Fängt das Resultat durch eine geschlossene Aktivität ab. Bei Erfolg wird das betroffene Element in der Liste aktualisiert.
+     * @param requestCode Code, zur Identifizierung der Anfrage
+     * @param resultCode Code, zur Identifizierung des Resultats
+     * @param data Zurückgegebene Daten
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -140,6 +154,10 @@ public class SeminarActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    /**
+     * Registriert, ob auf ein Listenelement gedrückt wurde. Es wird der Noteneditor geöffnet.
+     * @param object Betroffenes Element
+     */
     @Override
     public void onItemClicked(ListableObject object) {
         Intent intent = new Intent(this, GradeEditorActivity.class);
@@ -152,19 +170,25 @@ public class SeminarActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    /**
+     * Registriert, ob bei einem Listenelement auf bearbeiten gedrückt wurde. Leitet das Ereignis an onItemClicked(object) weiter.
+     * @param object Betroffenes Element
+     */
     @Override
     public void onItemEdit(ListableObject object) {
-        Intent intent = new Intent(this, GradeEditorActivity.class);
-
-        if(object instanceof Grade) {
-            Grade grade = (Grade) object;
-            intent.putExtra("action", "edit");
-            intent.putExtra("grade", AppSerializer.serialize(grade));
-            startActivityForResult(intent, AppCore.RequestCodes.REQUEST_UPDATE_GRADE);
-        }
+        onItemClicked(object);
     }
+
+    /**
+     * Unwichtig (nicht genutzt)
+     * @param object Betroffenes Element
+     */
     @Override
     public void onItemDeleted(ListableObject object) { }
+    /**
+     * Unwichtig (nicht genutzt)
+     * @param object Betroffenes Element
+     */
     @Override
     public void onItemLongClicked(ListableObject object) { }
 }
