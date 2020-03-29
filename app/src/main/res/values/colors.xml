@@ -13,4 +13,7 @@
 
     <color name="colorDisabled">#BCBCBC</color>
     <color name="colorDisabledDark">#707070</color>
+
+    <color name="colorSuccess">#70AA7E</color>
+    <color name="colorFailure">#A54B4B</color>
 </resources>

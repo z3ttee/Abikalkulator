@@ -122,7 +122,6 @@ public class AppDatabase extends SQLiteOpenHelper {
 
                         userSubjects.add(subject);
                     } catch (Exception ex) {
-                        // TODO: Print error to user
                         ex.printStackTrace();
                     }
                 } while (cursor.moveToNext());

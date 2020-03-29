@@ -8,18 +8,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.activities.subject.SeminarActivity;
+import de.zitzmanncedric.abicalc.activities.subject.SubjectEditorActivity;
 import de.zitzmanncedric.abicalc.activities.subject.ViewSubjectActivity;
 import de.zitzmanncedric.abicalc.adapter.RecyclerGridAdapter;
 import de.zitzmanncedric.abicalc.api.Grade;
@@ -29,6 +26,7 @@ import de.zitzmanncedric.abicalc.api.calculation.Average;
 import de.zitzmanncedric.abicalc.api.list.ListableObject;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
 import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
+import de.zitzmanncedric.abicalc.sheets.SubjectQuickOptionsSheet;
 import de.zitzmanncedric.abicalc.utils.AppSerializer;
 import lombok.Getter;
 import needle.Needle;
@@ -132,8 +130,26 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
      */
     @Override
     public void onItemLongClicked(ListableObject object) {
-        Toast.makeText(getContext(), "TODO: Show Sheet with options", Toast.LENGTH_SHORT).show();
-        // TODO: Show menu with options
+        if(object instanceof Subject) {
+            Subject subject = (Subject) object;
+
+            SubjectQuickOptionsSheet sheet = new SubjectQuickOptionsSheet(getContext());
+            sheet.setCallback((button -> {
+                if (button.getText().toString().equals(getString(R.string.btn_show))) {
+                    sheet.dismiss();
+                    onItemClicked(object);
+                    return;
+                }
+                if (button.getText().toString().equals(getString(R.string.btn_edit))) {
+                    sheet.dismiss();
+                    Intent intent = new Intent(getContext(), SubjectEditorActivity.class);
+                    intent.putExtra("subjectID", subject.getId());
+                    startActivityForResult(intent, AppCore.RequestCodes.REQUEST_UPDATE_SCHEDULE);
+                }
+            }));
+            sheet.setTitle(getString(R.string.headline_edit_subject));
+            sheet.show();
+        }
     }
 
     /**
@@ -184,11 +200,14 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
         if(requestCode == AppCore.RequestCodes.REQUEST_UPDATE_VIEWS) {
             Seminar.getInstance().setAside(String.valueOf(Average.getSeminarSync()));
             adapter.notifyDataSetChanged();
-            /*intensifiedAdapter.notifyDataSetChanged();
-            basicsAdapter.notifyDataSetChanged();
+        }
 
-            Seminar.getInstance().setAside(String.valueOf(Average.getSeminarSync()));
-            seminarAdapter.set(new ArrayList<>(Collections.singletonList(Seminar.getInstance())));*/
+        if(requestCode == AppCore.RequestCodes.REQUEST_UPDATE_SCHEDULE && resultCode == AppCore.ResultCodes.RESULT_OK) {
+            try {
+                getParentFragment().onActivityResult(requestCode, resultCode, null);
+            } catch (Exception ex){
+                ex.printStackTrace();
+            }
         }
     }
 }

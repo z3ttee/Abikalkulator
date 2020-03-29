@@ -78,7 +78,7 @@
             android:onClick="goGoals"
             android:padding="@dimen/icon_padding"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_goal"
+            android:src="@drawable/ic_award"
             android:tint="@color/colorPrimaryDark"
             android:foreground="?attr/selectableItemBackgroundBorderless"/>
 

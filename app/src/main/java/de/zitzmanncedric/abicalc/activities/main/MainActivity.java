@@ -24,13 +24,8 @@ import de.zitzmanncedric.abicalc.fragments.main.OverviewFragment;
 import de.zitzmanncedric.abicalc.fragments.main.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "MainActivity";
 
     private FrameLayout fragmentContainer;
-
-    private BottomAppBar bottomAppBar;
-    private FloatingActionButton fab;
-
     private ImageButton homeBtn, goalsBtn, settingsBtn;
 
     @Override
@@ -39,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         fragmentContainer = findViewById(R.id.app_fragment_container);
-        bottomAppBar = findViewById(R.id.app_bottom_bar);
-        fab = findViewById(R.id.app_fab);
+        BottomAppBar bottomAppBar = findViewById(R.id.app_bottom_bar);
+        FloatingActionButton fab = findViewById(R.id.app_fab);
         homeBtn = findViewById(R.id.menu_home);
         goalsBtn = findViewById(R.id.menu_goals);
         settingsBtn = findViewById(R.id.menu_settings);
@@ -50,13 +45,7 @@ public class MainActivity extends AppCompatActivity {
         homeBtn.setColorFilter(getColor(R.color.colorAccent));
         fab.setColorFilter(getColor(android.R.color.white));
 
-        AppFragments.replaceFragment(getSupportFragmentManager(), fragmentContainer, new OverviewFragment(), true, null, 0, R.anim.fragment_scaleout);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
+        AppFragments.replaceFragment(getSupportFragmentManager(), fragmentContainer, new OverviewFragment(), true, null, 0, R.anim.fragment_scaleout, R.anim.fragment_scalein, R.anim.fragment_scaleout);
     }
 
     public void goHome(View view) {
@@ -66,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         goalsBtn.setColorFilter(getColor(R.color.colorPrimaryDark));
         settingsBtn.setColorFilter(getColor(R.color.colorPrimaryDark));
 
-        AppFragments.replaceFragment(getSupportFragmentManager(), fragmentContainer, new OverviewFragment(), true, null, R.anim.fragment_scalein, R.anim.fragment_scaleout);
+        AppFragments.replaceFragment(getSupportFragmentManager(), fragmentContainer, new OverviewFragment(), true, null, R.anim.fragment_scalein, R.anim.fragment_scaleout, R.anim.fragment_scalein, R.anim.fragment_scaleout);
     }
     public void goGoals(View view) {
         if(getSupportFragmentManager().getFragments().get(0) instanceof GoalsFragment) return;
@@ -75,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         homeBtn.setColorFilter(getColor(R.color.colorPrimaryDark));
         settingsBtn.setColorFilter(getColor(R.color.colorPrimaryDark));
 
-        AppFragments.replaceFragment(getSupportFragmentManager(), fragmentContainer, new GoalsFragment(), true, null, R.anim.fragment_scalein, R.anim.fragment_scaleout);
+        AppFragments.replaceFragment(getSupportFragmentManager(), fragmentContainer, new GoalsFragment(), true, null, R.anim.fragment_scalein, R.anim.fragment_scaleout, R.anim.fragment_scalein, R.anim.fragment_scaleout);
     }
     public void goSettings(View view) {
         if(getSupportFragmentManager().getFragments().get(0) instanceof SettingsFragment) return;
@@ -84,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         homeBtn.setColorFilter(getColor(R.color.colorPrimaryDark));
         goalsBtn.setColorFilter(getColor(R.color.colorPrimaryDark));
 
-        AppFragments.replaceFragment(getSupportFragmentManager(), fragmentContainer, new SettingsFragment(), true, null, R.anim.fragment_scalein, R.anim.fragment_scaleout);
+        AppFragments.replaceFragment(getSupportFragmentManager(), fragmentContainer, new SettingsFragment(), true, null, R.anim.fragment_scalein, R.anim.fragment_scaleout, R.anim.fragment_scalein, R.anim.fragment_scaleout);
     }
 
     public void addGrade(View view) {
@@ -97,6 +86,11 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if(requestCode == AppCore.RequestCodes.REQUEST_UPDATE_SCHEDULE){
+            AppFragments.replaceFragment(getSupportFragmentManager(), fragmentContainer, new OverviewFragment(), true, null, 0, R.anim.fragment_scaleout, R.anim.fragment_scalein, R.anim.fragment_scaleout);
+            return;
+        }
+
         Fragment currentFragment = getSupportFragmentManager().getFragments().get(0);
         if(currentFragment instanceof OverviewFragment) {
             if(requestCode == AppCore.RequestCodes.REQUEST_ADD_GRADE) {
@@ -105,7 +99,5 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-
-
     }
 }

@@ -51,7 +51,7 @@ public class SettingsGoalsActivity extends AppCompatActivity implements View.OnC
 
         defaultPointsInput.setText(String.valueOf(AppCore.getSharedPreferences().getInt("defaultAVG", 8)));
         goalAverageInput.setText(String.valueOf(AppCore.getSharedPreferences().getFloat("goalAVG", 2.0f)));
-        goalPointsInput.setText(String.valueOf(AppCore.getSharedPreferences().getInt("goalPoints", 643)));
+        goalPointsInput.setText(String.valueOf(AppCore.getSharedPreferences().getInt("goalPoints", 660)));
 
         ConstraintLayout containerDefaultPoints = findViewById(R.id.container_input_defaultpoints);
         ConstraintLayout containerGoalAverage = findViewById(R.id.container_input_goalavg);
@@ -143,7 +143,6 @@ public class SettingsGoalsActivity extends AppCompatActivity implements View.OnC
                         AppCore.getSharedPreferences().edit().putFloat("goalAVG", Float.parseFloat(goalAverageInput.getText().toString().replace(",",".").substring(0, (Math.min(goalAverageInput.getText().length(), 3))))).apply();
                         AppCore.getSharedPreferences().edit().putInt("goalPoints", Integer.parseInt(goalPointsInput.getText().toString())).apply();
 
-                        // TODO: Update seminarfach grades
                         for (Subject subject : AppDatabase.getInstance().userSubjects) {
                             if(subject.isExam()){
                                 for (int i = 0; i < 5; i++) {

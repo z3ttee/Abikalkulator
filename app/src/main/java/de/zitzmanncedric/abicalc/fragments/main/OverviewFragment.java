@@ -25,11 +25,11 @@ import java.util.Arrays;
 
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.R;
+import de.zitzmanncedric.abicalc.activities.main.MainActivity;
 import de.zitzmanncedric.abicalc.api.Grade;
 import de.zitzmanncedric.abicalc.fragments.subject.SubjectsFragment;
 import de.zitzmanncedric.abicalc.utils.AppSerializer;
 import de.zitzmanncedric.abicalc.views.AverageView;
-import needle.Needle;
 
 /**
  * Teil des Hauptbildschirms. Zeigt die Übersicht über alle Fächer an, sowie voraussichtlicher Abiturschnitt
@@ -40,6 +40,7 @@ public class OverviewFragment extends Fragment {
     private ViewPager fragmentPager;
     private AverageView averageView;
     private ProgressBar progressBar;
+    private TabLayout tabLayout;
 
     /**
      * Standard-Konstruktor der Klasse (wird benötigt durch die Erbung von Fragment)
@@ -58,7 +59,7 @@ public class OverviewFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
 
         fragmentPager = view.findViewById(R.id.app_fragment_pager);
-        TabLayout tabLayout = view.findViewById(R.id.app_tabbar);
+        tabLayout = view.findViewById(R.id.app_tabbar);
         averageView = view.findViewById(R.id.app_averageview);
         progressBar = view.findViewById(R.id.app_progressbar);
 
@@ -82,8 +83,7 @@ public class OverviewFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        progressBar.animate().alpha(1f).setDuration(AppCore.getInstance().getResources().getInteger(R.integer.anim_speed_quickly));
-        averageView.recalculate(() -> progressBar.animate().alpha(0f).setDuration(AppCore.getInstance().getResources().getInteger(R.integer.anim_speed_quickly)).setStartDelay(50));
+        averageView.recalculate(() -> { });
     }
 
     /**
@@ -195,6 +195,14 @@ public class OverviewFragment extends Fragment {
                     SubjectsFragment f = (SubjectsFragment) fragment;
                     f.onActivityResult(AppCore.RequestCodes.REQUEST_UPDATE_VIEWS, resultCode, null);
                 }
+            }
+        }
+
+        if(requestCode == AppCore.RequestCodes.REQUEST_UPDATE_SCHEDULE) {
+            try {
+                ((MainActivity) getActivity()).onActivityResult(requestCode, resultCode, data);
+            } catch (Exception ex){
+                ex.printStackTrace();
             }
         }
     }

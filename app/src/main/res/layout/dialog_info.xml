@@ -7,12 +7,6 @@
     android:layout_marginStart="@dimen/window_padding"
     android:layout_marginEnd="@dimen/window_padding">
 
-    <ImageView
-        android:id="@+id/dialog_icon"
-        android:layout_width="@dimen/icon_size_large"
-        android:layout_height="@dimen/icon_size_large"
-        android:layout_gravity="center_horizontal"/>
-
     <TextView
         style="@style/Headline.h5"
         android:id="@+id/dialog_title"
@@ -39,15 +33,7 @@
             android:id="@+id/dialog_btn_positive"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/btn_continue"/>
-
-        <de.zitzmanncedric.abicalc.views.AppButton
-            style="@style/Button.primary"
-            android:id="@+id/dialog_btn_negative"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_padding"
-            android:text="@string/btn_cancel"/>
+            android:text="@string/btn_ok"/>
 
     </LinearLayout>
 

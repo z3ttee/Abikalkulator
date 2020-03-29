@@ -2,6 +2,7 @@ package de.zitzmanncedric.abicalc.activities.subject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -97,7 +98,6 @@ public class SubjectEditorActivity extends AppCompatActivity implements View.OnC
             return;
         }
         if(v.getId() == actionBar.getSaveView().getId()) {
-            // TODO: Save settings
             Subject newSubject = subjects.get(spinnerSubjectsView.getSelectedItemPosition());
 
             if(subject.getId() != newSubject.getId()) {
@@ -149,6 +149,9 @@ public class SubjectEditorActivity extends AppCompatActivity implements View.OnC
             dialog.setIcon(R.drawable.ic_warning);
             dialog.setTitle(getString(R.string.headline_yousure));
             dialog.setDescription(getString(R.string.notice_replace_subjects));
+            dialog.setOnCancelListener(dialog1 -> {
+                spinnerSubjectsView.setSelection(spinnerItems.indexOf(subject.getTitle()));
+            });
             dialog.show();
         }
     }

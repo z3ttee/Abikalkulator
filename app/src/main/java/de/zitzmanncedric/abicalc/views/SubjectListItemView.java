@@ -27,7 +27,7 @@ public class SubjectListItemView extends LinearLayout implements View.OnClickLis
 
     private TextView itemNameView;
     private TextView itemSubView;
-    private TextView itemPoints;
+    @Getter private TextView itemPoints;
     private ImageView itemEditBtn;
     private ImageView itemDeleteBtn;
     private LinearLayout itemDividerView;
@@ -123,6 +123,10 @@ public class SubjectListItemView extends LinearLayout implements View.OnClickLis
     public void setPoints(int points) {
         itemPoints.setText(points+"P");
         this.points = points;
+    }
+
+    public void setTextPoints(String points) {
+        itemPoints.setText(points);
     }
 
     public void setShowEdit(boolean showEdit) {

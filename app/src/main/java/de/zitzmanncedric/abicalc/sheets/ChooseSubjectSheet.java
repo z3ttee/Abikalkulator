@@ -179,7 +179,7 @@ public class ChooseSubjectSheet extends BottomSheetDialog implements OnListItemC
      * Setzt eine weiße Navigationsleiste für schöneres Aussehen
      * @param dialog Übergabe, um welches BottomSheet Fenster es sich handelt
      */
-    private void setWhiteNavigationBar(@NonNull Dialog dialog) {
+    public static void setWhiteNavigationBar(@NonNull Dialog dialog) {
         Window window = dialog.getWindow();
         if (window != null) {
             DisplayMetrics metrics = new DisplayMetrics();

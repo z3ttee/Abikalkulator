@@ -199,9 +199,16 @@ public class Average {
      * @param callback Um auf Rückgabe zurückzugreifen
      */
     public static void getStriked(CalcCallback<HashMap<Integer, Subject>> callback){
-        Needle.onBackgroundThread().execute(() -> {
-            HashMap<Integer, Subject> striked = getStrikedSync();
-            callback.onCalcFinished(striked);
+        Needle.onBackgroundThread().execute(new UiRelatedTask<HashMap<Integer, Subject>>() {
+            @Override
+            protected HashMap<Integer, Subject> doWork() {
+                return getStrikedSync();
+            }
+
+            @Override
+            protected void thenDoUiRelatedWork(HashMap<Integer, Subject> result) {
+                callback.onCalcFinished(result);
+            }
         });
     }
 

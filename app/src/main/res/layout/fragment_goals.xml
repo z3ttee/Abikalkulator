@@ -1,24 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/window_padding"
-    tools:context=".fragments.main.GoalsFragment"
-    android:orientation="vertical">
+    tools:context=".fragments.main.GoalsFragment">
 
-    <TextView
-        style="@style/Headline.h4"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Deine Ziele" />
+        android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:nestedScrollingEnabled="false" >
+        <TextView
+            style="@style/Headline.h4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/headline_goals" />
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <ImageView
+            android:layout_width="@dimen/icon_size_large"
+            android:layout_height="@dimen/icon_size_large"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/window_padding_large"
+            android:src="@drawable/ic_award"
+            android:tint="@color/colorAccent" />
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/window_padding_large"
+            android:layout_marginBottom="@dimen/default_padding"
+            android:background="@drawable/background_listitem">
+
+            <ImageView
+                android:id="@+id/goal_goalavg_icon"
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:padding="@dimen/icon_padding"
+                android:src="@drawable/ic_check"
+                android:layout_gravity="center_vertical"/>
+
+            <TextView
+                style="@style/TextAppearance"
+                android:id="@+id/goal_goalavg_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_padding"
+                android:layout_gravity="center_vertical"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/default_padding"
+            android:background="@drawable/background_listitem">
+
+            <ImageView
+                android:id="@+id/goal_goalpoints_icon"
+                android:layout_width="@dimen/icon_size"
+                android:layout_height="@dimen/icon_size"
+                android:padding="@dimen/icon_padding"
+                android:src="@drawable/ic_check"
+                android:layout_gravity="center_vertical"/>
+
+            <TextView
+                style="@style/TextAppearance"
+                android:id="@+id/goal_goalpoints_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_padding"
+                android:layout_gravity="center_vertical"/>
+
+        </LinearLayout>
+
+        <TextView
+            style="@style/TextAppearance.Label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/window_padding_large"
+            android:text="@string/label_striked" />
+
+        <TextView
+            style="@style/TextAppearance"
+            android:id="@+id/goal_algorythm_notice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_padding"
+            android:layout_marginBottom="@dimen/default_padding"
+            android:alpha="0.5"
+            android:textSize="14sp"
+            android:text="@string/notice_algorythm"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_striked_subjects"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/window_padding"/>
+    </LinearLayout>
+</ScrollView>
