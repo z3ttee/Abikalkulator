@@ -31,6 +31,7 @@
         Ist das Fach jedoch ein Leistungsfach, wird kein Halbjahr gestrichen.
         Wenn das Fach ein Nebenfach ist und als mündliche Prüfung markiert ist, so erfolgt im letzten Halbjahr ebenfalls kein Streichen.</string>
     <string name="paragraph_algorythm">Unser Algorithmus ist sehr einfach gestaltet. Wenn du mehr darüber wissen möchtest, dann klicke auf diesen Text.</string>
+    <string name="paragraph_sharewith">Hey, ich hab eine super App gefunden, womit man seine Noten perfekt Verwalten kann. Du bekommst sogar deinen Abischnitt angezeigt! Hier gehts zur App: %url%</string>
 
     <string name="btn_add_subject">Einen Kurs hinzufügen</string>
     <string name="btn_continue">Fortfahren</string>
