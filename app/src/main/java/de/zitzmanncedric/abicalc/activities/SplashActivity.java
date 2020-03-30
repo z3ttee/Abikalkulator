@@ -55,7 +55,8 @@ public class SplashActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(resultCode == AppCore.ResultCodes.RESULT_OK && requestCode == AppCore.RequestCodes.REQUEST_SETUP) {
-            AppCore.getInstance().restartApp(this);
+            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            finish();
         } else if(resultCode == AppCore.ResultCodes.RESULT_CANCELLED) {
             // Close app -> setup cancelled
             AlertDialog dialog = new AlertDialog.Builder(this).setTitle(getString(R.string.error_headline)).setMessage(getString(R.string.error_setup_cancelled)).create();

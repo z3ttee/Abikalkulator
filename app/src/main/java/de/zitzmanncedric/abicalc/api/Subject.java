@@ -1,7 +1,5 @@
 package de.zitzmanncedric.abicalc.api;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
@@ -9,9 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import de.zitzmanncedric.abicalc.AppCore;
-import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.api.list.ListableObject;
-import de.zitzmanncedric.abicalc.views.SubjectListItemView;
 import lombok.Getter;
 import lombok.Setter;
 

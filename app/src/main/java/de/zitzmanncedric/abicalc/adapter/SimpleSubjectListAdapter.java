@@ -1,10 +1,6 @@
 package de.zitzmanncedric.abicalc.adapter;
 
-import android.util.Log;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AnimationUtils;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,9 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.AppUtils;
-import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.listener.OnButtonTouchListener;
 import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
@@ -23,21 +17,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class SimpleSubjectListAdapter extends RecyclerView.Adapter<SimpleSubjectListAdapter.ViewHolder> implements DatasetInterface<Subject> {
-    private static final String TAG = "SimpleSubjectListAdapte";
-
     private ArrayList<Subject> dataset;
     private ArrayList<Subject> disabled = new ArrayList<>();
-    @Setter
-    private OnListItemCallback onCallback;
+    @Setter private OnListItemCallback onCallback;
 
     public SimpleSubjectListAdapter(ArrayList<Subject> dataset, @Nullable ArrayList<Subject> disabled) {
         this.dataset = dataset;
         if(disabled != null) this.disabled = disabled;
-    }
-    public SimpleSubjectListAdapter(ArrayList<Subject> dataset, @Nullable ArrayList<Subject> disabled, OnListItemCallback onCallback) {
-        this.dataset = dataset;
-        if(disabled != null) this.disabled = disabled;
-        this.onCallback = onCallback;
     }
 
     @NonNull
@@ -70,6 +56,22 @@ public class SimpleSubjectListAdapter extends RecyclerView.Adapter<SimpleSubject
         holder.itemView.setOnDeleteListener(() -> {
             if(onCallback != null) onCallback.onItemDeleted(subject);
         });
+    }
+
+    @Override
+    public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        Subject subject = this.dataset.get(holder.getAdapterPosition());
+
+        holder.itemView.setOnClickListener(view -> {
+            if(onCallback != null) onCallback.onItemClicked(subject);
+        });
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        holder.itemView.setOnClickListener((view)->{});
     }
 
     @Override
@@ -111,8 +113,7 @@ public class SimpleSubjectListAdapter extends RecyclerView.Adapter<SimpleSubject
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Getter
-        private SubjectListItemView itemView;
+        @Getter private SubjectListItemView itemView;
         ViewHolder(@NonNull SubjectListItemView itemView) {
             super(itemView);
             this.itemView = itemView;

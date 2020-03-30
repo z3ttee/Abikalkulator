@@ -1,9 +1,11 @@
 package de.zitzmanncedric.abicalc.fragments.setup;
 
-
-import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,65 +19,70 @@ import java.util.ArrayList;
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.activities.main.SetupActivity;
+import de.zitzmanncedric.abicalc.activities.subject.AddSubjectActivity;
 import de.zitzmanncedric.abicalc.adapter.AdvancedSubjectListAdapter;
 import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.api.list.ListableObject;
 import de.zitzmanncedric.abicalc.dialogs.QuickSubjectEditDialog;
-import de.zitzmanncedric.abicalc.listener.OnActivityToFragment;
 import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
+import de.zitzmanncedric.abicalc.utils.AppSerializer;
 import de.zitzmanncedric.abicalc.views.AppButton;
 
-public class AddNormalFragment extends Fragment implements OnActivityToFragment, OnListItemCallback {
+public class AddNormalFragment extends Fragment implements OnListItemCallback, View.OnClickListener {
 
-    private AppButton continueSetupBtn;
     private AppButton addSubjectBtn;
-    private RecyclerView recyclerView;
-
-    private SetupActivity setupActivity;
     private AdvancedSubjectListAdapter adapter;
+    private SetupActivity setupActivity;
 
-    public AddNormalFragment(AppButton continueSetupBtn, AppButton addSubjectBtn) {
-        this.continueSetupBtn = continueSetupBtn;
-        this.addSubjectBtn = addSubjectBtn;
+    private Context context;
+    public AddNormalFragment(Context context) {
+        this.context = context;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_normal, container, false);
-
-        if(getActivity() != null) {
-            recyclerView = view.findViewById(R.id.setup_recycler_normal);
-            recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-
-            ArrayList<ListableObject> objects = new ArrayList<>(((SetupActivity) getActivity()).normals);
-            adapter = new AdvancedSubjectListAdapter(objects);
-
-            adapter.setOnCallback(this);
-            adapter.setCorrespondingRecyclerView(recyclerView);
-            recyclerView.setAdapter(adapter);
-
-            setupActivity = (SetupActivity) getActivity();
-        }
-
-        return view;
+        return inflater.inflate(R.layout.fragment_add_basic, container, false);
     }
 
     @Override
-    public void onActivityToFragment(Activity activity, Object object, int actionCode) {
-        try {
-            adapter.add((ListableObject) object);
-            recyclerView.scrollToPosition(adapter.getItemCount());
-        } catch (Exception ex){
-            ex.printStackTrace();
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        this.setupActivity = (SetupActivity) getActivity();
+
+        this.addSubjectBtn = view.findViewById(R.id.btn_setup_addsubject);
+        this.addSubjectBtn.setOnClickListener(this);
+
+        this.adapter = new AdvancedSubjectListAdapter(new ArrayList<>(this.setupActivity.getBasics()));
+        this.adapter.setOnCallback(this);
+
+        RecyclerView recyclerView = view.findViewById(R.id.setup_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == this.addSubjectBtn.getId()) {
+
+            ArrayList<Subject> disabled = new ArrayList<>();
+            disabled.addAll(this.setupActivity.getIntensified());
+            disabled.addAll(this.setupActivity.getBasics());
+
+            Intent intent = new Intent(context, AddSubjectActivity.class);
+            intent.putExtra("disabled", AppSerializer.serialize(disabled));
+            intent.putExtra("onlyOralExam", true);
+            intent.putExtra("countOral", this.setupActivity.getCountOralExams());
+            intent.putExtra("countWritten", this.setupActivity.getCountWrittenExams());
+
+            startActivityForResult(intent, AppCore.RequestCodes.REQUEST_ADD_SUBJECT);
         }
     }
 
     @Override
     public void onItemDeleted(ListableObject object) {
         if(object instanceof Subject) {
-            if(setupActivity.normals.remove(object)) {
+            if(setupActivity.getBasics().remove(object)) {
                 adapter.remove(object);
-                setupActivity.onFragmentToActivity(this, object, AppCore.ActionCodes.ACTION_LIST_REMOVEITEM);
             }
         }
     }
@@ -84,14 +91,18 @@ public class AddNormalFragment extends Fragment implements OnActivityToFragment,
     public void onItemEdit(final ListableObject object) {
         try {
             if(object instanceof Subject) {
-                Subject subject = (Subject) object;
-                subject.setIntensified(false);
+                Subject old = (Subject) object;
+                old.setIntensified(false);
 
-                QuickSubjectEditDialog dialog = new QuickSubjectEditDialog(getContext(), subject, setupActivity);
+                QuickSubjectEditDialog dialog = new QuickSubjectEditDialog(context, old, setupActivity);
                 dialog.setCallback(sbj -> {
-                    int index = setupActivity.normals.indexOf(subject);
-                    setupActivity.normals.set(index, sbj);
-                    adapter.update(subject, sbj);
+                    int index = 0;
+                    for(Subject subject : setupActivity.getBasics()){
+                        if(subject.getTitle().equals(sbj.getTitle())) index = setupActivity.getBasics().indexOf(subject);
+                    }
+
+                    setupActivity.getBasics().set(index, sbj);
+                    adapter.update(old, sbj);
                 });
                 dialog.show();
             }
@@ -105,24 +116,29 @@ public class AddNormalFragment extends Fragment implements OnActivityToFragment,
         onItemEdit(object);
     }
 
+    /**
+     * Unwichtig (nicht genutzt)
+     */
     @Override
     public void onItemLongClicked(ListableObject object) { }
 
+    /**
+     * Von Android implementiert. Fängt das Resultat durch eine geschlossene Aktivität ab. Bei Erfolg wird das zuvor ausgewählte Element in der Liste angezeigt
+     * @param requestCode Code, zur Identifizierung der Anfrage
+     * @param resultCode Code, zur Identifizierung des Resultats
+     * @param data Zurückgegebene Daten
+     */
     @Override
-    public void onResume() {
-        super.onResume();
-        continueSetupBtn.setText(getString(R.string.btn_finish));
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == AppCore.RequestCodes.REQUEST_ADD_SUBJECT && resultCode == AppCore.ResultCodes.RESULT_OK && data != null){
+            Subject subject = (Subject) AppSerializer.deserialize(data.getByteArrayExtra("subjectData"));
+            this.setupActivity.getBasics().add(subject);
+            adapter.add(subject);
 
-        try {
-            if (setupActivity.normals.size() == SetupActivity.AMOUNT_NORMALS) {
-                continueSetupBtn.setEnabled(true);
+            if(this.setupActivity.getBasics().size() >= SetupActivity.AMOUNT_BASICS) {
                 addSubjectBtn.setEnabled(false);
-            } else {
-                addSubjectBtn.setEnabled(true);
-                continueSetupBtn.setEnabled(false);
             }
-        } catch (Exception ex){
-            ex.printStackTrace();
         }
     }
 }

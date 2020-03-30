@@ -29,7 +29,6 @@ import lombok.Setter;
 public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSubjectListAdapter.ViewHolder> implements DatasetInterface<ListableObject> {
 
     @Getter private ArrayList<ListableObject> dataset;
-    @Setter private RecyclerView correspondingRecyclerView;
     @Setter private OnListItemCallback onCallback;
     private boolean deletable = true;
 
@@ -147,9 +146,6 @@ public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSub
             holder.itemView.setOnEditCallback(() -> {
                 if (onCallback != null) onCallback.onItemEdit(subject);
             });
-
-            if (correspondingRecyclerView != null)
-                holder.itemView.setCorrespondingRecycler(correspondingRecyclerView);
         }
     }
 

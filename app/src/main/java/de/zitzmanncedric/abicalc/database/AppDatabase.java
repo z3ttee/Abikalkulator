@@ -76,8 +76,6 @@ public class AppDatabase extends SQLiteOpenHelper {
         Cursor cursor = getReadableDatabase().query(TABLE_SUBJECTS, new String[]{"*"}, "", new String[0], null, null, null);
         if(cursor != null) {
 
-            Log.i(TAG, "AppDatabase: "+cursor.getCount());
-
             if(cursor.moveToFirst()) {
                 do {
                     int subjectIDIndex = cursor.getColumnIndex("subjectID");

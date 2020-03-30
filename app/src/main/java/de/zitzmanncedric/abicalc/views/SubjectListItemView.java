@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
@@ -36,7 +35,6 @@ public class SubjectListItemView extends LinearLayout implements View.OnClickLis
     @Getter private int points, positionInList;
     @Getter private boolean showEdit, showDelete, showPoints;
 
-    @Getter @Setter private RecyclerView correspondingRecycler;
     @Getter @Setter private ArrayList<? extends ListableObject> correspondingDataset = new ArrayList<>();
 
     @Setter private OnDeleteCallback onDeleteListener;

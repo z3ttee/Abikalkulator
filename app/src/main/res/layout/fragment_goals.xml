@@ -92,7 +92,7 @@
             android:layout_marginBottom="@dimen/default_padding"
             android:alpha="0.5"
             android:textSize="14sp"
-            android:text="@string/notice_algorythm"/>
+            android:text="@string/paragraph_algorythm"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_striked_subjects"

@@ -12,14 +12,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.settings.SettingsGoalsActivity" android:windowSoftInputMode="adjustResize"></activity>
+        <activity android:name=".activities.subject.AddSubjectActivity"></activity>
+        <activity
+            android:name=".activities.settings.SettingsGoalsActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activities.subject.SubjectEditorActivity" />
         <activity android:name=".activities.settings.SettingsSubjectsActivity" />
         <activity android:name=".activities.settings.SettingsSeminarActivity" />
         <activity android:name=".activities.subject.SeminarActivity" />
         <activity android:name=".activities.subject.GradeEditorActivity" />
         <activity android:name=".activities.subject.ViewSubjectActivity" />
-        <activity android:name=".activities.main.MainActivity" android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".activities.main.MainActivity"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".activities.main.SetupActivity"
             android:theme="@style/AppTheme.Splash" />

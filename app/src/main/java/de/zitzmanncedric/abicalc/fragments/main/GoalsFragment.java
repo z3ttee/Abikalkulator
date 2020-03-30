@@ -106,7 +106,7 @@ public class GoalsFragment extends Fragment implements View.OnClickListener {
         if(v.getId() == noticeView.getId()) {
             InfoDialog dialog = new InfoDialog(getContext());
             dialog.setTitle(getString(R.string.headline_info));
-            dialog.setDescription(getString(R.string.explanation_algorythm));
+            dialog.setDescription(getString(R.string.paragraph_algorythm_dialog));
             dialog.show();
         }
     }

@@ -77,6 +77,7 @@ public class AppCore extends Application {
         public static int REQUEST_UPDATE_SUBJECT = 4;
         public static int REQUEST_UPDATE_VIEWS = 5;
         public static int REQUEST_UPDATE_SCHEDULE = 6;
+        public static int REQUEST_ADD_SUBJECT = 7;
     }
 
     /**

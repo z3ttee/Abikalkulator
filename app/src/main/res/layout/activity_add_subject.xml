@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.subject.AddSubjectActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
+        <de.zitzmanncedric.abicalc.views.AppActionBar
+            android:id="@+id/app_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/window_padding">
+
+            <TextView
+                style="@style/Headline.h4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/window_padding"
+                android:layout_marginEnd="@dimen/window_padding"
+                android:text="@string/headline_add_subject" />
+
+            <CheckBox
+                android:id="@+id/checkbox_exam"
+                style="@style/AppCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/window_padding"
+                android:layout_marginStart="@dimen/window_padding"
+                android:layout_marginEnd="@dimen/window_padding"
+                android:buttonTint="@color/colorAccent"
+                android:text="@string/label_markAsExam"/>
+
+            <CheckBox
+                android:id="@+id/checkbox_oralexam"
+                style="@style/AppCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/window_padding"
+                android:layout_marginEnd="@dimen/window_padding"
+                android:buttonTint="@color/colorAccent"
+                android:text="@string/label_markAsOralExam"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview_subjects"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="@dimen/window_padding"
+                android:paddingEnd="@dimen/window_padding"
+                android:paddingBottom="@dimen/window_padding"
+                android:layout_marginTop="@dimen/window_padding"
+                android:orientation="vertical" />
+
+        </LinearLayout>
+</LinearLayout>

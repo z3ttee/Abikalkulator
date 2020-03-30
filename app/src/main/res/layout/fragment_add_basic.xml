@@ -17,7 +17,7 @@
             style="@style/TextAppearance.Label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/label_choose_intensified"
+            android:text="@string/label_choose_basic"
             android:layout_marginBottom="@dimen/default_padding"/>
 
         <androidx.recyclerview.widget.RecyclerView

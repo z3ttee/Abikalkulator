@@ -2,8 +2,8 @@
     <string name="app_name">Abikalkulator</string>
     <string name="app_info">v1.0-beta07 - © 2020</string>
 
-    <string name="label_chose_intensified">Wähle deine Leistungskurse (5)</string>
-    <string name="label_chose_normal">Wähle deine anderen Kurse (6)</string>
+    <string name="label_choose_intensified">Wähle deine Leistungskurse (5)</string>
+    <string name="label_choose_basic">Wähle deine anderen Kurse (6)</string>
     <string name="label_chose_subject">Wähle einen Kurs</string>
     <string name="label_markAsExam">Als Prüfungsfach merken</string>
     <string name="label_markAsOralExam">Als mündliches Prüfungsfach merken</string>
@@ -26,7 +26,11 @@
     <string name="label_striked">Fächer, die wir beim Berechnen streichen</string>
     <string name="label_quickoptions">Schnelloptionen</string>
 
-    <string name="paragraph_welcome">Wir bedanken uns, dass du dein Vertrauen in uns steckst. Bevor du starten kannst, benötigen wir aber noch einige Informationen. Bitte gib uns deshalb Auskunft über deine Kursbelegung. Beachte, dass du 5 Kurse als Prüfungsfach markieren solltest.</string>
+    <string name="paragraph_setup_welcome">Herzlich willkommen beim Abikalkulator! Wir freuen uns dich hier zu treffen. Es ist uns eine Ehre, dein Speicherort für all\' deine Noten sein zu dürfen. Nun lass uns nicht lange reden, denn vorher wartet ein wenig Arbeit auf dich. In der folgenden Ersteinrichtung musst du uns deine Kursbelegung angeben, damit wir dir eine Übersicht erstellen können.</string>
+    <string name="paragraph_algorythm_dialog">Unser Algorithmus sucht pro Halbjahr das schlechteste Fach, welches dann gestrichen wird.
+        Ist das Fach jedoch ein Leistungsfach, wird kein Halbjahr gestrichen.
+        Wenn das Fach ein Nebenfach ist und als mündliche Prüfung markiert ist, so erfolgt im letzten Halbjahr ebenfalls kein Streichen.</string>
+    <string name="paragraph_algorythm">Unser Algorithmus ist sehr einfach gestaltet. Wenn du mehr darüber wissen möchtest, dann klicke auf diesen Text.</string>
 
     <string name="btn_add_subject">Einen Kurs hinzufügen</string>
     <string name="btn_continue">Fortfahren</string>
@@ -44,15 +48,22 @@
     <string name="exp_abi">Abitur</string>
     <string name="exp_overallpoints">Deine Punktzahl</string>
     <string name="exp_points">%points%/900Pkt.</string>
+    <string name="exp_steps">Schritt %step%/%steps%</string>
 
     <string name="error_headline">Whooops!</string>
-    <string name="error_limitforsubject_reached">Limit für dieses Fach erreicht!</string>
+    <!--<string name="error_limitforsubject_reached">Limit für dieses Fach erreicht!</string>-->
     <string name="error_occured">Es ist ein irreparabler Fehler aufgetreten. Die App wird geschlossen.</string>
-    <string name="error_missing_exams">Du musst 5 Kurse als Prüfungsfach markieren. Deine vorherige Auswahl erreichst du, indem du auf den ZURÜCK-Pfeil deines Smartphones drückst.</string>
+    <string name="error_missing_intensified">Du musst 5 Leistungskurse angeben, um fortzufahren.</string>
+    <string name="error_missing_basics">Du musst 6 Nebenfächer angeben, um fortzufahren.</string>
+    <string name="error_missing_writtenexams">Du musst mindestens 3 schriftliche Prüfungen angeben, um fortzufahren.</string>
+    <string name="error_missing_oralexams">Du musst mindestens 2 mündliche Prüfungen angeben, um fortzufahren.</string>
+
+    <!--<string name="error_missing_exams">Du musst 5 Kurse als Prüfungsfach markieren. Deine vorherige Auswahl erreichst du, indem du auf den ZURÜCK-Pfeil deines Smartphones drückst.</string>-->
     <string name="error_setup_cancelled">Du hast das Setup abgebrochen. Die App kann ohne Einrichtung nicht genutzt werden.</string>
     <string name="error_cant_be_edited">Das kann nicht bearbeitet werden.</string>
 
     <string name="headline_add_grade">Neue Note hinzufügen</string>
+    <string name="headline_add_subject">Fach hinzufügen</string>
     <string name="headline_edit_grade">Einzelnote bearbeiten</string>
     <string name="headline_edit_subject">Kurs bearbeiten</string>
     <string name="headline_settings">Einstellungen</string>
@@ -61,6 +72,7 @@
     <string name="headline_yousure">Bist du sicher?</string>
     <string name="headline_settings_goals">Deine Ziele bearbeiten</string>
     <string name="headline_info">Zur Information</string>
+    <string name="headline_setup_welcome">Schön dich zu sehen!</string>
 
     <string name="subject_math">Mathematik</string>
     <string name="subject_english">Englisch</string>
@@ -114,9 +126,6 @@
     <string name="notice_replace_subjects">Bist du sicher, dass du diese Fächer tauschen möchtest? Noten, die nicht mehr brauchbar sind, werden dann gelöscht.</string>
     <string name="notice_goal_reached">Du wirst dein Ziel von %goal% erreichen.</string>
     <string name="notice_goal_notreached">Du wirst dein Ziel von %goal% nicht erreichen.</string>
-    <string name="notice_algorythm">Unser Algorithmus ist sehr einfach gestaltet. Wenn du mehr darüber wissen möchtest, dann klicke auf diesen Text.</string>
+    <string name="notice_setup_required">Beachte, dass die App ohne Einrichtung nicht nutzbar ist.</string>
 
-    <string name="explanation_algorythm">Unser Algorithmus sucht pro Halbjahr das schlechteste Fach, welches dann gestrichen wird.
-        Ist das Fach jedoch ein Leistungsfach, wird kein Halbjahr gestrichen.
-        Wenn das Fach ein Nebenfach ist und als mündliche Prüfung markiert ist, so erfolgt im letzten Halbjahr ebenfalls kein Streichen.</string>
 </resources>

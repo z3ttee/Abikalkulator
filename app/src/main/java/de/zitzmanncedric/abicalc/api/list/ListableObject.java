@@ -1,9 +1,11 @@
 package de.zitzmanncedric.abicalc.api.list;
 
+import java.io.Serializable;
+
 import lombok.Getter;
 import lombok.Setter;
 
-public abstract class ListableObject {
+public abstract class ListableObject implements Serializable {
 
     @Getter @Setter private String title;
     @Getter @Setter private String subtitle;
