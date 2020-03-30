@@ -17,5 +17,9 @@
     <subject id="13" title="@string/subject_religion" />
     <subject id="14" title="@string/subject_art" />
     <subject id="15" title="@string/subject_music" />
+    <subject id="16" title="@string/subject_ethics" />
+    <subject id="17" title="@string/subject_latin" />
+    <subject id="18" title="@string/subject_russian" />
+    <subject id="19" title="@string/subject_spanish" />
 
 </resources>

@@ -79,6 +79,10 @@
     <string name="subject_music">Musik</string>
     <string name="subject_physics">Physik</string>
     <string name="subject_bio">Biologie</string>
+    <string name="subject_ethics">Ethik</string>
+    <string name="subject_spanish">Spanisch</string>
+    <string name="subject_russian">Russisch</string>
+    <string name="subject_latin">Latein</string>
 
     <string name="type_lk">Leistungskontrolle</string>
     <string name="type_ka">Kursarbeit</string>
