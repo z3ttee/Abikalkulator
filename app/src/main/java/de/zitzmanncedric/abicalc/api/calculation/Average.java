@@ -16,64 +16,63 @@ public class Average {
 
     public static void getOfTermAndSubject(Subject subject, int termID, CalcCallback<Integer> callback) {
         Needle.onBackgroundThread().execute(() -> {
-            int avg = AppCore.getSharedPreferences().getInt("defaultAVG", 8);
-
-            ArrayList<Grade> normalFactor = new ArrayList<>();
-            ArrayList<Grade> thirdFactor = new ArrayList<>();
-
-            for(Grade grade : AppDatabase.getInstance().getGradesForTerm(subject, termID)){
-                if(grade.getType() == Grade.Type.KA) {
-                    thirdFactor.add(grade);
-                } else {
-                    normalFactor.add(grade);
-                }
-            }
-
-            if(normalFactor.isEmpty() && thirdFactor.isEmpty()) {
-                callback.onCalcFinished(avg);
-                return;
-            }
-
-            avg = 0;
-
-            // Return average of KAs if these are the only grades
-            if(normalFactor.isEmpty()) {
-                for(Grade grade : thirdFactor) {
-                    avg += grade.getValue();
-                }
-                avg = Math.round((float) avg / (float) thirdFactor.size());
-                callback.onCalcFinished(avg);
-                return;
-            }
-
-            // Return average of all others if these are the only grades
-            if(thirdFactor.isEmpty()) {
-                for(Grade grade : normalFactor) {
-                    avg += grade.getValue();
-                }
-                avg = Math.round((float) avg / (float) normalFactor.size());
-                callback.onCalcFinished(avg);
-                return;
-            }
-
-            int partA = 0;
-            int partB = 0;
-
-            for(Grade grade : thirdFactor) {
-                partA += grade.getValue();
-            }
-            partA = partA / thirdFactor.size();
-
-            for(Grade grade : normalFactor) {
-                partB += grade.getValue();
-            }
-            partB = partB / normalFactor.size();
-
-            avg = Math.round((0.3333f*partA)+0.6666f*partB);
+            int avg = getOfTermAndSubjectSync(subject, termID);
             callback.onCalcFinished(avg);
         });
+    }
+    public static int getOfTermAndSubjectSync(Subject subject, int termID) {
+        int avg = AppCore.getSharedPreferences().getInt("defaultAVG", 8);
 
+        ArrayList<Grade> normalFactor = new ArrayList<>();
+        ArrayList<Grade> thirdFactor = new ArrayList<>();
 
+        for(Grade grade : AppDatabase.getInstance().getGradesForTerm(subject, termID)){
+            if(grade.getType() == Grade.Type.KA) {
+                thirdFactor.add(grade);
+            } else {
+                normalFactor.add(grade);
+            }
+        }
+
+        if(normalFactor.isEmpty() && thirdFactor.isEmpty()) {
+            return avg;
+        }
+
+        avg = 0;
+
+        // Return average of KAs if these are the only grades
+        if(normalFactor.isEmpty()) {
+            for(Grade grade : thirdFactor) {
+                avg += grade.getValue();
+            }
+            avg = Math.round((float) avg / (float) thirdFactor.size());
+            return avg;
+        }
+
+        // Return average of all others if these are the only grades
+        if(thirdFactor.isEmpty()) {
+            for(Grade grade : normalFactor) {
+                avg += grade.getValue();
+            }
+            avg = Math.round((float) avg / (float) normalFactor.size());
+            return avg;
+        }
+
+        int partA = 0;
+        int partB = 0;
+
+        for(Grade grade : thirdFactor) {
+            partA += grade.getValue();
+        }
+        partA = partA / thirdFactor.size();
+
+        for(Grade grade : normalFactor) {
+            partB += grade.getValue();
+        }
+        partB = partB / normalFactor.size();
+
+        avg = Math.round((0.3333f*partA)+0.6666f*partB);
+        return avg;
     }
 
     public static int getSeminarSync(){

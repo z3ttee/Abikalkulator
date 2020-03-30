@@ -303,22 +303,27 @@ public class AppDatabase extends SQLiteOpenHelper {
             case 0:
                 subject.setQuickAvgT1(quickAvg);
                 values.put("quickAvgT1", quickAvg);
+                break;
             case 1:
                 subject.setQuickAvgT2(quickAvg);
                 values.put("quickAvgT2", quickAvg);
+                break;
             case 2:
                 subject.setQuickAvgT3(quickAvg);
                 values.put("quickAvgT3", quickAvg);
+                break;
             case 3:
                 subject.setQuickAvgT4(quickAvg);
                 values.put("quickAvgT4", quickAvg);
+                break;
             case 4:
                 subject.setQuickAvgTA(quickAvg);
                 values.put("quickAvgTA", quickAvg);
+                break;
         }
 
         getUserSubjects().set(index, subject);
-        return getWritableDatabase().updateWithOnConflict(TABLE_SUBJECTS, values, "subjectID=?", new String[]{""+subject.getId()}, SQLiteDatabase.CONFLICT_REPLACE);
+        return getWritableDatabase().updateWithOnConflict(TABLE_SUBJECTS, values, "subjectID=?", new String[]{String.valueOf(subject.getId())}, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     /**
@@ -468,9 +473,16 @@ public class AppDatabase extends SQLiteOpenHelper {
             if (subjectID != Seminar.getInstance().getSubjectID()) {
                 Subject subject = getUserSubjectByID(subjectID);
 
-                Average.getOfTermAndSubject(subject, termID, (result -> {
-                    updateQuickAverage(subject, termID, result);
-                }));
+                int result = Average.getOfTermAndSubjectSync(subject,termID);
+                updateQuickAverage(subject, termID, result);
+
+                // Update averages for alle following terms, if there is no grade
+                for(int i = termID+1; i<5; i++){
+                    ArrayList<Grade> grades = getGradesForTerm(subject, i);
+                    if(grades.isEmpty()){
+                        updateQuickAverage(subject, i, result);
+                    }
+                }
             }
         } catch (Exception ex){
             ex.printStackTrace();
