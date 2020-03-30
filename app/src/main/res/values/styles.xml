@@ -7,7 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
-        <item name="bottomSheetDialogTheme">@style/BottomSheet</item>
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheet</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowLightStatusBar">true</item>
@@ -63,6 +63,9 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">16sp</item>
     </style>
+    <style name="TextAppearance.Medium">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+    </style>
 
     <!-- TextAppearances -->
     <style name="Button">
@@ -94,15 +97,15 @@
 
 
     <!-- BottomSheetDialog -->
-    <style name="BottomSheet" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+    <style name="AppBottomSheet" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppBottomSheetStyle</item>
     </style>
-    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+    <style name="AppBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/background_sheet</item>
     </style>
 
     <!-- Checkbox -->
-    <style name="CheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
+    <style name="AppCheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
         <item name="android:textAppearance">@style/TextAppearance.Label</item>
         <item name="android:minHeight">0dp</item>
         <item name="android:paddingTop">@dimen/default_padding</item>
@@ -110,16 +113,16 @@
     </style>
 
     <!-- SpinnerDesign -->
-    <style name="Spinner" parent="AppTheme">
+    <style name="AppSpinner" parent="AppTheme">
         <item name="android:background">@drawable/background_input</item>
         <item name="android:textAppearance">@style/Headline.h5</item>
     </style>
-    <style name="Popup" parent="ThemeOverlay.AppCompat.Light">
+    <style name="AppPopup" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:background">@drawable/background_input</item>
     </style>
 
     <!-- TabLayout -->
-    <style name="TabLayout">
+    <style name="AppTabLayout">
         <item name="android:background">@drawable/background_tablayout</item>
         <item name="tabIndicator">@drawable/background_tabindicator</item>
         <item name="tabIndicatorColor">@android:color/white</item>
@@ -132,7 +135,7 @@
     </style>
 
     <!-- FloatingActionButton -->
-    <style name="FloatingActionButton">
+    <style name="AppFloatingActionButton">
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="borderWidth">0dp</item>
@@ -143,8 +146,14 @@
         <item name="backgroundTint">@color/colorAccent</item>
     </style>
 
+    <!-- ProgressBar -->
+    <style name="AppProgressBar" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progressbar_track</item>
+    </style>
+
+
     <!-- Animations -->
-    <style name="dialog_scale">
+    <style name="anim_dialog_scale">
         <item name="android:windowEnterAnimation">@anim/dialog_scaleup</item>
         <item name="android:windowExitAnimation">@anim/dialog_scaledown</item>
     </style>

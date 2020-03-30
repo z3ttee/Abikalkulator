@@ -6,6 +6,8 @@
     <item name="default_padding_large" type="dimen">16dp</item>
     <item name="default_scaleDown" format="float" type="dimen">0.98</item>
 
+    <item name="progressbar_height" type="dimen">4dp</item>
+
     <item name="list_bottom_padding" type="dimen">30dp</item>
 
     <item name="icon_size" type="dimen">32dp</item>
