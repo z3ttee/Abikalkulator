@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Abikalkulator</string>
-    <string name="app_info">v1.0-beta06 - © 2020</string>
+    <string name="app_info">v1.0-beta07 - © 2020</string>
 
     <string name="label_chose_intensified">Wähle deine Leistungskurse (5)</string>
     <string name="label_chose_normal">Wähle deine anderen Kurse (6)</string>
@@ -110,9 +110,9 @@
     <string name="notice_replace_subjects">Bist du sicher, dass du diese Fächer tauschen möchtest? Noten, die nicht mehr brauchbar sind, werden dann gelöscht.</string>
     <string name="notice_goal_reached">Du wirst dein Ziel von %goal% erreichen.</string>
     <string name="notice_goal_notreached">Du wirst dein Ziel von %goal% nicht erreichen.</string>
-    <string name="notice_algorythm">Unser Algorythmus ist sehr einfach gestaltet. Wenn du mehr darüber wissen möchtest, dann klicke auf diesen Text.</string>
+    <string name="notice_algorythm">Unser Algorithmus ist sehr einfach gestaltet. Wenn du mehr darüber wissen möchtest, dann klicke auf diesen Text.</string>
 
-    <string name="explanation_algorythm">Unser Algorythmus sucht pro Halbjahr das schlechteste Fach, welches dann gestrichen wird.
+    <string name="explanation_algorythm">Unser Algorithmus sucht pro Halbjahr das schlechteste Fach, welches dann gestrichen wird.
         Ist das Fach jedoch ein Leistungsfach, wird kein Halbjahr gestrichen.
         Wenn das Fach ein Nebenfach ist und als mündliche Prüfung markiert ist, so erfolgt im letzten Halbjahr ebenfalls kein Streichen.</string>
 </resources>
