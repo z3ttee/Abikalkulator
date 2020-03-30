@@ -237,6 +237,10 @@ public class Average {
                         } else {
                             candidatesIterator.remove();
                         }
+                    } else {
+                        if(subject.isIntensified()) {
+                            candidatesIterator.remove();
+                        }
                     }
                 }
 
