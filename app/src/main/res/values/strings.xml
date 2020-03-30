@@ -1,13 +1,13 @@
 <resources>
     <string name="app_name">Abikalkulator</string>
-    <string name="app_info">v1.0-beta07 - © 2020</string>
+    <string name="app_info">v1.0-beta08 - © 2020</string>
 
     <string name="label_choose_intensified">Wähle deine Leistungskurse (5)</string>
     <string name="label_choose_basic">Wähle deine anderen Kurse (6)</string>
     <string name="label_chose_subject">Wähle einen Kurs</string>
     <string name="label_markAsExam">Als Prüfungsfach merken</string>
     <string name="label_markAsOralExam">Als mündliches Prüfungsfach merken</string>
-    <string name="label_settingup_app">Die App wird eingerichtet… Es erfolgt ein Neustart</string>
+    <string name="label_settingup_app">Die App wird eingerichtet…</string>
     <string name="label_yourintensified">Deine Leistungskurse</string>
     <string name="label_yourbasics">Deine Nebenkurse</string>
     <string name="label_yourseminar">Dein Seminarfach</string>
@@ -51,14 +51,11 @@
     <string name="exp_steps">Schritt %step%/%steps%</string>
 
     <string name="error_headline">Whooops!</string>
-    <!--<string name="error_limitforsubject_reached">Limit für dieses Fach erreicht!</string>-->
     <string name="error_occured">Es ist ein irreparabler Fehler aufgetreten. Die App wird geschlossen.</string>
     <string name="error_missing_intensified">Du musst 5 Leistungskurse angeben, um fortzufahren.</string>
     <string name="error_missing_basics">Du musst 6 Nebenfächer angeben, um fortzufahren.</string>
     <string name="error_missing_writtenexams">Du musst mindestens 3 schriftliche Prüfungen angeben, um fortzufahren.</string>
     <string name="error_missing_oralexams">Du musst mindestens 2 mündliche Prüfungen angeben, um fortzufahren.</string>
-
-    <!--<string name="error_missing_exams">Du musst 5 Kurse als Prüfungsfach markieren. Deine vorherige Auswahl erreichst du, indem du auf den ZURÜCK-Pfeil deines Smartphones drückst.</string>-->
     <string name="error_setup_cancelled">Du hast das Setup abgebrochen. Die App kann ohne Einrichtung nicht genutzt werden.</string>
     <string name="error_cant_be_edited">Das kann nicht bearbeitet werden.</string>
 
