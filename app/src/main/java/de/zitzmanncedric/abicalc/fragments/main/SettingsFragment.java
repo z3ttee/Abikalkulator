@@ -1,6 +1,5 @@
 package de.zitzmanncedric.abicalc.fragments.main;
 
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,8 +10,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,14 +24,10 @@ import de.zitzmanncedric.abicalc.activities.settings.SettingsSeminarActivity;
 import de.zitzmanncedric.abicalc.activities.settings.SettingsSubjectsActivity;
 import de.zitzmanncedric.abicalc.adapter.SettingsListAdapter;
 import de.zitzmanncedric.abicalc.api.settings.SettingsItem;
-import needle.Needle;
-import needle.UiRelatedProgressTask;
 
 public class SettingsFragment extends Fragment implements SettingsListAdapter.Callback {
 
-    public SettingsFragment() {
-        // Required empty public constructor
-    }
+    public SettingsFragment() { }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

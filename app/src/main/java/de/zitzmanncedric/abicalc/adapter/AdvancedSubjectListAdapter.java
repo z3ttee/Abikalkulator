@@ -250,7 +250,7 @@ public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSub
          * Konstruktor, erstellt den View, der in der Liste angezeigt werden soll
          * @param itemView View, der in der Liste angezeigt wird
          */
-        public ViewHolder(@NonNull SubjectListItemView itemView) {
+        ViewHolder(@NonNull SubjectListItemView itemView) {
             super(itemView);
             this.itemView = itemView;
         }

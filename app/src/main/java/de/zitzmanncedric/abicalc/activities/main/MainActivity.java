@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Von Android implementiert. Fängt das Resultat durch eine geschlossene Aktivität ab. Bei Erfolg werden betreffende Bereiche aktualisiert.
+     * Von Android implementiert. Fängt das Resultat durch eine geschlossene Aktivität ab. Bei Erfolg werden betroffene Listen aktualisiert, um Änderungen zu übernehmen.
      * @param requestCode Code, zur Identifizierung der Anfrage
      * @param resultCode Code, zur Identifizierung des Resultats
      * @param data Zurückgegebene Daten

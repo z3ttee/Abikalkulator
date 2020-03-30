@@ -13,12 +13,20 @@ import de.zitzmanncedric.abicalc.AppUtils;
 import de.zitzmanncedric.abicalc.api.settings.SettingsItem;
 import de.zitzmanncedric.abicalc.views.SettingsListItemView;
 
+/**
+ * Zweck dieser Klasse ist zu bestimmen, wie Elemente in einer Liste aufgebaut sind.
+ */
 public class SettingsListAdapter extends RecyclerView.Adapter<SettingsListAdapter.ViewHolder> implements DatasetInterface<SettingsItem> {
     private static final String TAG = "SettingsListAdapter";
 
     private ArrayList<SettingsItem> dataset;
     private Callback callback;
 
+    /**
+     * Konstruktor der Klasse. Setzt gleichzeitig ein Callback-Interface
+     * @param dataset Bestimmt die Elemente, die in einer Liste angezeigt werden
+     * @param callback Setzt ein Callback-Interface, um Interaktion mit Elementen abzufangen
+     */
     public SettingsListAdapter(ArrayList<SettingsItem> dataset, Callback callback) {
         this.dataset = dataset;
         this.callback = callback;
@@ -139,12 +147,15 @@ public class SettingsListAdapter extends RecyclerView.Adapter<SettingsListAdapte
          * Konstruktor, erstellt den View, der in der Liste angezeigt werden soll
          * @param itemView View, der in der Liste angezeigt wird
          */
-        public ViewHolder(@NonNull SettingsListItemView itemView) {
+        ViewHolder(@NonNull SettingsListItemView itemView) {
             super(itemView);
             this.itemView = itemView;
         }
     }
 
+    /**
+     * Interface, um Interaktionen in der Liste abzufangen und zu bearbeiten
+     */
     public interface Callback {
         void onItemClicked(SettingsItem item);
     }

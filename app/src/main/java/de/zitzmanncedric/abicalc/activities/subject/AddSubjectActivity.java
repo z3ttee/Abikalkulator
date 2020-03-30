@@ -4,14 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.CheckBox;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -24,14 +19,12 @@ import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.api.list.ListableObject;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
 import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
-import de.zitzmanncedric.abicalc.listener.OnSubjectChosenListener;
 import de.zitzmanncedric.abicalc.utils.AppSerializer;
 import lombok.Setter;
 import needle.Needle;
 import needle.UiRelatedProgressTask;
 
 public class AddSubjectActivity extends AppCompatActivity implements OnListItemCallback {
-    private static final String TAG = "AddSubjectActivity";
 
     private ArrayList<Subject> disabled = new ArrayList<>();
 
@@ -42,9 +35,11 @@ public class AddSubjectActivity extends AppCompatActivity implements OnListItemC
 
     @Setter private boolean onlyOralExam = false;
     @Setter private boolean onlyWrittenExam = false;
-    private int count_oral = 0;
-    private int count_written = 0;
 
+    /**
+     * Von Android implementiert. Methode zum Aufbauen des Fensters. Es werden alle Standardfächer, die in der App zur Auswahl stehen, geladen und in einer Liste angezeigt.
+     * @param savedInstanceState Von Android übergeben (nicht genutzt)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,8 +53,8 @@ public class AddSubjectActivity extends AppCompatActivity implements OnListItemC
         Intent intent = getIntent();
         this.onlyOralExam = intent.getBooleanExtra("onlyOralExam", false);
         this.onlyWrittenExam = intent.getBooleanExtra("onlyWrittenExam", false);
-        this.count_written = intent.getIntExtra("countWritten", 0);
-        this.count_oral = intent.getIntExtra("countOral", 0);
+        int count_written = intent.getIntExtra("countWritten", 0);
+        int count_oral = intent.getIntExtra("countOral", 0);
 
         try {
             this.disabled = (ArrayList<Subject>) AppSerializer.deserialize(intent.getByteArrayExtra("disabled"));

@@ -44,7 +44,6 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
     public static final int AMOUNT_BASICS = 6;
     public static final int AMOUNT_WRITTEN_EXAMS = 3;
     public static final int AMOUNT_ORAL_EXAMS = 2;
-    public static final int AMOUNT_EXAMS_MAX = AMOUNT_WRITTEN_EXAMS+AMOUNT_ORAL_EXAMS;
 
     private final int COUNT_STEPS = 3;
     private int CURRENT_STEP = 1;

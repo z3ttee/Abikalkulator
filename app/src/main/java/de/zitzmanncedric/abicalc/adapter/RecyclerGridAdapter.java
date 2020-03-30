@@ -26,6 +26,9 @@ import de.zitzmanncedric.abicalc.listener.OnButtonTouchListener;
 import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
 import lombok.Setter;
 
+/**
+ * Zweck dieser Klasse ist zu bestimmen, wie Elemente in einer Liste aufgebaut sind.
+ */
 public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapter.ViewHolder> implements DatasetInterface<ListableObject> {
 
     private static final int VIEWTYPE_LISTITEM = 0;
@@ -40,6 +43,12 @@ public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapte
     @Setter private OnListItemCallback itemCallback;
     private int termID;
 
+    /**
+     * Konstruktor der Klasse
+     * @param context Context dient des späteren Zugriffs auf App-Resourcen
+     * @param termID ID des aktuellen Halbjahres
+     * @param layoutManager LayoutManager, der die Anordnung der Listenelemente verwaltet
+     */
     public RecyclerGridAdapter(Context context, int termID, GridLayoutManager layoutManager) {
         this.context = context;
 
@@ -55,6 +64,12 @@ public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapte
         layoutManager.setSpanSizeLookup(new SpanSizeLookup(termID));
     }
 
+    /**
+     * ViewHolder wird erstellt. Hierin wird später ein Listenelement bestimmt. Es wird zwischen Text und anderen Elementen unterschieden. Handelt es sich bei dem Element in der Liste um einen Text, wird hier das Aussehen festgelegt.
+     * @param parent Von Android übergeben
+     * @param viewType Von Android übergeben
+     * @return Gibt den erstellten ViewHolder zurück
+     */
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -73,6 +88,11 @@ public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapte
         return viewHolder;
     }
 
+    /**
+     * Ermittelt den Typ des Elements in der Liste.
+     * @param position Position des Elements in der Liste
+     * @return Typ des Elements als Integer (1=Text; 0=Kurs)
+     */
     @Override
     public int getItemViewType(int position) {
         if(termID == 4) {
@@ -91,6 +111,11 @@ public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapte
         return VIEWTYPE_LISTITEM;
     }
 
+    /**
+     * Ein Element von DATASET wird an den ViewHolder gebunden. Das Aussehen des Elements wird bestimmt und Daten werden geladen und gesetzt.
+     * @param holder Gibt den ViewHolder an
+     * @param position Gibt die Position des Elements in der Liste an
+     */
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         ListableObject obj = dataset.get(position);
@@ -144,11 +169,19 @@ public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapte
         }
     }
 
+    /**
+     * Gibt die Anzahl an Elementen im Dataset an
+     * @return Integer
+     */
     @Override
     public int getItemCount() {
         return dataset.size();
     }
 
+    /**
+     * Fügt ein Element zum Dataset hinzu. An bestimmten Positionen werden "Labels" eingefügt, um die Bereiche zu Kennzeichnen
+     * @param object Element, das hinzugefügt werden soll
+     */
     @Override
     public void add(ListableObject object) {
         dataset.add(object);
@@ -174,6 +207,10 @@ public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapte
         }
     }
 
+    /**
+     * Entfernt ein Element vom Dataset
+     * @param object Element, das entfernt werden soll
+     */
     @Override
     public void remove(ListableObject object) {
         int index = dataset.indexOf(object);
@@ -181,12 +218,21 @@ public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapte
         this.notifyItemRemoved(index);
     }
 
+    /**
+     * Setzt das gesamte Dataset neu
+     * @param list Dataset, das das alte Dataset ersetzen soll
+     */
     @Override
     public void set(ArrayList<ListableObject> list) {
         this.dataset = list;
         this.notifyDataSetChanged();
     }
 
+    /**
+     * Aktualisiert ein Element in der Liste
+     * @param old Vorherige Element
+     * @param updated Aktualisiertes Element
+     */
     @Override
     public void update(ListableObject old, ListableObject updated) {
         if(updated instanceof Subject) {
@@ -206,17 +252,27 @@ public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapte
         }
     }
 
+    /**
+     * Entfernt alle Einträge des Datasets
+     */
     @Override
     public void clear() {
         this.dataset.clear();
         this.notifyDataSetChanged();
     }
 
+    /**
+     * ViewHolder-Klasse
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private View container;
         private TextView titleView;
         private TextView pointsView;
 
+        /**
+         * Konstruktor, erstellt den View, der in der Liste angezeigt werden soll
+         * @param itemView View, der in der Liste angezeigt wird
+         */
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -226,13 +282,25 @@ public class RecyclerGridAdapter extends RecyclerView.Adapter<RecyclerGridAdapte
         }
     }
 
+    /**
+     * Klasse zur Verwaltung der y-Länge eines Elements
+     */
     private static class SpanSizeLookup extends GridLayoutManager.SpanSizeLookup {
         private int termID;
 
+        /**
+         * Konstruktor, setzt die Halbjahres-ID zur weiteren Verarbeitung
+         * @param termID Halbjahres-ID
+         */
         public SpanSizeLookup(int termID) {
             this.termID = termID;
         }
 
+        /**
+         * Ermittelt die y-Länge eines Elements. Text wird über die gesamte Breite dargestellt, während Kurse als Kacheln angezeigt werden
+         * @param position Position des Elements in der Liste
+         * @return
+         */
         @Override
         public int getSpanSize(int position) {
             if(termID == 4) {
