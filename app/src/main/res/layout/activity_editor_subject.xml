@@ -45,7 +45,7 @@
             android:layout_marginBottom="@dimen/default_padding"/>
 
         <Spinner
-            style="@style/Spinner"
+            style="@style/AppSpinner"
             android:id="@+id/spinner_subjects"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

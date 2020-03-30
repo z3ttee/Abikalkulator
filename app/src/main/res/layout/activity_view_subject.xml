@@ -20,7 +20,7 @@
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/app_tabbar"
-                style="@style/TabLayout"
+                style="@style/AppTabLayout"
                 android:layout_width="match_parent"
                 android:layout_marginStart="@dimen/window_padding"
                 android:layout_marginEnd="@dimen/window_padding"
@@ -41,7 +41,7 @@
         </androidx.viewpager.widget.ViewPager>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        style="@style/FloatingActionButton"
+        style="@style/AppFloatingActionButton"
         android:id="@+id/app_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

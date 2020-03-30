@@ -30,7 +30,7 @@
         app:avgSubtitle="640 / 900Pkt."/>
 
     <com.google.android.material.tabs.TabLayout
-        style="@style/TabLayout"
+        style="@style/AppTabLayout"
         android:id="@+id/app_tabbar"
         android:layout_width="match_parent"
         android:layout_marginTop="@dimen/default_padding_large"

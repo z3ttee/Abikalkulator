@@ -19,7 +19,7 @@
 
     <CheckBox
         android:id="@+id/sheet_checkbox_exam"
-        style="@style/CheckBox"
+        style="@style/AppCheckBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:buttonTint="@color/colorAccent"
@@ -29,7 +29,7 @@
 
     <CheckBox
         android:id="@+id/sheet_checkbox_oralexam"
-        style="@style/CheckBox"
+        style="@style/AppCheckBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:buttonTint="@color/colorAccent"

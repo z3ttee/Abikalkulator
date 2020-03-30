@@ -1,7 +1,6 @@
 package de.zitzmanncedric.abicalc.fragments.main;
 
 
-import android.app.AlertDialog;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 
@@ -11,7 +10,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,18 +17,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.R;
-import de.zitzmanncedric.abicalc.adapter.SimpleSubjectListAdapter;
 import de.zitzmanncedric.abicalc.adapter.SubjectStrikeListAdapter;
 import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.api.calculation.Average;
-import de.zitzmanncedric.abicalc.database.AppDatabase;
 import de.zitzmanncedric.abicalc.dialogs.InfoDialog;
-import needle.Needle;
-import needle.UiRelatedProgressTask;
 
 public class GoalsFragment extends Fragment implements View.OnClickListener {
 

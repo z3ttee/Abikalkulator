@@ -3,7 +3,6 @@ package de.zitzmanncedric.abicalc.dialogs;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.ViewGroup;
 import android.view.Window;
 
 import androidx.annotation.LayoutRes;
@@ -34,7 +33,7 @@ public abstract class AppDialog extends Dialog {
 
     @Override
     public void show() {
-        Objects.requireNonNull(getWindow()).getAttributes().windowAnimations = R.style.dialog_scale;
+        Objects.requireNonNull(getWindow()).getAttributes().windowAnimations = R.style.anim_dialog_scale;
         getWindow().setBackgroundDrawable(getContext().getDrawable(R.drawable.background_dialog));
         super.show();
     }

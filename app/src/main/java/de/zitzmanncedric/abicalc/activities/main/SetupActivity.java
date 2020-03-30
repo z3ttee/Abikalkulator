@@ -42,8 +42,8 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
 
     private FrameLayout appFragmentContainer;
 
-    private AppButton addSubjectBtn;
-    private AppButton continueSetupBtn;
+    /*private AppButton addSubjectBtn;
+    private AppButton continueSetupBtn;*/
 
     public ArrayList<Subject> intensified = new ArrayList<>();
     public ArrayList<Subject> normals = new ArrayList<>();
@@ -59,17 +59,17 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
         setContentView(R.layout.activity_setup);
 
         appFragmentContainer = findViewById(R.id.app_fragment_container);
-        addSubjectBtn = findViewById(R.id.btn_add_subject);
+        /*addSubjectBtn = findViewById(R.id.btn_add_subject);
         continueSetupBtn = findViewById(R.id.btn_continue);
 
-        continueSetupBtn.setEnabled(false);
+        continueSetupBtn.setEnabled(false);*/
 
-        AppFragments.replaceFragment(getSupportFragmentManager(),
+        /*AppFragments.replaceFragment(getSupportFragmentManager(),
                 appFragmentContainer,
                 new AddIntensifiedFragment(continueSetupBtn, addSubjectBtn),
                 true,
                 null,
-                0, R.anim.fragment_slideout_left, R.anim.fragment_slidein_left, R.anim.fragment_slideout_right);
+                0, R.anim.fragment_slideout_left, R.anim.fragment_slidein_left, R.anim.fragment_slideout_right);*/
 
         setResult(AppCore.ResultCodes.RESULT_CANCELLED);
     }
@@ -149,12 +149,12 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
             return;
         }
 
-        AppFragments.replaceFragment(getSupportFragmentManager(),
+        /*AppFragments.replaceFragment(getSupportFragmentManager(),
                 appFragmentContainer,
                 new AddNormalFragment(continueSetupBtn, addSubjectBtn),
                 false,
                 "fragment2",
-                R.anim.fragment_slidein_right, R.anim.fragment_slideout_left, R.anim.fragment_slidein_left, R.anim.fragment_slideout_right);
+                R.anim.fragment_slidein_right, R.anim.fragment_slideout_left, R.anim.fragment_slidein_left, R.anim.fragment_slideout_right);*/
     }
 
     /**
@@ -233,8 +233,8 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
             intensified.add(subject);
 
             if(intensified.size() == AMOUNT_INTENSIFIED) {
-                addSubjectBtn.setEnabled(false);
-                continueSetupBtn.setEnabled(true);
+                /*addSubjectBtn.setEnabled(false);
+                continueSetupBtn.setEnabled(true);*/
             }
 
             // Send info to fragment
@@ -245,8 +245,8 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
             normals.add(subject);
 
             if(normals.size() == AMOUNT_NORMALS) {
-                addSubjectBtn.setEnabled(false);
-                continueSetupBtn.setEnabled(true);
+                /*addSubjectBtn.setEnabled(false);
+                continueSetupBtn.setEnabled(true);*/
             }
 
             // Send info to fragment
@@ -264,14 +264,14 @@ public class SetupActivity extends AppCompatActivity implements OnSubjectChosenL
     public void onFragmentToActivity(Fragment fragment, Object object, int actionCode) {
         if(fragment instanceof AddIntensifiedFragment) {
             if (intensified.size() < AMOUNT_INTENSIFIED) {
-                addSubjectBtn.setEnabled(true);
-                continueSetupBtn.setEnabled(false);
+                /*addSubjectBtn.setEnabled(true);
+                continueSetupBtn.setEnabled(false);*/
             }
         }
         if(fragment instanceof AddNormalFragment) {
             if (normals.size() < AMOUNT_NORMALS) {
-                addSubjectBtn.setEnabled(true);
-                continueSetupBtn.setEnabled(false);
+                /*addSubjectBtn.setEnabled(true);
+                continueSetupBtn.setEnabled(false);*/
             }
         }
     }

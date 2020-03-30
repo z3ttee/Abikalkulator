@@ -1,8 +1,5 @@
 package de.zitzmanncedric.abicalc.api.calculation;
 
-import android.util.Log;
-import android.view.ViewGroup;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,7 +13,6 @@ import needle.Needle;
 import needle.UiRelatedTask;
 
 public class Average {
-    private static final String TAG = "Average";
 
     public static void getOfTermAndSubject(Subject subject, int termID, CalcCallback<Integer> callback) {
         Needle.onBackgroundThread().execute(() -> {
@@ -170,7 +166,7 @@ public class Average {
      * Berechnet Gesamtpunktezahl im gleichen Thread. Es werden die 4 schlechtesten Fächer automatisch gestrichen aus jedem Halbjahr eins.
      * @return Gibt direkten Wert zurück
      */
-    public static synchronized int getAllPointsSync() {
+    private static synchronized int getAllPointsSync() {
         int points = 0;
         for(Subject subject : AppDatabase.getInstance().getUserSubjects()) {
             points += subject.getQuickAvgT1()+subject.getQuickAvgT2()+subject.getQuickAvgT3()+subject.getQuickAvgT4();
@@ -216,7 +212,7 @@ public class Average {
      * Ermittelt im Vordergrund oder gleichen Thread eine Auswahl an streichbaren Fächern. Definitiv 1 pro Halbjahr. Nicht gestrichen wird, wenn Leistungsfach oder letztes Halbjahr eines Prüfungsfachs
      * @return Direkter Wert
      */
-    public static HashMap<Integer, Subject> getStrikedSync(){
+    private static HashMap<Integer, Subject> getStrikedSync(){
             HashMap<Integer, Subject> striked = new HashMap<>();
 
             for(int i = 0; i < 4; i++) {

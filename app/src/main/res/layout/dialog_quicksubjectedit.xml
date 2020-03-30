@@ -13,7 +13,7 @@
         android:textAlignment="center"/>
 
     <CheckBox
-        style="@style/CheckBox"
+        style="@style/AppCheckBox"
         android:id="@+id/dialog_checkbox_exam"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
         android:layout_marginTop="@dimen/default_padding_large"/>
 
     <CheckBox
-        style="@style/CheckBox"
+        style="@style/AppCheckBox"
         android:id="@+id/dialog_checkbox_oralexam"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
