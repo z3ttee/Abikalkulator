@@ -89,6 +89,12 @@ public class AddIntensifiedFragment extends Fragment implements OnListItemCallba
         if(object instanceof Subject) {
             if(setupActivity.getIntensified().remove(object)) {
                 adapter.remove(object);
+
+                if(this.setupActivity.getIntensified().size() >= SetupActivity.AMOUNT_INTENSIFIED) {
+                    addSubjectBtn.setEnabled(false);
+                } else {
+                    addSubjectBtn.setEnabled(true);
+                }
             }
         }
     }

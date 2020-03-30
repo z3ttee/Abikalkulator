@@ -83,6 +83,12 @@ public class AddNormalFragment extends Fragment implements OnListItemCallback, V
         if(object instanceof Subject) {
             if(setupActivity.getBasics().remove(object)) {
                 adapter.remove(object);
+
+                if(this.setupActivity.getBasics().size() >= SetupActivity.AMOUNT_BASICS) {
+                    addSubjectBtn.setEnabled(false);
+                } else {
+                    addSubjectBtn.setEnabled(true);
+                }
             }
         }
     }
