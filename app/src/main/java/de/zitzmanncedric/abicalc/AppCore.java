@@ -1,15 +1,7 @@
 package de.zitzmanncedric.abicalc;
 
-import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.Application;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.widget.Toast;
-
-import de.zitzmanncedric.abicalc.activities.SplashActivity;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
 import lombok.Getter;
 
@@ -19,7 +11,6 @@ import lombok.Getter;
  */
 
 public class AppCore extends Application {
-    private static final String TAG = "AppCore";
 
     @Getter private static AppCore instance;
     @Getter private static SharedPreferences sharedPreferences;
@@ -70,14 +61,5 @@ public class AppCore extends Application {
         public static int RESULT_FAILED = 0;
         public static int RESULT_OK = 1;
         public static int RESULT_CANCELLED = 2;
-    }
-
-    /**
-     * Klasse beinhaltet Codes zur Verwaltung von Aktionen und deren Identifizierung
-     */
-    public static class ActionCodes {
-        public static int ACTION_LIST_REMOVEITEM = 0;
-        public static int ACTION_LIST_ADDITEM = 1;
-        public static int ACTION_LIST_REPLACEITEM = 2;
     }
 }
