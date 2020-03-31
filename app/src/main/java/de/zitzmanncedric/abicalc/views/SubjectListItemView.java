@@ -22,7 +22,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class SubjectListItemView extends LinearLayout implements View.OnClickListener {
-    private static final String TAG = "SubjectListItemView";
 
     private TextView itemNameView;
     private TextView itemSubView;
@@ -173,10 +172,6 @@ public class SubjectListItemView extends LinearLayout implements View.OnClickLis
             }
             if (view.getId() == itemDeleteBtn.getId()) {
                 if(this.onDeleteListener != null) onDeleteListener.onDeleteItem();
-                return;
-            }
-            if (view.getId() == this.getId()) {
-                // Click on whole view
             }
         } catch (NullPointerException ex) {
             // In case a view wasn't defined in init();

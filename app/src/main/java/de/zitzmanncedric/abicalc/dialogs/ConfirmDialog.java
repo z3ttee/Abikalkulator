@@ -17,6 +17,9 @@ import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.views.AppButton;
 import lombok.Setter;
 
+/**
+ * Klasse zur Erstellung eines Bestätigungs-Dialogs
+ */
 public class ConfirmDialog extends AppDialog implements View.OnClickListener {
 
     private Drawable icon;
@@ -28,10 +31,18 @@ public class ConfirmDialog extends AppDialog implements View.OnClickListener {
 
     @Setter private DialogCallback callback;
 
+    /**
+     * Konstruktor zur Übergabe des Context-Objekts. Gleichzeitig wird das Layout gesetzt
+     * @param context Context zum Zugriff auf App-Ressourcen
+     */
     public ConfirmDialog(@NonNull Context context) {
         super(context, R.layout.dialog_confirm);
     }
 
+    /**
+     * Das Dialogfenster wird aufgebaut und die Informationen werden angezeigt
+     * @param savedInstanceState Von Android übergeben (Nicht genutzt)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,34 +60,68 @@ public class ConfirmDialog extends AppDialog implements View.OnClickListener {
         title.setText(this.title);
         description.setText(this.description);
 
-        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        if(getWindow() != null) {
+            getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
     }
 
+    /**
+     * Ändert den Titel des Dialogfensters
+     * @param title Titel, der gesetzt werden soll
+     */
     @Override
     public void setTitle(@Nullable CharSequence title) {
         this.title = String.valueOf(title);
     }
+
+    /**
+     * Ändert den Titel des Dialogfensters
+     * @param titleId ID der Resource, die als Titel gesetzt werden soll
+     */
     @Override
     public void setTitle(@StringRes int titleId) {
         String s = getContext().getString(titleId);
         setTitle(s);
     }
 
+    /**
+     * Ändert die Beschreibung des Dialogfensters
+     * @param description ID der Resource, die als Beschreibung gesetzt werden soll
+     */
     public void setDescription(@StringRes int description) {
         String s = getContext().getString(description);
         setDescription(s);
     }
+
+    /**
+     * Ändert die Beschreibung des Dialogfensters
+     * @param description Beschreibung, die gesetzt werden soll
+     */
     public void setDescription(CharSequence description) {
         this.description = String.valueOf(description);
     }
+
+    /**
+     * Ändert das Icon des Dialogfensters
+     * @param icon ID der Resource, die als Icon gesetzt werden soll
+     */
     public void setIcon(@DrawableRes int icon) {
         Drawable s = getContext().getDrawable(icon);
         setIcon(s);
     }
+
+    /**
+     * Ändert das Icon des Dialogfensters
+     * @param icon ID der Resource, die als Icon gesetzt werden soll
+     */
     public void setIcon(Drawable icon) {
         this.icon = icon;
     }
 
+    /**
+     * Fängt alle Klick-Events im Fenster ab. Bei einem Klick wird das gesetzte Callback aufgerufen und die passende Methode behandelt
+     * @param v Angeklickter Button
+     */
     @Override
     public void onClick(View v) {
         if(v.getId() == buttonPositive.getId()){
@@ -88,8 +133,20 @@ public class ConfirmDialog extends AppDialog implements View.OnClickListener {
         }
     }
 
+    /**
+     * Interface, um auf Interaktionen im Fenster zurückzugreifen
+     */
     public interface DialogCallback {
+        /**
+         * Funktion zum behandeln des Klick-Events auf den "Bestätigen"-Button
+         * @param button Angeklickter Button
+         */
         void onButtonPositiveClicked(AppButton button);
+
+        /**
+         * Funktion zum behandeln des Klick-Events auf den "Abbrechen"-Button
+         * @param button Angeklickter Button
+         */
         void onButtonNegativeClicked(AppButton button);
     }
 }

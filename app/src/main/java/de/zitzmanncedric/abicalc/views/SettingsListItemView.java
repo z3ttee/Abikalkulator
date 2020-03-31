@@ -21,7 +21,6 @@ import lombok.Getter;
 
 public class SettingsListItemView extends LinearLayout {
 
-    private LinearLayout itemContainerView;
     private ImageView itemIconView;
     private TextView itemNameView;
     private TextView itemDescView;
@@ -52,7 +51,7 @@ public class SettingsListItemView extends LinearLayout {
         if(inflater != null) {
             View view = inflater.inflate(R.layout.view_settingsitem, this);
 
-            itemContainerView = view.findViewById(R.id.item_container);
+            LinearLayout itemContainerView = view.findViewById(R.id.item_container);
             itemIconView = view.findViewById(R.id.item_icon);
             itemNameView = view.findViewById(R.id.item_name);
             itemDescView = view.findViewById(R.id.item_description);

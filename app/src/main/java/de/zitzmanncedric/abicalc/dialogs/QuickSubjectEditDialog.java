@@ -16,23 +16,35 @@ import de.zitzmanncedric.abicalc.views.AppButton;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Klasse zur Erstellung des Schnellbearbeitungs-Dialogs
+ */
 public class QuickSubjectEditDialog extends AppDialog implements View.OnClickListener {
-    private static final String TAG = "QuickSubjectEditDialog";
 
     private Subject subject;
-    @Setter private DialogCallback callback;
 
     private CheckBox checkBoxExam;
     private CheckBox checkBoxOralExam;
 
+    @Setter private DialogCallback callback;
     @Getter @Setter private Activity owner;
 
+    /**
+     * Konstruktor zur Übergabe des Context-Objekts. Gleichzeitig wird das Layout gesetzt
+     * @param context Context zum Zugriff auf App-Ressourcen
+     * @param subject Definiert das Fach, das bearbeitet werden soll
+     * @param owner Definiert die Aktivität, in welcher das Dialogfenster angezeigt wird
+     */
     public QuickSubjectEditDialog(@NonNull Context context, @NonNull Subject subject, Activity owner) {
         super(context, R.layout.dialog_quicksubjectedit);
         this.subject = subject;
         this.owner = owner;
     }
 
+    /**
+     * Das Dialogfenster wird aufgebaut und die Informationen werden angezeigt
+     * @param savedInstanceState Von Android übergeben (Nicht genutzt)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +84,9 @@ public class QuickSubjectEditDialog extends AppDialog implements View.OnClickLis
         }
     }
 
+    /**
+     * Funktion zum Schließen des Fensters. Dabei werden die Eingaben überprüft und gespeichert.
+     */
     @Override
     public void dismiss() {
         SetupActivity activity = (SetupActivity) owner;
@@ -110,6 +125,9 @@ public class QuickSubjectEditDialog extends AppDialog implements View.OnClickLis
         super.dismiss();
     }
 
+    /**
+     * Funktion zum Bearbeiten des Fachs. Alle Informationen werden gespeichert und das gesetzt Callback wird aufgerufen
+     */
     private void editSubject() {
         subject.setExam(checkBoxExam.isChecked());
         if (checkBoxOralExam.isChecked()) subject.setExam(true);
@@ -117,12 +135,22 @@ public class QuickSubjectEditDialog extends AppDialog implements View.OnClickLis
         if (callback != null) callback.onCallback(subject);
     }
 
+    /**
+     * Bei einem Klick-Event wird das Fenster geschlossen
+     * @param v Angeklickter Button
+     */
     @Override
     public void onClick(View v) {
         dismiss();
     }
 
+    /**
+     * Interface, um auf Interaktionen im Fenster zurückzugreifen
+     */
     public interface DialogCallback {
+        /**
+         * Funktion zum Behandeln des Callbacks
+         */
         void onCallback(Subject subject);
     }
 }
