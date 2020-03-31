@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.activities.main.MainActivity;
 import de.zitzmanncedric.abicalc.activities.main.SetupActivity;
+import de.zitzmanncedric.abicalc.dialogs.InfoDialog;
 import de.zitzmanncedric.abicalc.utils.AppSerializer;
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.api.Subject;
@@ -58,16 +59,7 @@ public class SplashActivity extends AppCompatActivity {
             startActivity(new Intent(SplashActivity.this, MainActivity.class));
             finish();
         } else if(resultCode == AppCore.ResultCodes.RESULT_CANCELLED) {
-            // Close app -> setup cancelled
-            AlertDialog dialog = new AlertDialog.Builder(this).setTitle(getString(R.string.error_headline)).setMessage(getString(R.string.error_setup_cancelled)).create();
-            dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.btn_ok), null, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    finishAndRemoveTask();
-                }
-            });
-            dialog.show();
+            showCancelled();
         } else if(resultCode == AppCore.ResultCodes.RESULT_FAILED) {
             showError();
         }
@@ -77,9 +69,25 @@ public class SplashActivity extends AppCompatActivity {
      * Private Funktion der Klasse zum Anzeigen des Fehlers.
      */
     private void showError() {
-        AlertDialog dialog = new AlertDialog.Builder(this).setTitle(getString(R.string.error_headline)).setMessage(getString(R.string.error_occured)).create();
-        dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.btn_ok), null, (dialog1, which) -> {
-            dialog1.dismiss();
+        InfoDialog dialog = new InfoDialog(this);
+        dialog.setTitle(getString(R.string.error_headline));
+        dialog.setDescription(getString(R.string.error_occured));
+        dialog.setCallback((button) -> {
+            dialog.dismiss();
+            finishAndRemoveTask();
+        });
+        dialog.show();
+    }
+
+    /**
+     * Private Funktion der Klasse zum Anzeigen der Nachricht, dass die Ersteinrichtung abgebrochen wurde.
+     */
+    private void showCancelled(){
+        InfoDialog dialog = new InfoDialog(this);
+        dialog.setTitle(getString(R.string.error_headline));
+        dialog.setDescription(getString(R.string.error_setup_cancelled));
+        dialog.setCallback((button) -> {
+            dialog.dismiss();
             finishAndRemoveTask();
         });
         dialog.show();
