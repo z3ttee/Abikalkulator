@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -139,25 +140,21 @@ public class SubjectEditorActivity extends AppCompatActivity implements View.OnC
         Subject sbj = subjects.get(position);
         if(subject.getId() != sbj.getId()) {
             ConfirmDialog dialog = new ConfirmDialog(this);
-            dialog.setCallback(new ConfirmDialog.DialogCallback() {
-                @Override
-                public void onButtonPositiveClicked(AppButton button) {
+            dialog.setCallback((button) -> {
+                if(button == dialog.getButtonPositive()){
                     spinnerSubjectsView.setSelection(spinnerItems.indexOf(sbj.getTitle()));
                     dialog.dismiss();
+                    return;
                 }
-
-                @Override
-                public void onButtonNegativeClicked(AppButton button) {
+                if(button == dialog.getButtonNegative()) {
                     spinnerSubjectsView.setSelection(spinnerItems.indexOf(subject.getTitle()));
                     dialog.dismiss();
                 }
             });
-            dialog.setIcon(R.drawable.ic_warning);
+            dialog.setBanner(R.drawable.ic_warning, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, getResources().getDisplayMetrics()));
             dialog.setTitle(getString(R.string.headline_yousure));
-            dialog.setDescription(getString(R.string.notice_replace_subjects));
-            dialog.setOnCancelListener(dialog1 -> {
-                spinnerSubjectsView.setSelection(spinnerItems.indexOf(subject.getTitle()));
-            });
+            dialog.setMessage(R.string.notice_replace_subjects);
+            dialog.setOnCancelListener(dialog1 -> spinnerSubjectsView.setSelection(spinnerItems.indexOf(subject.getTitle())));
             dialog.show();
         }
     }

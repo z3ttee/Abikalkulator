@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.util.TypedValue;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -71,10 +73,15 @@ public class SplashActivity extends AppCompatActivity {
     private void showError() {
         InfoDialog dialog = new InfoDialog(this);
         dialog.setTitle(getString(R.string.error_headline));
-        dialog.setDescription(getString(R.string.error_occured));
+        dialog.setMessage(R.string.error_occured);
         dialog.setCallback((button) -> {
             dialog.dismiss();
             finishAndRemoveTask();
+        });
+        dialog.setOnCancelListener(dialog1 -> {
+            if(dialog.getCallback() != null) {
+                dialog.getCallback().onButtonClicked(null);
+            }
         });
         dialog.show();
     }
@@ -85,10 +92,16 @@ public class SplashActivity extends AppCompatActivity {
     private void showCancelled(){
         InfoDialog dialog = new InfoDialog(this);
         dialog.setTitle(getString(R.string.error_headline));
-        dialog.setDescription(getString(R.string.error_setup_cancelled));
+        dialog.setMessage(R.string.error_setup_cancelled);
+        dialog.setBanner(R.drawable.ic_undraw_cancel, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 128, getResources().getDisplayMetrics()));
         dialog.setCallback((button) -> {
             dialog.dismiss();
             finishAndRemoveTask();
+        });
+        dialog.setOnCancelListener(dialog1 -> {
+            if(dialog.getCallback() != null) {
+                dialog.getCallback().onButtonClicked(null);
+            }
         });
         dialog.show();
     }

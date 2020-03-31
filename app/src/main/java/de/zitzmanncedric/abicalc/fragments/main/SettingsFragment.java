@@ -1,5 +1,6 @@
 package de.zitzmanncedric.abicalc.fragments.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,24 +11,32 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import de.zitzmanncedric.abicalc.AppCore;
+import de.zitzmanncedric.abicalc.utils.AppUtils;
 import de.zitzmanncedric.abicalc.BuildConfig;
 import de.zitzmanncedric.abicalc.R;
+import de.zitzmanncedric.abicalc.activities.SplashActivity;
 import de.zitzmanncedric.abicalc.activities.settings.SettingsGoalsActivity;
 import de.zitzmanncedric.abicalc.activities.settings.SettingsSeminarActivity;
 import de.zitzmanncedric.abicalc.activities.settings.SettingsSubjectsActivity;
 import de.zitzmanncedric.abicalc.adapter.SettingsListAdapter;
 import de.zitzmanncedric.abicalc.api.settings.SettingsItem;
+import de.zitzmanncedric.abicalc.dialogs.ProgressDialog;
+import needle.Needle;
+import needle.UiRelatedTask;
 
 public class SettingsFragment extends Fragment implements SettingsListAdapter.Callback {
 
-    public SettingsFragment() { }
+    private Context context;
+    public SettingsFragment(Context context) {
+        this.context = context;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,15 +65,15 @@ public class SettingsFragment extends Fragment implements SettingsListAdapter.Ca
     public void onItemClicked(SettingsItem item) {
         switch (item.getName()) {
             case R.string.settings_seminar:
-                Intent semiSettings = new Intent(getContext(), SettingsSeminarActivity.class);
+                Intent semiSettings = new Intent(context, SettingsSeminarActivity.class);
                 startActivity(semiSettings);
                 break;
             case R.string.settings_subjects:
-                Intent subjects = new Intent(getContext(), SettingsSubjectsActivity.class);
+                Intent subjects = new Intent(context, SettingsSubjectsActivity.class);
                 startActivity(subjects);
                 break;
             case R.string.settings_goals:
-                Intent goals = new Intent(getContext(), SettingsGoalsActivity.class);
+                Intent goals = new Intent(context, SettingsGoalsActivity.class);
                 startActivity(goals);
                 break;
             case R.string.settings_share:
@@ -81,9 +90,33 @@ public class SettingsFragment extends Fragment implements SettingsListAdapter.Ca
                 startActivity(openUrl);
                 break;
             case R.string.settings_reset:
-                Intent info = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                ProgressDialog dialog = new ProgressDialog(context);
+                dialog.setTitle(getString(R.string.notice_app_beingresetted));
+                dialog.show();
+
+                Needle.onBackgroundThread().execute(new UiRelatedTask<Void>() {
+                    @Override
+                    protected Void doWork() {
+                        AppUtils.resetAppSettings();
+                        return null;
+                    }
+
+                    @Override
+                    protected void thenDoUiRelatedWork(Void aVoid) {
+                        new Handler().postDelayed(() -> {
+                            dialog.dismiss();
+                            Intent intent = new Intent(context, SplashActivity.class);
+                            startActivity(intent);
+                            if(getActivity() != null){
+                                getActivity().finish();
+                            }
+                        }, 500);
+                    }
+                });
+
+                /*Intent info = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                 info.setData(Uri.parse("package:" + AppCore.getInstance().getPackageName()));
-                startActivity(info);
+                startActivity(info);*/
                 break;
         }
 

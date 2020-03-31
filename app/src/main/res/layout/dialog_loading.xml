@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
+    android:layout_marginStart="@dimen/window_padding_large"
+    android:layout_marginEnd="@dimen/window_padding_large"
     android:background="@drawable/background_dialog">
 
     <ProgressBar

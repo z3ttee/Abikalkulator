@@ -8,6 +8,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import de.zitzmanncedric.abicalc.listener.OnButtonTouchListener;
 
 public class AppButton extends AppCompatButton {
+
     public AppButton(Context context) {
         super(context);
         init();

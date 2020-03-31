@@ -14,6 +14,7 @@ public class AppCore extends Application {
 
     @Getter private static AppCore instance;
     @Getter private static SharedPreferences sharedPreferences;
+    public static final int DATABASE_VERSION = 1;
 
     /**
      * Bildet instanz der App
@@ -25,7 +26,7 @@ public class AppCore extends Application {
         instance = this;
         sharedPreferences = getSharedPreferences(getPackageName(), MODE_PRIVATE);
 
-        AppDatabase.createInstance(this, 1);
+        AppDatabase.createInstance(this, DATABASE_VERSION);
     }
 
     /**

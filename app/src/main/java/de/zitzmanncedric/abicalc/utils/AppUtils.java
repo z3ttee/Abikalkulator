@@ -1,4 +1,4 @@
-package de.zitzmanncedric.abicalc;
+package de.zitzmanncedric.abicalc.utils;
 
 import android.content.Context;
 import android.os.Build;
@@ -14,6 +14,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import de.zitzmanncedric.abicalc.AppCore;
+import de.zitzmanncedric.abicalc.R;
+import de.zitzmanncedric.abicalc.api.Grade;
+import de.zitzmanncedric.abicalc.api.Seminar;
+import de.zitzmanncedric.abicalc.api.Subject;
+import de.zitzmanncedric.abicalc.database.AppDatabase;
 
 /**
  * Verwaltet Funktionen für spezielle Vorgänge, die öfter wiederholt werden
@@ -75,6 +82,23 @@ public class AppUtils {
         }
 
         transaction.replace(container.getId(), newFragment).commit();
+    }
+
+    /**
+     * Funktion zum Zurücksetzen der gesamten App-Daten
+     */
+    public static void resetAppSettings(){
+        AppCore.getSharedPreferences().edit().putInt("defaultAVG", 8).apply();
+        AppCore.getSharedPreferences().edit().putFloat("goalAVG", 2.0f).apply();
+        AppCore.getSharedPreferences().edit().putInt("goalPoints", 660).apply();
+        AppCore.getSharedPreferences().edit().putInt("currentTerm", 0).apply();
+
+        AppCore.Setup.setSetupPassed(false);
+        Seminar.getInstance().setMinded(false);
+        Seminar.getInstance().setReplacedSubjectID(-1);
+
+        AppCore.getInstance().getApplicationContext().deleteDatabase(AppDatabase.getInstance().getDatabaseName());
+        AppDatabase.createInstance(AppCore.getInstance().getApplicationContext(), AppCore.DATABASE_VERSION);
     }
 
 }

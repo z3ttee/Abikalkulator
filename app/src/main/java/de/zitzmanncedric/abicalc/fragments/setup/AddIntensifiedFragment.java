@@ -107,7 +107,7 @@ public class AddIntensifiedFragment extends Fragment implements OnListItemCallba
                 old.setIntensified(true);
 
                 QuickSubjectEditDialog dialog = new QuickSubjectEditDialog(context, old, setupActivity);
-                dialog.setCallback(sbj -> {
+                dialog.setCustomCallback(sbj -> {
                     int index = 0;
                     for(Subject subject : setupActivity.getIntensified()){
                         if(subject.getTitle().equals(sbj.getTitle())) index = setupActivity.getIntensified().indexOf(subject);

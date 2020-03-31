@@ -207,10 +207,10 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
             dialog.setTitle(getString(R.string.error_headline));
 
             if(this.intensified.size() < AMOUNT_INTENSIFIED){
-                dialog.setDescription(getString(R.string.error_missing_intensified));
+                dialog.setMessage(R.string.error_missing_intensified);
                 ready = false;
             } else if(this.getCountWrittenExams() < AMOUNT_WRITTEN_EXAMS){
-                dialog.setDescription(getString(R.string.error_missing_writtenexams));
+                dialog.setMessage(R.string.error_missing_writtenexams);
                 ready = false;
             }
 
@@ -222,10 +222,10 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
             dialog.setTitle(getString(R.string.error_headline));
 
             if(this.basics.size() < AMOUNT_BASICS){
-                dialog.setDescription(getString(R.string.error_missing_basics));
+                dialog.setMessage(R.string.error_missing_basics);
                 ready = false;
             } else if(this.getCountOralExams() < AMOUNT_ORAL_EXAMS){
-                dialog.setDescription(getString(R.string.error_missing_oralexams));
+                dialog.setMessage(R.string.error_missing_oralexams);
                 ready = false;
             }
 

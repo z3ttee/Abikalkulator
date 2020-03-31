@@ -14,7 +14,7 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import de.zitzmanncedric.abicalc.AppCore;
-import de.zitzmanncedric.abicalc.AppUtils;
+import de.zitzmanncedric.abicalc.utils.AppUtils;
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.activities.subject.GradeEditorActivity;
 import de.zitzmanncedric.abicalc.fragments.main.GoalsFragment;
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         homeBtn.setColorFilter(getColor(R.color.colorPrimaryDark));
         settingsBtn.setColorFilter(getColor(R.color.colorPrimaryDark));
 
-        AppUtils.replaceFragment(getSupportFragmentManager(), fragmentContainer, new GoalsFragment(), true, null, R.anim.fragment_scalein, R.anim.fragment_scaleout, R.anim.fragment_scalein, R.anim.fragment_scaleout);
+        AppUtils.replaceFragment(getSupportFragmentManager(), fragmentContainer, new GoalsFragment(this), true, null, R.anim.fragment_scalein, R.anim.fragment_scaleout, R.anim.fragment_scalein, R.anim.fragment_scaleout);
     }
 
     /**
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         homeBtn.setColorFilter(getColor(R.color.colorPrimaryDark));
         goalsBtn.setColorFilter(getColor(R.color.colorPrimaryDark));
 
-        AppUtils.replaceFragment(getSupportFragmentManager(), fragmentContainer, new SettingsFragment(), true, null, R.anim.fragment_scalein, R.anim.fragment_scaleout, R.anim.fragment_scalein, R.anim.fragment_scaleout);
+        AppUtils.replaceFragment(getSupportFragmentManager(), fragmentContainer, new SettingsFragment(this), true, null, R.anim.fragment_scalein, R.anim.fragment_scaleout, R.anim.fragment_scalein, R.anim.fragment_scaleout);
     }
 
     /**

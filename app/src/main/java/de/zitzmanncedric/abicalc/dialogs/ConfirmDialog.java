@@ -3,6 +3,8 @@ package de.zitzmanncedric.abicalc.dialogs;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,19 +17,17 @@ import androidx.annotation.StringRes;
 
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.views.AppButton;
+import lombok.Getter;
 import lombok.Setter;
 
 /**
  * Klasse zur Erstellung eines Bestätigungs-Dialogs
  */
 public class ConfirmDialog extends AppDialog implements View.OnClickListener {
+    private static final String TAG = "ConfirmDialog";
 
-    private Drawable icon;
-    private String title;
-    private String description;
-
-    private AppButton buttonPositive;
-    private AppButton buttonNegative;
+    @Getter private AppButton buttonPositive;
+    @Getter private AppButton buttonNegative;
 
     @Setter private DialogCallback callback;
 
@@ -36,86 +36,27 @@ public class ConfirmDialog extends AppDialog implements View.OnClickListener {
      * @param context Context zum Zugriff auf App-Ressourcen
      */
     public ConfirmDialog(@NonNull Context context) {
-        super(context, R.layout.dialog_confirm);
+        super(context);
+        init(context);
     }
 
     /**
-     * Das Dialogfenster wird aufgebaut und die Informationen werden angezeigt
-     * @param savedInstanceState Von Android übergeben (Nicht genutzt)
+     * Funktion zum initialisieren des Dialogs. Hier werden anzuzeigende Buttons erstellt und hinzugefügt.
+     * @param context Context zum Zugriff auf App-Resourcen
      */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        ImageView icon = findViewById(R.id.dialog_icon);
-        TextView title = findViewById(R.id.dialog_title);
-        TextView description = findViewById(R.id.dialog_description);
-
-        buttonPositive = findViewById(R.id.dialog_btn_positive);
-        buttonNegative = findViewById(R.id.dialog_btn_negative);
-        buttonNegative.setOnClickListener(this);
+    private void init(Context context){
+        buttonPositive = new AppButton(new ContextThemeWrapper(context, R.style.Button_primary), null, 0);
+        buttonPositive.setText(R.string.btn_continue);
+        buttonPositive.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         buttonPositive.setOnClickListener(this);
 
-        icon.setImageDrawable(this.icon);
-        title.setText(this.title);
-        description.setText(this.description);
+        buttonNegative = new AppButton(new ContextThemeWrapper(context, R.style.Button_primary), null, 0);
+        buttonNegative.setText(R.string.btn_cancel);
+        buttonNegative.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        buttonNegative.setOnClickListener(this);
 
-        if(getWindow() != null) {
-            getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        }
-    }
-
-    /**
-     * Ändert den Titel des Dialogfensters
-     * @param title Titel, der gesetzt werden soll
-     */
-    @Override
-    public void setTitle(@Nullable CharSequence title) {
-        this.title = String.valueOf(title);
-    }
-
-    /**
-     * Ändert den Titel des Dialogfensters
-     * @param titleId ID der Resource, die als Titel gesetzt werden soll
-     */
-    @Override
-    public void setTitle(@StringRes int titleId) {
-        String s = getContext().getString(titleId);
-        setTitle(s);
-    }
-
-    /**
-     * Ändert die Beschreibung des Dialogfensters
-     * @param description ID der Resource, die als Beschreibung gesetzt werden soll
-     */
-    public void setDescription(@StringRes int description) {
-        String s = getContext().getString(description);
-        setDescription(s);
-    }
-
-    /**
-     * Ändert die Beschreibung des Dialogfensters
-     * @param description Beschreibung, die gesetzt werden soll
-     */
-    public void setDescription(CharSequence description) {
-        this.description = String.valueOf(description);
-    }
-
-    /**
-     * Ändert das Icon des Dialogfensters
-     * @param icon ID der Resource, die als Icon gesetzt werden soll
-     */
-    public void setIcon(@DrawableRes int icon) {
-        Drawable s = getContext().getDrawable(icon);
-        setIcon(s);
-    }
-
-    /**
-     * Ändert das Icon des Dialogfensters
-     * @param icon ID der Resource, die als Icon gesetzt werden soll
-     */
-    public void setIcon(Drawable icon) {
-        this.icon = icon;
+        addButton(buttonPositive);
+        addButton(buttonNegative);
     }
 
     /**
@@ -124,29 +65,12 @@ public class ConfirmDialog extends AppDialog implements View.OnClickListener {
      */
     @Override
     public void onClick(View v) {
-        if(v.getId() == buttonPositive.getId()){
-            if(callback != null) callback.onButtonPositiveClicked(buttonPositive);
+        if(v == buttonPositive){
+            if(callback != null) callback.onButtonClicked(buttonPositive);
             return;
         }
-        if(v.getId() == buttonNegative.getId()){
-            if(callback != null) callback.onButtonNegativeClicked(buttonNegative);
+        if(v == buttonNegative){
+            if(callback != null) callback.onButtonClicked(buttonNegative);
         }
-    }
-
-    /**
-     * Interface, um auf Interaktionen im Fenster zurückzugreifen
-     */
-    public interface DialogCallback {
-        /**
-         * Funktion zum behandeln des Klick-Events auf den "Bestätigen"-Button
-         * @param button Angeklickter Button
-         */
-        void onButtonPositiveClicked(AppButton button);
-
-        /**
-         * Funktion zum behandeln des Klick-Events auf den "Abbrechen"-Button
-         * @param button Angeklickter Button
-         */
-        void onButtonNegativeClicked(AppButton button);
     }
 }

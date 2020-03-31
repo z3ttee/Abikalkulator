@@ -2,6 +2,7 @@ package de.zitzmanncedric.abicalc.dialogs;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.TextView;
 
@@ -11,6 +12,7 @@ import androidx.annotation.StringRes;
 
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.views.AppButton;
+import lombok.Getter;
 import lombok.Setter;
 
 /**
@@ -18,36 +20,28 @@ import lombok.Setter;
  */
 public class InfoDialog extends AppDialog implements View.OnClickListener {
 
-    private String title;
-    private String description;
-    private AppButton buttonPositive;
-
-    @Setter private DialogCallback callback;
+    @Getter private AppButton buttonPositive;
 
     /**
      * Konstruktor zur Übergabe des Context-Objekts. Gleichzeitig wird das Layout gesetzt
      * @param context Context zum Zugriff auf App-Ressourcen
      */
     public InfoDialog(@NonNull Context context) {
-        super(context, R.layout.dialog_info);
+        super(context);
+        init(context);
     }
 
     /**
-     * Das Dialogfenster wird aufgebaut und die Informationen werden angezeigt.
-     * @param savedInstanceState Von Android übergeben (Nicht genutzt)
+     * Funktion zum initialisieren des Dialogs. Hier werden anzuzeigende Buttons erstellt und hinzugefügt.
+     * @param context Context zum Zugriff auf App-Resourcen
      */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        TextView title = findViewById(R.id.dialog_title);
-        TextView description = findViewById(R.id.dialog_description);
-
-        buttonPositive = findViewById(R.id.dialog_btn_positive);
+    private void init(Context context){
+        buttonPositive = new AppButton(new ContextThemeWrapper(context, R.style.Button_primary), null, 0);
+        buttonPositive.setText(R.string.btn_ok);
+        buttonPositive.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         buttonPositive.setOnClickListener(this);
 
-        title.setText(this.title);
-        description.setText(this.description);
+        addButton(buttonPositive);
     }
 
     /**
@@ -56,58 +50,11 @@ public class InfoDialog extends AppDialog implements View.OnClickListener {
      */
     @Override
     public void onClick(View v) {
-        if(v.getId() == buttonPositive.getId()){
+        if(v == buttonPositive){
             dismiss();
-            if(callback != null) {
-                callback.onButtonPositiveClicked(buttonPositive);
+            if(getCallback() != null) {
+                getCallback().onButtonClicked(buttonPositive);
             }
         }
-    }
-
-    /**
-     * Ändert den Titel des Dialogfensters
-     * @param title Titel, der gesetzt werden soll
-     */
-    @Override
-    public void setTitle(@Nullable CharSequence title) {
-        this.title = String.valueOf(title);
-    }
-
-    /**
-     * Ändert den Titel des Dialogfensters
-     * @param titleId ID der Resource, die als Titel gesetzt werden soll
-     */
-    @Override
-    public void setTitle(@StringRes int titleId) {
-        String s = getContext().getString(titleId);
-        setTitle(s);
-    }
-
-    /**
-     * Ändert die Beschreibung des Dialogfensters
-     * @param description ID der Resource, die als Beschreibung gesetzt werden soll
-     */
-    public void setDescription(@StringRes int description) {
-        String s = getContext().getString(description);
-        setDescription(s);
-    }
-
-    /**
-     * Ändert die Beschreibung des Dialogfensters
-     * @param description Beschreibung, die gesetzt werden soll
-     */
-    public void setDescription(CharSequence description) {
-        this.description = String.valueOf(description);
-    }
-
-    /**
-     * Interface, um auf Interaktionen im Fenster zurückzugreifen
-     */
-    public interface DialogCallback {
-        /**
-         * Funktion zum behandeln des Klick-Events auf den "Bestätigen"-Button
-         * @param button Angeklickter Button
-         */
-        void onButtonPositiveClicked(AppButton button);
     }
 }

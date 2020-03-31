@@ -135,6 +135,7 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
 
             SubjectQuickOptionsSheet sheet = new SubjectQuickOptionsSheet(getContext());
             sheet.setCallback((button -> {
+                // TODO: Find better way to identify button
                 if (button.getText().toString().equals(getString(R.string.btn_show))) {
                     sheet.dismiss();
                     onItemClicked(object);

@@ -101,7 +101,7 @@ public class AddNormalFragment extends Fragment implements OnListItemCallback, V
                 old.setIntensified(false);
 
                 QuickSubjectEditDialog dialog = new QuickSubjectEditDialog(context, old, setupActivity);
-                dialog.setCallback(sbj -> {
+                dialog.setCustomCallback(sbj -> {
                     int index = 0;
                     for(Subject subject : setupActivity.getBasics()){
                         if(subject.getTitle().equals(sbj.getTitle())) index = setupActivity.getBasics().indexOf(subject);

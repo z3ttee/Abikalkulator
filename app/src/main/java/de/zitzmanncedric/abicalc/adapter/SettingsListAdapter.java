@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import de.zitzmanncedric.abicalc.AppUtils;
+import de.zitzmanncedric.abicalc.utils.AppUtils;
 import de.zitzmanncedric.abicalc.api.settings.SettingsItem;
 import de.zitzmanncedric.abicalc.views.SettingsListItemView;
 

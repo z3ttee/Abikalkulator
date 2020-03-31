@@ -1,6 +1,7 @@
 package de.zitzmanncedric.abicalc.fragments.main;
 
 
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 
@@ -36,9 +37,11 @@ public class GoalsFragment extends Fragment implements View.OnClickListener {
     private TextView goalPointsText;
 
     private SubjectStrikeListAdapter adapter;
+    private Context context;
 
-    public GoalsFragment() { }
-
+    public GoalsFragment(Context context) {
+        this.context = context;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,12 +72,12 @@ public class GoalsFragment extends Fragment implements View.OnClickListener {
         Average.getAllPoints((result -> {
             int goal = AppCore.getSharedPreferences().getInt("goalPoints", 660);
             if(result >= goal) {
-                goalPointsIcon.setImageDrawable(getContext().getDrawable(R.drawable.ic_check));
-                goalPointsIcon.setImageTintList(ColorStateList.valueOf(getContext().getColor(R.color.colorSuccess)));
+                goalPointsIcon.setImageDrawable(context.getDrawable(R.drawable.ic_check));
+                goalPointsIcon.setImageTintList(ColorStateList.valueOf(context.getColor(R.color.colorSuccess)));
                 goalPointsText.setText(getString(R.string.notice_goal_reached).replace("%goal%", goal +"Pkt."));
             } else {
-                goalPointsIcon.setImageDrawable(getContext().getDrawable(R.drawable.ic_cross));
-                goalPointsIcon.setImageTintList(ColorStateList.valueOf(getContext().getColor(R.color.colorFailure)));
+                goalPointsIcon.setImageDrawable(context.getDrawable(R.drawable.ic_cross));
+                goalPointsIcon.setImageTintList(ColorStateList.valueOf(context.getColor(R.color.colorFailure)));
                 goalPointsText.setText(getString(R.string.notice_goal_notreached).replace("%goal%", goal +"Pkt."));
             }
         }));
@@ -84,12 +87,12 @@ public class GoalsFragment extends Fragment implements View.OnClickListener {
             String result = String.valueOf((float) r.doubleValue()).substring(0, 3);
 
             if(goal.equalsIgnoreCase(result) || r <= goalValue) {
-                goalAvgIcon.setImageDrawable(getContext().getDrawable(R.drawable.ic_check));
-                goalAvgIcon.setImageTintList(ColorStateList.valueOf(getContext().getColor(R.color.colorSuccess)));
+                goalAvgIcon.setImageDrawable(context.getDrawable(R.drawable.ic_check));
+                goalAvgIcon.setImageTintList(ColorStateList.valueOf(context.getColor(R.color.colorSuccess)));
                 goalAvgText.setText(getString(R.string.notice_goal_reached).replace("%goal%", goal));
             } else {
-                goalAvgIcon.setImageDrawable(getContext().getDrawable(R.drawable.ic_cross));
-                goalAvgIcon.setImageTintList(ColorStateList.valueOf(getContext().getColor(R.color.colorFailure)));
+                goalAvgIcon.setImageDrawable(context.getDrawable(R.drawable.ic_cross));
+                goalAvgIcon.setImageTintList(ColorStateList.valueOf(context.getColor(R.color.colorFailure)));
                 goalAvgText.setText(getString(R.string.notice_goal_notreached).replace("%goal%", goal));
             }
         }));
@@ -104,9 +107,9 @@ public class GoalsFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if(v.getId() == noticeView.getId()) {
-            InfoDialog dialog = new InfoDialog(getContext());
+            InfoDialog dialog = new InfoDialog(context);
             dialog.setTitle(getString(R.string.headline_info));
-            dialog.setDescription(getString(R.string.paragraph_algorythm_dialog));
+            dialog.setMessage(R.string.paragraph_algorythm_dialog);
             dialog.show();
         }
     }

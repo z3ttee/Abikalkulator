@@ -180,7 +180,7 @@ public class OverviewFragment extends Fragment {
                             }
                         }
 
-                        fragmentPager.setCurrentItem(grade.getTermID(), true);
+                        fragmentPager.setCurrentItem(grade.getTermID(), false);
                         averageView.recalculate(() -> progressBar.animate().alpha(0f).setDuration(AppCore.getInstance().getResources().getInteger(R.integer.anim_speed_quickly)).setStartDelay(50));
                     } catch (Exception ex) {
                         ex.printStackTrace();

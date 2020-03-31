@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import de.zitzmanncedric.abicalc.AppUtils;
+import de.zitzmanncedric.abicalc.utils.AppUtils;
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.api.Grade;
 import de.zitzmanncedric.abicalc.api.Seminar;

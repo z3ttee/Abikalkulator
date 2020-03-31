@@ -125,5 +125,6 @@
     <string name="notice_goal_reached">Du wirst dein Ziel von %goal% erreichen.</string>
     <string name="notice_goal_notreached">Du wirst dein Ziel von %goal% nicht erreichen.</string>
     <string name="notice_setup_required">Beachte, dass die App ohne Einrichtung nicht nutzbar ist.</string>
+    <string name="notice_app_beingresetted">App wird zurückgesetzt…</string>
 
 </resources>

@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import de.zitzmanncedric.abicalc.AppUtils;
+import de.zitzmanncedric.abicalc.utils.AppUtils;
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.api.Seminar;
 import de.zitzmanncedric.abicalc.api.Subject;

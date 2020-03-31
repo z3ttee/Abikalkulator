@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/window_padding"
+    android:layout_marginStart="@dimen/window_padding_large"
+    android:layout_marginEnd="@dimen/window_padding_large"
+    android:orientation="vertical"
+    android:background="@drawable/background_dialog">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/dialog_banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitCenter"/>
+
+            <TextView
+                style="@style/Headline.h5"
+                android:id="@+id/dialog_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/window_padding_large"
+                android:textAlignment="center" />
+
+            <TextView
+                style="@style/TextAppearance"
+                android:id="@+id/dialog_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_padding" />
+
+            <LinearLayout
+                android:id="@+id/dialog_button_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/window_padding_large" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -26,7 +26,7 @@ public class QuickSubjectEditDialog extends AppDialog implements View.OnClickLis
     private CheckBox checkBoxExam;
     private CheckBox checkBoxOralExam;
 
-    @Setter private DialogCallback callback;
+    @Setter private DialogCallback customCallback;
     @Getter @Setter private Activity owner;
 
     /**
@@ -132,7 +132,7 @@ public class QuickSubjectEditDialog extends AppDialog implements View.OnClickLis
         subject.setExam(checkBoxExam.isChecked());
         if (checkBoxOralExam.isChecked()) subject.setExam(true);
         subject.setOralExam(checkBoxOralExam.isChecked());
-        if (callback != null) callback.onCallback(subject);
+        if (this.customCallback != null) this.customCallback.onCallback(subject);
     }
 
     /**

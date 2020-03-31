@@ -506,10 +506,12 @@ public class AppDatabase extends SQLiteOpenHelper {
                 updateQuickAverage(subject, termID, result);
 
                 // Update averages for alle following terms, if there is no grade
-                for(int i = termID+1; i<5; i++){
-                    ArrayList<Grade> grades = getGradesForTerm(subject, i);
-                    if(grades.isEmpty()){
-                        updateQuickAverage(subject, i, result);
+                if(getGradesForTerm(subject, termID+1).isEmpty()) {
+                    for (int i = termID + 1; i < 5; i++) {
+                        ArrayList<Grade> grades = getGradesForTerm(subject, i);
+                        if (grades.isEmpty()) {
+                            updateQuickAverage(subject, i, result);
+                        }
                     }
                 }
             }

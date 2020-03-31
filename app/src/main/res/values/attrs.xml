@@ -14,4 +14,7 @@
         <attr name="average" format="float" />
         <attr name="showMedal" format="boolean|reference" />
     </declare-styleable>
+    <declare-styleable name="AppButton">
+        <attr name="android:text" format="string|reference" />
+    </declare-styleable>
 </resources>
