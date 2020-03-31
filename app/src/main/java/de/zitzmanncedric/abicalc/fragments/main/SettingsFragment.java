@@ -2,6 +2,7 @@ package de.zitzmanncedric.abicalc.fragments.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -15,9 +16,11 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.utils.AppUtils;
 import de.zitzmanncedric.abicalc.BuildConfig;
 import de.zitzmanncedric.abicalc.R;
@@ -59,6 +62,11 @@ public class SettingsFragment extends Fragment implements SettingsListAdapter.Ca
         SettingsListAdapter adapter = new SettingsListAdapter(items, this);
         list.setLayoutManager(new LinearLayoutManager(getContext()));
         list.setAdapter(adapter);
+
+        TextView appInfoView = view.findViewById(R.id.app_info);
+        try {
+            appInfoView.setText( getString(R.string.app_info).replace("%version%", AppCore.getInstance().getPackageManager().getPackageInfo(AppCore.getInstance().getPackageName(), 0).versionName));
+        } catch (Exception ignored) { }
     }
 
     @Override

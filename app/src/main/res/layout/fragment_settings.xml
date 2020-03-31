@@ -28,7 +28,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/window_padding"
-        android:text="@string/app_info"
         android:textAlignment="center"
         android:textSize="10sp"
         tools:ignore="SmallSp" />
