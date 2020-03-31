@@ -5,7 +5,7 @@
             <solid android:color="@color/splash_background" />
         </shape>
     </item>
-    <item android:gravity="center">
+    <item android:gravity="center" android:width="256dp" android:height="256dp">
         <bitmap android:src="@drawable/app_icon" />
     </item>
 </layer-list>
