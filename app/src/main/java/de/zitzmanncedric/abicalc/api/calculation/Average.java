@@ -12,14 +12,30 @@ import de.zitzmanncedric.abicalc.database.AppDatabase;
 import needle.Needle;
 import needle.UiRelatedTask;
 
+/**
+ * Klasse mit Funktionen zur Berechnung verschiedener Durchschnittswerte, Punktezahlen und zur Ermittlung streichbarer Fächer
+ */
 public class Average {
 
+    /**
+     * Ermittelt den Durchschnittswert für ein bestimmtes Fach in einem bestimmten Halbjahr in einem neuen Thread (asynchron)
+     * @param subject Übergabe des betroffenen Fachs
+     * @param termID Übergabe der Halbjahres-ID
+     * @param callback Interface, zum Abfangen des asynchron berechneten Resultats
+     */
     public static void getOfTermAndSubject(Subject subject, int termID, CalcCallback<Integer> callback) {
         Needle.onBackgroundThread().execute(() -> {
             int avg = getOfTermAndSubjectSync(subject, termID);
             callback.onCalcFinished(avg);
         });
     }
+
+    /**
+     * Ermittelt den Durchschnittswert für ein bestimmtes Fach in einem bestimmten Halbjahr im gleichen Thread (synchron)
+     * @param subject Übergabe des betroffenen Fachs
+     * @param termID Übergabe der Halbjahres-ID
+     * @return Durchschnitt als Integer
+     */
     public static int getOfTermAndSubjectSync(Subject subject, int termID) {
         int avg = AppCore.getSharedPreferences().getInt("defaultAVG", 8);
 
@@ -75,6 +91,10 @@ public class Average {
         return avg;
     }
 
+    /**
+     * Ermittelt den Durchschnittswert aller Noten des Seminarfachs im gleichen Thread (synchron)
+     * @return Durchschnittswert als Integer
+     */
     public static int getSeminarSync(){
         float avg = 0;
 
@@ -94,10 +114,10 @@ public class Average {
     }
 
     /**
-     * Gibt den gespeicherten Durchschnitts eines Fachs eines Halbjahres zurück
+     * Gibt den gespeicherten Durchschnitt eines Fachs eines Halbjahres zurück
      * @param subject Angabe des Fachs
-     * @param termID Angabe des Halbjahres
-     * @return Durchschnitt des Fachs
+     * @param termID Angabe der Halbjahres-ID
+     * @return Durchschnitt als Integer
      */
     public static int getQuickAverageOfTerm(Subject subject, int termID) {
         switch (termID) {
@@ -117,8 +137,8 @@ public class Average {
     }
 
     /**
-     * Berechnet Gesamtnote im Hintergrund aus. Es werden die 4 schlechtesten Fächer automatisch gestrichen aus jedem Halbjahr eins.
-     * @param callback Um auf Rückgabe zurückzugreifen
+     * Berechnet Gesamtnote im Hintergrund aus (asynchron). Es werden die 4 schlechtesten Fächer automatisch gestrichen, aus jedem Halbjahr eins.
+     * @param callback Interface, um auf Resultat zurückzugreifen
      */
     public static void getGeneral(CalcCallback<Double> callback){
         Needle.onBackgroundThread().execute(new UiRelatedTask<Double>() {
@@ -144,8 +164,8 @@ public class Average {
     }
 
     /**
-     * Berechnet Gesamtpunktezahl im Hintergrund. Es werden die 4 schlechtesten Fächer automatisch gestrichen aus jedem Halbjahr eins.
-     * @param callback Um auf Rückgabe zurückzugreifen
+     * Berechnet Gesamtpunktezahl im Hintergrund (asynchron). Es werden die 4 schlechtesten Fächer automatisch gestrichen aus jedem Halbjahr eins.
+     * @param callback Interface, um auf Resultat zurückzugreifen
      */
     public static void getAllPoints(CalcCallback<Integer> callback) {
         Needle.onBackgroundThread().execute(new UiRelatedTask<Integer>() {
@@ -162,8 +182,8 @@ public class Average {
     }
 
     /**
-     * Berechnet Gesamtpunktezahl im gleichen Thread. Es werden die 4 schlechtesten Fächer automatisch gestrichen aus jedem Halbjahr eins.
-     * @return Gibt direkten Wert zurück
+     * Berechnet Gesamtpunktezahl im gleichen Thread (synchron). Es werden die 4 schlechtesten Fächer automatisch gestrichen, aus jedem Halbjahr eins.
+     * @return Gesamtpunktezahl als Integer
      */
     private static synchronized int getAllPointsSync() {
         int points = 0;
@@ -190,8 +210,8 @@ public class Average {
     }
 
     /**
-     * Ermittelt im Hintergrund eine Auswahl an streichbaren Fächern. Definitiv 1 pro Halbjahr. Nicht gestrichen wird, wenn Leistungsfach oder letztes Halbjahr eines Prüfungsfachs
-     * @param callback Um auf Rückgabe zurückzugreifen
+     * Ermittelt im Hintergrund (asynchron) eine Auswahl an streichbaren Fächern. Definitiv 1 pro Halbjahr. Nicht gestrichen wird, wenn Leistungsfach oder letztes Halbjahr eines Prüfungsfachs
+     * @param callback Interface. um auf Rückgabe zurückzugreifen
      */
     public static void getStriked(CalcCallback<HashMap<Integer, Subject>> callback){
         Needle.onBackgroundThread().execute(new UiRelatedTask<HashMap<Integer, Subject>>() {
@@ -208,8 +228,8 @@ public class Average {
     }
 
     /**
-     * Ermittelt im Vordergrund oder gleichen Thread eine Auswahl an streichbaren Fächern. Definitiv 1 pro Halbjahr. Nicht gestrichen wird, wenn Leistungsfach oder letztes Halbjahr eines Prüfungsfachs
-     * @return Direkter Wert
+     * Ermittelt im Vordergrund (synchron) eine Auswahl an streichbaren Fächern. Definitiv 1 pro Halbjahr. Nicht gestrichen wird, wenn Leistungsfach oder letztes Halbjahr eines Prüfungsfachs
+     * @return Map(Integer, Subject)
      */
     private static HashMap<Integer, Subject> getStrikedSync(){
             HashMap<Integer, Subject> striked = new HashMap<>();

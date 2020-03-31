@@ -38,23 +38,6 @@ public class AppCore extends Application {
     }
 
     /**
-     *
-     */
-    public void restartApp(Activity callerActivity) {
-        try {
-            Intent intent = new Intent(getApplicationContext(), SplashActivity.class);
-            int mPendingIntentId = 0;
-            PendingIntent mPendingIntent = PendingIntent.getActivity(getApplicationContext(), mPendingIntentId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-            AlarmManager mgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-            System.exit(0);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            Toast.makeText(getApplicationContext(), "Restart failed. App must be restarted manually.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    /**
      * Klasse beinhaltet Codes zur Anfragenverwaltung und Identifizierung
      */
     public static class Setup {

@@ -37,6 +37,11 @@ public class AppDatabase extends SQLiteOpenHelper {
     @Getter public List<Subject> userSubjects = new ArrayList<>();
     @Getter public HashMap<Integer, String> subjectShorts = new HashMap<>();
 
+    /**
+     * Konstruktor der Klasse. Hier werden erstmalig alle Daten aus der Datenbank und alle Fächer, die in der App existieren, geladen.
+     * @param context Context zum Zugriff auf App-Resourcen
+     * @param version Version der Datenbankstruktur. Dient zur Verarbeitung von Upgrades und eventuellen Umstrukturierungen innerhalb der Datenbank.
+     */
     public AppDatabase(Context context, int version) {
         super(context, context.getPackageName(), null, version);
 
@@ -70,6 +75,9 @@ public class AppDatabase extends SQLiteOpenHelper {
         reloadSubjects();
     }
 
+    /**
+     * Lädt alle Fächer des Nutzers erneut aus der Datenbank. Ermöglicht das Neuladen der App
+     */
     public void reloadSubjects(){
         userSubjects.clear();
         // Load users subjects
@@ -128,6 +136,10 @@ public class AppDatabase extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Funktion um auf das Create-Event einer Datenbank zuzugreifen. Hier werden beide Datenbanktabellen erstellt (ac_grades, ac_subjects)
+     * @param sqLiteDatabase Datenbank, die erstellt wird
+     */
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS `"+TABLE_SUBJECTS+"` (" +
@@ -155,15 +167,21 @@ public class AppDatabase extends SQLiteOpenHelper {
                 "PRIMARY KEY(id));");
     }
 
+    /**
+     * Upgrade-Event der Datenbank. Wird genutzt, um Änderungen an der Datenbankstruktur vorzunehmen, wenn die Version geändert wurde.
+     * @param sqLiteDatabase Betroffene Datenbank
+     * @param i vorherige Version
+     * @param i1 neueste Version
+     */
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         // Upgrade entries
     }
 
     /**
-     *
-     * @param context
-     * @param version
+     * Bildet eine neue Instanz der Datenbank
+     * @param context Context zum Zugriff auf App-Resourcen
+     * @param version Version der Datenbank
      */
     public static void createInstance(Context context, int version){
         instance = new AppDatabase(context, version);
@@ -200,9 +218,9 @@ public class AppDatabase extends SQLiteOpenHelper {
     }
 
     /**
-     *
-     * @param subject
-     * @return
+     * Funktion zum aktualisieren eines Fachs in der Datenbank
+     * @param subject Betroffenes Fach
+     * @return Anzahl der veränderten Zeilen als Integer
      */
     public int updateSubject(Subject subject) {
         ContentValues values = new ContentValues();
@@ -293,7 +311,7 @@ public class AppDatabase extends SQLiteOpenHelper {
      * @param subject Datenobjekt des betreffenden Fachs
      * @param termID Halbjahres-ID
      * @param quickAvg Durchschnittswert
-     * @return ID des veränderten Eintrags
+     * @return Anzahl der veränderten Zeilen als Integer
      */
     public int updateQuickAverage(Subject subject, int termID, int quickAvg) {
         ContentValues values = new ContentValues();
@@ -353,10 +371,10 @@ public class AppDatabase extends SQLiteOpenHelper {
     }
 
     /**
-     *
-     * @param subjectID
-     * @param grade
-     * @return
+     * Funktion zum Erstellen einer neuen Note
+     * @param subjectID ID des Fachs. Wird benutzt, um einen neuen Durchschnitt zu berechnen.
+     * @param grade Datenobjekt der zu erstellenden Note
+     * @return ID des Datenbankeintrags. Beträgt -1, wenn ein Fehler entstanden ist
      */
     public long createGrade(int subjectID, Grade grade) {
         ContentValues values = new ContentValues();
@@ -376,10 +394,10 @@ public class AppDatabase extends SQLiteOpenHelper {
     }
 
     /**
-     *
-     * @param subjectID
-     * @param grade
-     * @return
+     * Funktion zum aktualisieren einer Note
+     * @param subjectID ID des Fachs. Wird benutzt, um einen neuen Durchschnitt zu berechnen
+     * @param grade Datenobjekt der zu aktualisierenden Note
+     * @return Anzahl der veränderten Zeilen als Integer
      */
     public long updateGrade(int subjectID, Grade grade) {
         ContentValues values = new ContentValues();
@@ -394,6 +412,11 @@ public class AppDatabase extends SQLiteOpenHelper {
         return l;
     }
 
+    /**
+     * Funktion zum Löschen einer Note
+     * @param grade Datenobjekt der zu löschenden Note
+     * @return Anzahl der veränderten Zeilen als Integer
+     */
     public int removeGrade(Grade grade) {
         int i = getWritableDatabase().delete(TABLE_GRADES, "id=?", new String[]{String.valueOf(grade.getId())});
         Subject subject = AppDatabase.getInstance().getUserSubjectByID(grade.getSubjectID());
@@ -438,6 +461,7 @@ public class AppDatabase extends SQLiteOpenHelper {
 
     /**
      * Funktion, um alle Noten des Seminarfachs zu erhalten
+     * @return Liste aller Noten
      */
     public ArrayList<Grade> getGradesForSeminar() {
         ArrayList<Grade> grades = new ArrayList<>();
@@ -468,7 +492,12 @@ public class AppDatabase extends SQLiteOpenHelper {
         return grades;
     }
 
-    public void notifyGradesChanged(int subjectID, int termID){
+    /**
+     * Funktion zum Berechnen eines neuen Durchschnitts, wenn eine Note hinzugefügt, gelöscht oder aktualisiert wurde.
+     * @param subjectID ID des Fachs
+     * @param termID ID des Halbjahres
+     */
+    private void notifyGradesChanged(int subjectID, int termID){
         try {
             if (subjectID != Seminar.getInstance().getSubjectID()) {
                 Subject subject = getUserSubjectByID(subjectID);
