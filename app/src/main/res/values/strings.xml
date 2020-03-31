@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Abikalkulator</string>
-    <string name="app_info">v1.0-beta08 - © 2020</string>
+    <string name="app_info">v1.0-release01 - © 2020</string>
 
     <string name="label_choose_intensified">Wähle deine Leistungskurse (5)</string>
     <string name="label_choose_basic">Wähle deine anderen Kurse (6)</string>
