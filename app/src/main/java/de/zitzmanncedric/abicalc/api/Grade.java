@@ -63,12 +63,39 @@ public class Grade extends ListableObject implements Serializable, Cloneable {
      * Enum zum Festlegen eines Notentyps
      */
     public enum Type implements Cloneable {
+        /**
+         * Leistungskontrolle
+         */
         LK(0, AppCore.getInstance().getString(R.string.type_lk)),
+
+        /**
+         * Kursarbeit
+         */
         KA(1, AppCore.getInstance().getString(R.string.type_ka)),
+
+        /**
+         * mündliche Leistung
+         */
         ORAL(2, AppCore.getInstance().getString(R.string.type_oral)),
+
+        /**
+         * Epochalnote
+         */
         EPOCH(3, AppCore.getInstance().getString(R.string.type_epoch)),
+
+        /**
+         * Prozessnote des Seminarfachs (Kann nicht vom Benutzer ausgewählt werden)
+         */
         PROCESS(4, AppCore.getInstance().getString(R.string.type_process)),
+
+        /**
+         * Note der Seminarfacharbeit (Kann nicht vom Benutzer ausgewählt werden)
+         */
         THESIS(5, AppCore.getInstance().getString(R.string.type_thesis)),
+
+        /**
+         * Note des Kolloquiums des Seminarfachs (Kann nicht vom Benutzer ausgewählt werden)
+         */
         PRESENTATION(6, AppCore.getInstance().getString(R.string.type_presentation));
 
         @Getter private int id;
