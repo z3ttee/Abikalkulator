@@ -14,13 +14,13 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import java.util.ArrayList;
-
 import de.zitzmanncedric.abicalc.R;
-import de.zitzmanncedric.abicalc.api.list.ListableObject;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Klasse zur Definition eines Listenelements in der Fächer- oder Notenübersicht
+ */
 public class SubjectListItemView extends LinearLayout implements View.OnClickListener {
 
     private TextView itemNameView;
@@ -31,29 +31,47 @@ public class SubjectListItemView extends LinearLayout implements View.OnClickLis
     private LinearLayout itemDividerView;
 
     @Getter private String title,subtitle;
-    @Getter private int points, positionInList;
+    @Getter private int points;
     @Getter private boolean showEdit, showDelete, showPoints;
-
-    @Getter @Setter private ArrayList<? extends ListableObject> correspondingDataset = new ArrayList<>();
 
     @Setter private OnDeleteCallback onDeleteListener;
     @Setter private OnEditCallback onEditCallback;
 
+    /**
+     * Konstruktor der Klasse. Ruft init() auf.
+     * @param context Context zur Übergabe an Elternklasse
+     */
     public SubjectListItemView(Context context) {
         super(context);
         init(context, null);
     }
 
+    /**
+     * Konstruktor der Klasse. Ruft init() auf.
+     * @param context Context zur Übergabe an Elternklasse
+     * @param attrs Übergibt Style-Attribute an die Elternklasse
+     */
     public SubjectListItemView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
+    /**
+     * Konstruktor der Klasse. Ruft init() auf.
+     * @param context Context zur Übergabe an Elternklasse
+     * @param attrs Übergibt Style-Attribute an die Elternklasse
+     * @param defStyleAttr Übergibt die Standard-Style Resource als ID an die Elternklasse
+     */
     public SubjectListItemView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
+    /**
+     * Definiert das Layout und lädt Standardwerte, die über den Style geliefert werden
+     * @param context Context zum Zugriff auf App-Resourcen
+     * @param attrs Attribute, die im Style festgelegt wurden
+     */
     @SuppressLint("SetTextI18n")
     private void init(Context context, @Nullable AttributeSet attrs) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -87,7 +105,6 @@ public class SubjectListItemView extends LinearLayout implements View.OnClickLis
             this.itemEditBtn.setVisibility((showEdit ? VISIBLE : GONE));
             this.itemDeleteBtn.setVisibility((showDelete ? VISIBLE : GONE));
             this.itemPoints.setVisibility((showPoints ? VISIBLE : GONE));
-            positionInList = 0;
 
             toggleDividerIfNeeded();
             toggleSubtitleIfNeeded();
@@ -102,45 +119,76 @@ public class SubjectListItemView extends LinearLayout implements View.OnClickLis
         }
     }
 
+    /**
+     * Ändert den Titel des Listenelements
+     * @param title Titel, der gesetzt werden soll
+     */
     public void setTitle(String title) {
         itemNameView.setText(title);
         this.title = title;
     }
+
+    /**
+     * Ändert den Untertitel des Listenelements
+     * @param subtitle Untertitel, der gesetzt werden soll
+     */
     public void setSubtitle(String subtitle) {
         itemSubView.setText(subtitle);
         this.subtitle = subtitle;
         toggleSubtitleIfNeeded();
     }
 
-    public void setPositionInList(int positionInList) {
-        this.positionInList = positionInList;
-    }
-
+    /**
+     * Ändert die Punktezahl des Listenelements
+     * @param points Punkte als Integer
+     */
     @SuppressLint("SetTextI18n")
     public void setPoints(int points) {
         itemPoints.setText(points+"P");
         this.points = points;
     }
 
-    public void setTextPoints(String points) {
-        itemPoints.setText(points);
+    /**
+     * Setzt statt einer Punktezahl einen festgelegten Text
+     * @param text Text als String
+     */
+    public void setTextPoints(String text) {
+        itemPoints.setText(text);
     }
 
+    /**
+     * Legt fest, ob der "Bearbeiten"-Button angezeigt werden soll
+     * @param showEdit Wenn true, wird der Button angezeigt
+     */
     public void setShowEdit(boolean showEdit) {
         this.showEdit = showEdit;
         this.itemEditBtn.setVisibility((showEdit ? VISIBLE : GONE));
         toggleDividerIfNeeded();
     }
+
+    /**
+     * Legt fest, ob der "Löschen"-Button angezeigt werden soll
+     * @param showDelete Wenn true, wird der Button angezeigt
+     */
     public void setShowDelete(boolean showDelete) {
         this.showDelete = showDelete;
         this.itemDeleteBtn.setVisibility((showDelete ? VISIBLE : GONE));
         toggleDividerIfNeeded();
     }
+
+    /**
+     * Legt fest, ob die Punkte angezeigt werden soll
+     * @param showPoints Wenn true, werden die Punkte angezeigt
+     */
     public void setShowPoints(boolean showPoints) {
         this.showPoints = showPoints;
         this.itemPoints.setVisibility((showPoints ? VISIBLE : GONE));
         toggleDividerIfNeeded();
     }
+
+    /**
+     * Zeigt bei Bedarf den Trenner neben den Buttons im Element an
+     */
     public void toggleDividerIfNeeded(){
         if(!this.showEdit && !this.showDelete) {
             this.itemDividerView.setVisibility(GONE);
@@ -148,6 +196,10 @@ public class SubjectListItemView extends LinearLayout implements View.OnClickLis
             this.itemDividerView.setVisibility(VISIBLE);
         }
     }
+
+    /**
+     * Zeigt bei Bedarf den Untertitel des Listenelements an
+     */
     public void toggleSubtitleIfNeeded(){
         if(this.itemSubView.getText().length() == 0) {
             this.itemSubView.setVisibility(GONE);
@@ -156,13 +208,10 @@ public class SubjectListItemView extends LinearLayout implements View.OnClickLis
         }
     }
 
-    @Override
-    public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
-        if(enabled) setAlpha(1.0f);
-        else setAlpha(0.4f);
-    }
-
+    /**
+     * Fängt alle Klick-Events im Listenelement ab und ruft das passende Callback auf (dient Funktionsfähigkeit von "Löschen" und "Bearbeiten"
+     * @param view Angeklickter Button
+     */
     @Override
     public void onClick(View view) {
         try {
@@ -173,16 +222,28 @@ public class SubjectListItemView extends LinearLayout implements View.OnClickLis
             if (view.getId() == itemDeleteBtn.getId()) {
                 if(this.onDeleteListener != null) onDeleteListener.onDeleteItem();
             }
-        } catch (NullPointerException ex) {
+        } catch (Exception ignored) {
             // In case a view wasn't defined in init();
-            ex.printStackTrace();
         }
     }
 
+    /**
+     * Interface zur Behandlung des Löschen-Events
+     */
     public interface OnDeleteCallback {
+        /**
+         * Wird aufgerufen, wenn auf "Löschen" geklickt wurde
+         */
         void onDeleteItem();
     }
+
+    /**
+     * Interface zur Behandlung des Bearbeiten-Events
+     */
     public interface OnEditCallback {
+        /**
+         * Wird aufgerufen, wenn auf "Bearbeiten" geklickt wurde
+         */
         void onEditItem();
     }
 }

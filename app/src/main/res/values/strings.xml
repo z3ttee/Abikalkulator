@@ -32,6 +32,7 @@
         Wenn das Fach ein Nebenfach ist und als mündliche Prüfung markiert ist, so erfolgt im letzten Halbjahr ebenfalls kein Streichen.</string>
     <string name="paragraph_algorythm">Unser Algorithmus ist sehr einfach gestaltet. Wenn du mehr darüber wissen möchtest, dann klicke auf diesen Text.</string>
     <string name="paragraph_sharewith">Hey, ich hab eine super App gefunden, womit man seine Noten perfekt Verwalten kann. Du bekommst sogar deinen Abischnitt angezeigt! Hier gehts zur App: %url%</string>
+    <string name="paragrahp_setup_finished">Du hast es geschafft! Die App steht dir nun in vollem Umfang zur Verfügung.</string>
 
     <string name="btn_add_subject">Einen Kurs hinzufügen</string>
     <string name="btn_continue">Fortfahren</string>
@@ -71,6 +72,7 @@
     <string name="headline_settings_goals">Deine Ziele bearbeiten</string>
     <string name="headline_info">Zur Information</string>
     <string name="headline_setup_welcome">Schön dich zu sehen!</string>
+    <string name="headline_setup_finished">Einrichtung abgeschlossen!</string>
 
     <string name="subject_math">Mathematik</string>
     <string name="subject_english">Englisch</string>
@@ -126,5 +128,6 @@
     <string name="notice_goal_notreached">Du wirst dein Ziel von %goal% nicht erreichen.</string>
     <string name="notice_setup_required">Beachte, dass die App ohne Einrichtung nicht nutzbar ist.</string>
     <string name="notice_app_beingresetted">App wird zurückgesetzt…</string>
+    <string name="notice_app_data_will_resetted">Alle deine vorgenommenen Einstellungen, sowie deine Fächerwahl und eingetragenen Noten werden gelöscht.</string>
 
 </resources>

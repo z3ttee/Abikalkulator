@@ -134,8 +134,6 @@ public class AdvancedSubjectListAdapter extends RecyclerView.Adapter<AdvancedSub
                 holder.itemView.setSubtitle(null);
             }
 
-            holder.itemView.setPositionInList(position);
-            holder.itemView.setCorrespondingDataset(dataset);
             holder.itemView.setOnTouchListener(new OnButtonTouchListener());
             holder.itemView.setOnClickListener((view) -> {
                 if(onCallback != null) onCallback.onItemClicked(subject);

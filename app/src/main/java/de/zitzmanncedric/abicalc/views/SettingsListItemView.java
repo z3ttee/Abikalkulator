@@ -19,6 +19,9 @@ import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.listener.OnButtonTouchListener;
 import lombok.Getter;
 
+/**
+ * Klasse zur Definition eines Listenelements in den Einstellungen
+ */
 public class SettingsListItemView extends LinearLayout {
 
     private ImageView itemIconView;
@@ -29,21 +32,40 @@ public class SettingsListItemView extends LinearLayout {
     @Getter private @StringRes int name;
     @Getter private @StringRes int description;
 
+    /**
+     * Konstruktor der Klasse. Ruft init() auf.
+     * @param context Context zur Übergabe an Elternklasse
+     */
     public SettingsListItemView(Context context) {
         super(context);
         init(context);
     }
 
+    /**
+     * Konstruktor der Klasse. Ruft init() auf.
+     * @param context Context zur Übergabe an Elternklasse
+     * @param attrs Übergibt Style-Attribute an die Elternklasse
+     */
     public SettingsListItemView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
+    /**
+     * Konstruktor der Klasse. Ruft init() auf.
+     * @param context Context zur Übergabe an Elternklasse
+     * @param attrs Übergibt Style-Attribute an die Elternklasse
+     * @param defStyleAttr Übergibt die Standard-Style Resource als ID an die Elternklasse
+     */
     public SettingsListItemView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
 
+    /**
+     * Funktion zum Erstellen des Layouts
+     * @param context Context zum Zugriff auf App-Resourcen
+     */
     @SuppressLint("ClickableViewAccessibility")
     private void init(Context context) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -51,7 +73,6 @@ public class SettingsListItemView extends LinearLayout {
         if(inflater != null) {
             View view = inflater.inflate(R.layout.view_settingsitem, this);
 
-            LinearLayout itemContainerView = view.findViewById(R.id.item_container);
             itemIconView = view.findViewById(R.id.item_icon);
             itemNameView = view.findViewById(R.id.item_name);
             itemDescView = view.findViewById(R.id.item_description);
@@ -71,14 +92,28 @@ public class SettingsListItemView extends LinearLayout {
         }
     }
 
+    /**
+     * Ändert den anzuzeigenden Name des Listenelements
+     * @param res ID der String-Resource
+     */
     public void setName(@StringRes int res) {
         this.name = res;
         this.itemNameView.setText(this.name);
     }
+
+    /**
+     * Ändert die anzuzeigende Beschreibung des Listenelements
+     * @param res ID der String-Resource
+     */
     public void setDescription(@StringRes int res) {
         this.description = res;
         this.itemDescView.setText(this.description);
     }
+
+    /**
+     * Änder das Symbol des Listenelements
+     * @param icon Bildasset, das angezeigt werden soll
+     */
     public void setIcon(Drawable icon) {
         this.icon = icon;
         this.itemIconView.setImageDrawable(this.icon);

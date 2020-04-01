@@ -21,6 +21,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import de.zitzmanncedric.abicalc.AppCore;
+import de.zitzmanncedric.abicalc.dialogs.ConfirmDialog;
 import de.zitzmanncedric.abicalc.utils.AppUtils;
 import de.zitzmanncedric.abicalc.BuildConfig;
 import de.zitzmanncedric.abicalc.R;
@@ -98,35 +99,50 @@ public class SettingsFragment extends Fragment implements SettingsListAdapter.Ca
                 startActivity(openUrl);
                 break;
             case R.string.settings_reset:
-                ProgressDialog dialog = new ProgressDialog(context);
-                dialog.setTitle(getString(R.string.notice_app_beingresetted));
-                dialog.show();
-
-                Needle.onBackgroundThread().execute(new UiRelatedTask<Void>() {
-                    @Override
-                    protected Void doWork() {
-                        AppUtils.resetAppSettings();
-                        return null;
-                    }
-
-                    @Override
-                    protected void thenDoUiRelatedWork(Void aVoid) {
-                        new Handler().postDelayed(() -> {
-                            dialog.dismiss();
-                            Intent intent = new Intent(context, SplashActivity.class);
-                            startActivity(intent);
-                            if(getActivity() != null){
-                                getActivity().finish();
-                            }
-                        }, 500);
+                ConfirmDialog dialog = new ConfirmDialog(context);
+                dialog.setTitle(R.string.headline_yousure);
+                dialog.setMessage(R.string.notice_app_data_will_resetted);
+                dialog.setBanner(R.drawable.ic_undraw_questions, (int) getResources().getDimension(R.dimen.default_banner_height));
+                dialog.setCallback((button) -> {
+                    if(button == dialog.getButtonPositive()){
+                        dialog.dismiss();
+                        reset();
+                    } else {
+                        dialog.dismiss();
                     }
                 });
-
-                /*Intent info = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                info.setData(Uri.parse("package:" + AppCore.getInstance().getPackageName()));
-                startActivity(info);*/
+                dialog.show();
                 break;
         }
 
+    }
+
+    /**
+     * Funktion zum Behandeln des Zurücksetzens der App
+     */
+    private void reset(){
+        ProgressDialog dialog = new ProgressDialog(context);
+        dialog.setTitle(getString(R.string.notice_app_beingresetted));
+        dialog.show();
+
+        Needle.onBackgroundThread().execute(new UiRelatedTask<Void>() {
+            @Override
+            protected Void doWork() {
+                AppUtils.resetAppSettings();
+                return null;
+            }
+
+            @Override
+            protected void thenDoUiRelatedWork(Void aVoid) {
+                new Handler().postDelayed(() -> {
+                    dialog.dismiss();
+                    Intent intent = new Intent(context, SplashActivity.class);
+                    startActivity(intent);
+                    if(getActivity() != null){
+                        getActivity().finish();
+                    }
+                }, 500);
+            }
+        });
     }
 }

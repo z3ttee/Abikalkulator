@@ -2,9 +2,7 @@ package de.zitzmanncedric.abicalc.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,32 +13,53 @@ import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.api.calculation.Average;
 
+/**
+ * Benutzerdefiniertes View. Wird benutzt um den Gesamtdurchschnitt und Gesamtpunktezahl anzuzeigen
+ */
 public class AverageView extends LinearLayout {
-    private static final String TAG = "AverageView";
 
     private TextView subtitle;
     private TextView amount;
     private ImageView goal;
 
+    /**
+     * Konstruktor der Klasse. Ruft init() auf.
+     * @param context Context zur Übergabe an Elternklasse
+     */
     public AverageView(Context context) {
         super(context);
-        init(context, null);
+        init(context);
     }
 
+    /**
+     * Konstruktor der Klasse. Ruft init() auf.
+     * @param context Context zur Übergabe an Elternklasse
+     * @param attrs Übergibt Style-Attribute an die Elternklasse
+     */
     public AverageView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init(context, attrs);
+        init(context);
     }
 
+    /**
+     * Konstruktor der Klasse. Ruft init() auf.
+     * @param context Context zur Übergabe an Elternklasse
+     * @param attrs Übergibt Style-Attribute an die Elternklasse
+     * @param defStyleAttr Übergibt die Standard-Style Resource als ID an die Elternklasse
+     */
     public AverageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context, attrs);
+        init(context);
     }
 
-    private void init(Context context, @Nullable AttributeSet attrs) {
+    /**
+     * Funktion zum erstellen des Layouts
+     * @param context Context zum Zugriff auf App-Resourcen
+     */
+    private void init(Context context) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if(inflater != null) {
-            View view = inflater.inflate(R.layout.view_averageview, this);
+            inflater.inflate(R.layout.view_averageview, this);
 
             subtitle = findViewById(R.id.averageview_subtitle);
             amount = findViewById(R.id.averageview_amount);
@@ -48,6 +67,10 @@ public class AverageView extends LinearLayout {
         }
     }
 
+    /**
+     * Funktion zum Berechnen des Gesamtdurchschnitts, um diesen anzuzeigen
+     * @param callback Interface, um auf das Resultat zurückzugreifen
+     */
     public void recalculate(ProgressCallback callback){
         Average.getAllPoints((result) -> {
             subtitle.setText(getContext().getString(R.string.exp_points).replace("%points%", String.valueOf(result)));
@@ -69,7 +92,14 @@ public class AverageView extends LinearLayout {
 
     }
 
+    /**
+     * Callback-Interface
+     */
     public interface ProgressCallback {
+
+        /**
+         * Funktion, die ausgeführt wird, wenn der Vorgang beendet wurde
+         */
         void onFinish();
     }
 }

@@ -333,7 +333,6 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
         for(Subject subject : this.intensified) {
             subject.setIntensified(true);
             subjects.add(subject);
-            Log.i(TAG, "finishSetup: "+subject.isIntensified());
         }
         subjects.addAll(basics);
 
@@ -366,8 +365,17 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
             @Override
             protected void thenDoUiRelatedWork(Void aVoid) {
                 dialog.dismiss();
-                setResult(AppCore.ResultCodes.RESULT_OK);
-                finish();
+                InfoDialog congrats = new InfoDialog(SetupActivity.this);
+                congrats.setTitle(R.string.headline_setup_finished);
+                congrats.setMessage(R.string.paragrahp_setup_finished);
+                congrats.setBanner(R.drawable.ic_undraw_confirmed, (int) getResources().getDimension(R.dimen.default_banner_height));
+                congrats.setCallback((button) -> {
+                    congrats.dismiss();
+                    setResult(AppCore.ResultCodes.RESULT_OK);
+                    finish();
+                });
+                congrats.setOnCancelListener((d) -> congrats.getCallback().onButtonClicked(null));
+                congrats.show();
             }
         });
     }
