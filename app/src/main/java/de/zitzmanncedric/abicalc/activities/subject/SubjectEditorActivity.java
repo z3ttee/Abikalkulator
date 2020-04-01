@@ -20,9 +20,7 @@ import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
 import de.zitzmanncedric.abicalc.dialogs.ConfirmDialog;
 import de.zitzmanncedric.abicalc.dialogs.ProgressDialog;
-import de.zitzmanncedric.abicalc.utils.AppSerializer;
-import de.zitzmanncedric.abicalc.views.AppActionBar;
-import de.zitzmanncedric.abicalc.views.AppButton;
+import de.zitzmanncedric.abicalc.views.AppToolbar;
 import needle.Needle;
 import needle.UiRelatedTask;
 
@@ -32,7 +30,7 @@ import needle.UiRelatedTask;
  */
 public class SubjectEditorActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
-    private AppActionBar actionBar;
+    private AppToolbar toolbar;
     private Spinner spinnerSubjectsView;
 
     private Subject subject;
@@ -48,12 +46,12 @@ public class SubjectEditorActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor_subject);
 
-        actionBar = findViewById(R.id.app_toolbar);
-        actionBar.setShowClose(true);
-        actionBar.setShowSave(true);
-        actionBar.getCloseView().setOnClickListener(this);
-        actionBar.getSaveView().setOnClickListener(this);
-        setSupportActionBar(actionBar);
+        toolbar = findViewById(R.id.app_toolbar);
+        toolbar.setShowClose(true);
+        toolbar.setShowSave(true);
+        toolbar.getCloseView().setOnClickListener(this);
+        toolbar.getSaveView().setOnClickListener(this);
+        setSupportActionBar(toolbar);
 
         spinnerSubjectsView = findViewById(R.id.spinner_subjects);
         CheckBox markAsExamView = findViewById(R.id.checkbox_markasexam);
@@ -92,12 +90,12 @@ public class SubjectEditorActivity extends AppCompatActivity implements View.OnC
      */
     @Override
     public void onClick(View v) {
-        if(v.getId() == actionBar.getCloseView().getId()) {
+        if(v.getId() == toolbar.getCloseView().getId()) {
             setResult(AppCore.ResultCodes.RESULT_CANCELLED);
             finish();
             return;
         }
-        if(v.getId() == actionBar.getSaveView().getId()) {
+        if(v.getId() == toolbar.getSaveView().getId()) {
             Subject newSubject = subjects.get(spinnerSubjectsView.getSelectedItemPosition());
 
             if(subject.getId() != newSubject.getId()) {

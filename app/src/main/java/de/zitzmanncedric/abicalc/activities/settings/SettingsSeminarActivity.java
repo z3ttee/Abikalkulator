@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -18,7 +17,7 @@ import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.api.Seminar;
 import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
-import de.zitzmanncedric.abicalc.views.AppActionBar;
+import de.zitzmanncedric.abicalc.views.AppToolbar;
 
 /**
  * Klasse zur Behandlung des Einstellungs-Menü für das Seminarfach
@@ -26,7 +25,7 @@ import de.zitzmanncedric.abicalc.views.AppActionBar;
  */
 public class SettingsSeminarActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private AppActionBar actionBar;
+    private AppToolbar toolbar;
     private Spinner replaceSubjectView;
     private TextView labelSpinnerReplace;
 
@@ -41,14 +40,14 @@ public class SettingsSeminarActivity extends AppCompatActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_seminar);
 
-        actionBar = findViewById(R.id.app_toolbar);
+        toolbar = findViewById(R.id.app_toolbar);
         replaceSubjectView = findViewById(R.id.spinner_replace);
         Switch mindSeminarView = findViewById(R.id.switch_mind_seminar);
         labelSpinnerReplace = findViewById(R.id.label_spinner_replace);
 
-        setSupportActionBar(actionBar);
-        actionBar.setShowClose(true);
-        actionBar.getCloseView().setOnClickListener(this);
+        toolbar.setShowClose(true);
+        toolbar.getCloseView().setOnClickListener(this);
+        setSupportActionBar(toolbar);
 
         if(Seminar.getInstance().isMinded()) {
             mindSeminarView.setChecked(true);
@@ -128,7 +127,7 @@ public class SettingsSeminarActivity extends AppCompatActivity implements View.O
      */
     @Override
     public void onClick(View v) {
-        if(v.getId() == actionBar.getCloseView().getId()) {
+        if(v.getId() == toolbar.getCloseView().getId()) {
             finish();
         }
     }

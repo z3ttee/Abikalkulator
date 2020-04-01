@@ -16,7 +16,7 @@ import de.zitzmanncedric.abicalc.api.calculation.Average;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
 import de.zitzmanncedric.abicalc.dialogs.ProgressDialog;
 import de.zitzmanncedric.abicalc.listener.OnButtonTouchListener;
-import de.zitzmanncedric.abicalc.views.AppActionBar;
+import de.zitzmanncedric.abicalc.views.AppToolbar;
 import needle.Needle;
 import needle.UiRelatedTask;
 
@@ -26,7 +26,7 @@ import needle.UiRelatedTask;
  */
 public class SettingsGoalsActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private AppActionBar actionBar;
+    private AppToolbar toolbar;
 
     private EditText defaultPointsInput;
     private EditText goalAverageInput;
@@ -43,11 +43,12 @@ public class SettingsGoalsActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_goals);
 
-        actionBar = findViewById(R.id.app_toolbar);
-        actionBar.setShowClose(true);
-        actionBar.setShowSave(true);
-        actionBar.getCloseView().setOnClickListener(this);
-        actionBar.getSaveView().setOnClickListener(this);
+        toolbar = findViewById(R.id.app_toolbar);
+        toolbar.setShowClose(true);
+        toolbar.setShowSave(true);
+        toolbar.getCloseView().setOnClickListener(this);
+        toolbar.getSaveView().setOnClickListener(this);
+        setSupportActionBar(toolbar);
 
         defaultPointsInput = findViewById(R.id.input_default_points);
         goalAverageInput = findViewById(R.id.input_goalavg);
@@ -112,11 +113,11 @@ public class SettingsGoalsActivity extends AppCompatActivity implements View.OnC
      */
     @Override
     public void onClick(View v) {
-        if(v.getId() == actionBar.getCloseView().getId()) {
+        if(v.getId() == toolbar.getCloseView().getId()) {
             finish();
             return;
         }
-        if(v.getId() == actionBar.getSaveView().getId()) {
+        if(v.getId() == toolbar.getSaveView().getId()) {
             ProgressDialog dialog = new ProgressDialog(SettingsGoalsActivity.this);
             dialog.setTitle(getString(R.string.notice_settings_beingsaved));
             dialog.show();

@@ -19,7 +19,7 @@ import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.api.list.ListableObject;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
 import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
-import de.zitzmanncedric.abicalc.views.AppActionBar;
+import de.zitzmanncedric.abicalc.views.AppToolbar;
 
 /**
  * Klasse zur Behandlung des Einstellungs-Menü für die Kursbelegung
@@ -27,7 +27,7 @@ import de.zitzmanncedric.abicalc.views.AppActionBar;
  */
 public class SettingsSubjectsActivity extends AppCompatActivity implements OnListItemCallback, View.OnClickListener {
 
-    private AppActionBar actionBarView;
+    private AppToolbar toolbar;
     private AdvancedSubjectListAdapter adapter;
 
     /**
@@ -39,12 +39,12 @@ public class SettingsSubjectsActivity extends AppCompatActivity implements OnLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_subjects);
 
-        actionBarView = findViewById(R.id.app_toolbar);
+        toolbar = findViewById(R.id.app_toolbar);
         RecyclerView subjectsListView = findViewById(R.id.recyclerview_subjects);
 
-        setSupportActionBar(actionBarView);
-        actionBarView.setShowClose(true);
-        actionBarView.getCloseView().setOnClickListener(this);
+        toolbar.setShowClose(true);
+        toolbar.getCloseView().setOnClickListener(this);
+        setSupportActionBar(toolbar);
 
         adapter = new AdvancedSubjectListAdapter(new ArrayList<>(AppDatabase.getInstance().userSubjects), this, false);
         subjectsListView.setLayoutManager(new LinearLayoutManager(this));
@@ -111,7 +111,7 @@ public class SettingsSubjectsActivity extends AppCompatActivity implements OnLis
      */
     @Override
     public void onClick(View v) {
-        if(v.getId() == actionBarView.getCloseView().getId()){
+        if(v.getId() == toolbar.getCloseView().getId()){
             finish();
         }
     }

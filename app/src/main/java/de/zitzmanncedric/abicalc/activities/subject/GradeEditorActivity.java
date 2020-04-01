@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,11 +22,11 @@ import de.zitzmanncedric.abicalc.api.Seminar;
 import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
 import de.zitzmanncedric.abicalc.utils.AppSerializer;
-import de.zitzmanncedric.abicalc.views.AppActionBar;
+import de.zitzmanncedric.abicalc.views.AppToolbar;
 
 public class GradeEditorActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private AppActionBar actionBar;
+    private AppToolbar toolbar;
 
     private Spinner subjectSpinner;
     private Spinner termSpinner;
@@ -62,13 +61,12 @@ public class GradeEditorActivity extends AppCompatActivity implements View.OnCli
         TextView labelTermSpinner = findViewById(R.id.label_termspinner);
         TextView labelTypeSpinner = findViewById(R.id.label_typespinner);
 
-        actionBar = findViewById(R.id.app_toolbar);
-        setSupportActionBar(actionBar);
-
-        actionBar.setShowSave(true);
-        actionBar.setShowClose(true);
-        actionBar.getSaveView().setOnClickListener(this);
-        actionBar.getCloseView().setOnClickListener(this);
+        toolbar = findViewById(R.id.app_toolbar);
+        toolbar.setShowSave(true);
+        toolbar.setShowClose(true);
+        toolbar.getSaveView().setOnClickListener(this);
+        toolbar.getCloseView().setOnClickListener(this);
+        setSupportActionBar(toolbar);
 
         amountPicker.setMinValue(0);
         amountPicker.setMaxValue(15);
@@ -219,12 +217,12 @@ public class GradeEditorActivity extends AppCompatActivity implements View.OnCli
      */
     @Override
     public void onClick(View v) {
-        if(v.getId() == actionBar.getCloseView().getId()) {
+        if(v.getId() == toolbar.getCloseView().getId()) {
             setResult(AppCore.ResultCodes.RESULT_CANCELLED);
             finish();
             return;
         }
-        if(v.getId() == actionBar.getSaveView().getId()) {
+        if(v.getId() == toolbar.getSaveView().getId()) {
             if(!edit) {
                 addGrade();
             } else {

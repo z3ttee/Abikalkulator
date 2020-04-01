@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/white">
 
-        <de.zitzmanncedric.abicalc.views.AppActionBar
+        <de.zitzmanncedric.abicalc.views.AppToolbar
             android:id="@+id/app_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

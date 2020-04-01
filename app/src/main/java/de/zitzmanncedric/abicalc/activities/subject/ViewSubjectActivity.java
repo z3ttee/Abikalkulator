@@ -27,7 +27,7 @@ import de.zitzmanncedric.abicalc.api.Seminar;
 import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.fragments.subject.GradesFragment;
 import de.zitzmanncedric.abicalc.utils.AppSerializer;
-import de.zitzmanncedric.abicalc.views.AppActionBar;
+import de.zitzmanncedric.abicalc.views.AppToolbar;
 
 /**
  * Klasse zur Behandlung der Notenübersicht eines Fachs
@@ -35,6 +35,7 @@ import de.zitzmanncedric.abicalc.views.AppActionBar;
  */
 public class ViewSubjectActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private AppToolbar toolbar;
     private ViewPager fragmentPager;
     private TabLayout tabLayout;
     private Subject subject;
@@ -54,9 +55,10 @@ public class ViewSubjectActivity extends AppCompatActivity implements View.OnCli
         fragmentPager = findViewById(R.id.app_fragment_pager);
         tabLayout = findViewById(R.id.app_tabbar);
 
-        AppActionBar actionBar = findViewById(R.id.app_toolbar);
-        actionBar.setShowClose(true);
-        actionBar.getCloseView().setOnClickListener(this);
+        toolbar = findViewById(R.id.app_toolbar);
+        toolbar.setShowClose(true);
+        toolbar.getCloseView().setOnClickListener(this);
+        setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
         termID = intent.getIntExtra("termID", 0);
@@ -79,7 +81,7 @@ public class ViewSubjectActivity extends AppCompatActivity implements View.OnCli
      */
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.btn_close) {
+        if(v.getId() == toolbar.getCloseView().getId()) {
             finish();
             return;
         }

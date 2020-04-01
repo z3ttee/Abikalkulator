@@ -19,15 +19,12 @@ import java.util.ArrayList;
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.adapter.AdvancedSubjectListAdapter;
-import de.zitzmanncedric.abicalc.adapter.RecyclerGridAdapter;
 import de.zitzmanncedric.abicalc.api.Grade;
-import de.zitzmanncedric.abicalc.api.Seminar;
 import de.zitzmanncedric.abicalc.api.list.ListableObject;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
-import de.zitzmanncedric.abicalc.fragments.subject.GradesFragment;
 import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
 import de.zitzmanncedric.abicalc.utils.AppSerializer;
-import de.zitzmanncedric.abicalc.views.AppActionBar;
+import de.zitzmanncedric.abicalc.views.AppToolbar;
 import needle.Needle;
 import needle.UiRelatedProgressTask;
 
@@ -39,6 +36,7 @@ public class SeminarActivity extends AppCompatActivity implements View.OnClickLi
 
     private AdvancedSubjectListAdapter adapter;
 
+    private AppToolbar toolbar;
     private TextView noticeView;
     private LinearLayout wrapper;
 
@@ -51,11 +49,10 @@ public class SeminarActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seminar);
 
-        AppActionBar actionBar = findViewById(R.id.app_toolbar);
-        setSupportActionBar(actionBar);
-
-        actionBar.setShowClose(true);
-        actionBar.getCloseView().setOnClickListener(this);
+        toolbar = findViewById(R.id.app_toolbar);
+        toolbar.setShowClose(true);
+        toolbar.getCloseView().setOnClickListener(this);
+        setSupportActionBar(toolbar);
 
         RecyclerView recyclerView = findViewById(R.id.app_grid_seminars);
         adapter = new AdvancedSubjectListAdapter(new ArrayList<>(), this);
@@ -119,7 +116,7 @@ public class SeminarActivity extends AppCompatActivity implements View.OnClickLi
      */
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.btn_close) {
+        if(v.getId() == toolbar.getCloseView().getId()) {
             finish();
         }
     }
