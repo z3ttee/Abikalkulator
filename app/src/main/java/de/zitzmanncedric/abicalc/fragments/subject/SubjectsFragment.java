@@ -42,7 +42,15 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
 
     private RecyclerGridAdapter adapter;
 
+    /**
+     * Konstruktor der Klasse. (Durch Veerbung benötigt) (leer)
+     */
     public SubjectsFragment() {}
+
+    /**
+     * Konstuktor der Klasse. Legt die Halbjahres-ID fest
+     * @param termID Halbjahres-ID
+     */
     public SubjectsFragment(int termID) {
         this.termID = termID;
     }
@@ -97,6 +105,9 @@ public class SubjectsFragment extends Fragment implements OnListItemCallback {
         return view;
     }
 
+    /**
+     * Wird das Fragment fortgesetzt, wird das Seminarfach in der Liste aktualisiert
+     */
     @Override
     public void onResume() {
         super.onResume();

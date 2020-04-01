@@ -35,18 +35,38 @@ import de.zitzmanncedric.abicalc.dialogs.ProgressDialog;
 import needle.Needle;
 import needle.UiRelatedTask;
 
+/**
+ * Fragment zum Anzeigen von "Einstellungen"
+ */
 public class SettingsFragment extends Fragment implements SettingsListAdapter.Callback {
 
     private Context context;
+
+    /**
+     * Konstruktor der Klasse. Setzt Context zur späteren Verarbeitung
+     * @param context Context zur späteren Benutzung
+     */
     public SettingsFragment(Context context) {
         this.context = context;
     }
 
+    /**
+     * Das Layout wird bestimmt.
+     * @param inflater Inflater zum erstellen des Layouts
+     * @param container Der View, der das Layout umschließt
+     * @param savedInstanceState Von Android übergeben (nicht genutzt)
+     * @return Erstelltes View-Element aus dem Layout
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_settings, container, false);
     }
 
+    /**
+     * Festlegen der UI-Elemente aus dem Layout und Laden der Optionen zum Anzeigen in der Liste
+     * @param view View-Element
+     * @param savedInstanceState Von Android übergeben (nicht genutzt)
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -70,6 +90,10 @@ public class SettingsFragment extends Fragment implements SettingsListAdapter.Ca
         } catch (Exception ignored) { }
     }
 
+    /**
+     * Funktion zum Abfangen des ItemClicked-Events. Es wird geprüft, welche Option angeklickt wurde. Passend dazu werden Aktionen ausgeführt
+     * @param item Listenelement, auf welches geklickt wurde
+     */
     @Override
     public void onItemClicked(SettingsItem item) {
         switch (item.getName()) {

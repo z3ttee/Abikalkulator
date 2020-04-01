@@ -10,7 +10,6 @@ import androidx.viewpager.widget.ViewPager;
 import android.animation.ObjectAnimator;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -26,8 +25,8 @@ import de.zitzmanncedric.abicalc.dialogs.InfoDialog;
 import de.zitzmanncedric.abicalc.dialogs.ProgressDialog;
 import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.api.Subject;
+import de.zitzmanncedric.abicalc.fragments.setup.AddBasicFragment;
 import de.zitzmanncedric.abicalc.fragments.setup.AddIntensifiedFragment;
-import de.zitzmanncedric.abicalc.fragments.setup.AddNormalFragment;
 import de.zitzmanncedric.abicalc.fragments.setup.SetupWelcomeFragment;
 import lombok.Getter;
 import needle.Needle;
@@ -264,7 +263,7 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
                     fragment = new AddIntensifiedFragment(SetupActivity.this);
                     break;
                 case 2:
-                    fragment = new AddNormalFragment(SetupActivity.this);
+                    fragment = new AddBasicFragment(SetupActivity.this);
                     break;
 
                 default:

@@ -26,6 +26,9 @@ import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.api.calculation.Average;
 import de.zitzmanncedric.abicalc.dialogs.InfoDialog;
 
+/**
+ * Fragment zum Anzeigen "Deiner Ziele"
+ */
 public class GoalsFragment extends Fragment implements View.OnClickListener {
 
     private RecyclerView listView;
@@ -39,15 +42,31 @@ public class GoalsFragment extends Fragment implements View.OnClickListener {
     private SubjectStrikeListAdapter adapter;
     private Context context;
 
+    /**
+     * Konstruktor der Klasse. Setzt Context zur späteren Verarbeitung
+     * @param context Context zur späteren Benutzung
+     */
     public GoalsFragment(Context context) {
         this.context = context;
     }
 
+    /**
+     * Das Layout wird bestimmt.
+     * @param inflater Inflater zum erstellen des Layouts
+     * @param container Der View, der das Layout umschließt
+     * @param savedInstanceState Von Android übergeben (nicht genutzt)
+     * @return Erstelltes View-Element aus dem Layout
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_goals, container, false);
     }
 
+    /**
+     * Festlegen der UI-Elemente aus dem Layout
+     * @param view View-Element
+     * @param savedInstanceState Von Android übergeben (nicht genutzt)
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -62,6 +81,9 @@ public class GoalsFragment extends Fragment implements View.OnClickListener {
         noticeView.setOnClickListener(this);
     }
 
+    /**
+     * Wenn das Fragment fortgesetzt wird, werden alle Daten geladen und angezeigt
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -104,6 +126,10 @@ public class GoalsFragment extends Fragment implements View.OnClickListener {
         });
     }
 
+    /**
+     * Fängt das Klick-Event ab, wenn auf den Text, der vom Algorithmus handelt, geklickt wurde. Öffnet daraufhin ein Dialogfenster mit weiteren Informationen
+     * @param v Angeklickter Button
+     */
     @Override
     public void onClick(View v) {
         if(v.getId() == noticeView.getId()) {

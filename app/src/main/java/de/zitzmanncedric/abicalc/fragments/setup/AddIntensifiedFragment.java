@@ -28,6 +28,9 @@ import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
 import de.zitzmanncedric.abicalc.utils.AppSerializer;
 import de.zitzmanncedric.abicalc.views.AppButton;
 
+/**
+ * Fragment zum Anzeigen des zweiten Schritts in der Ersteinrichtung. Hier können Leistungskurse hinzugefügt werden
+ */
 public class AddIntensifiedFragment extends Fragment implements OnListItemCallback, View.OnClickListener {
 
     private AppButton addSubjectBtn;
@@ -35,15 +38,32 @@ public class AddIntensifiedFragment extends Fragment implements OnListItemCallba
     private SetupActivity setupActivity;
 
     private Context context;
+
+    /**
+     * Konstruktor der Klasse. Setzt Context zur späteren Verarbeitung
+     * @param context Context zur späteren Benutzung
+     */
     public AddIntensifiedFragment(Context context) {
         this.context = context;
     }
 
+    /**
+     * Das Layout wird bestimmt.
+     * @param inflater Inflater zum erstellen des Layouts
+     * @param container Der View, der das Layout umschließt
+     * @param savedInstanceState Von Android übergeben (nicht genutzt)
+     * @return Erstelltes View-Element aus dem Layout
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_add_intensified, container, false);
     }
 
+    /**
+     * Festlegen der UI-Elemente aus dem Layout
+     * @param view View-Element
+     * @param savedInstanceState Von Android übergeben (nicht genutzt)
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -60,6 +80,10 @@ public class AddIntensifiedFragment extends Fragment implements OnListItemCallba
         recyclerView.setAdapter(adapter);
     }
 
+    /**
+     * Fängt das Klick-Event des "Hinzufügen"-Buttons ab. Es wird eine neue Aktivität gestartet und auf ein Resultat dieser gewartet.
+     * @param v Angeklickter Button
+     */
     @Override
     public void onClick(View v) {
         if(v.getId() == this.addSubjectBtn.getId()) {
@@ -84,6 +108,10 @@ public class AddIntensifiedFragment extends Fragment implements OnListItemCallba
         }
     }
 
+    /**
+     * Das angeklickte Listenelement wird entfernt
+     * @param object Angeklicktes Element
+     */
     @Override
     public void onItemDeleted(ListableObject object) {
         if(object instanceof Subject) {
@@ -99,6 +127,10 @@ public class AddIntensifiedFragment extends Fragment implements OnListItemCallba
         }
     }
 
+    /**
+     * Wenn auf "Bearbeiten" geklickt wurde, wird ein Dialogfenster mit weiteren Einstellungen angezeigt.
+     * @param object Angeklicktes Element
+     */
     @Override
     public void onItemEdit(final ListableObject object) {
         try {
@@ -123,6 +155,10 @@ public class AddIntensifiedFragment extends Fragment implements OnListItemCallba
         }
     }
 
+    /**
+     * Funktion leitet auf onItemEdit() weiter, da diese die gleichen Resultate haben
+     * @param object Angeklicktes Listenelement
+     */
     @Override
     public void onItemClicked(ListableObject object) {
         onItemEdit(object);
@@ -130,6 +166,7 @@ public class AddIntensifiedFragment extends Fragment implements OnListItemCallba
 
     /**
      * Unwichtig (nicht genutzt)
+     * @param object Betroffenes Listenelement
      */
     @Override
     public void onItemLongClicked(ListableObject object) { }

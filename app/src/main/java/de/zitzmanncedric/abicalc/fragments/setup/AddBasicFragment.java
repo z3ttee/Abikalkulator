@@ -28,22 +28,42 @@ import de.zitzmanncedric.abicalc.listener.OnListItemCallback;
 import de.zitzmanncedric.abicalc.utils.AppSerializer;
 import de.zitzmanncedric.abicalc.views.AppButton;
 
-public class AddNormalFragment extends Fragment implements OnListItemCallback, View.OnClickListener {
+/**
+ * Fragment zum Anzeigen des dritten Schritts in der Ersteinrichtung. Hier können Nebenfächer hinzugefügt werden
+ */
+public class AddBasicFragment extends Fragment implements OnListItemCallback, View.OnClickListener {
 
     private AppButton addSubjectBtn;
     private AdvancedSubjectListAdapter adapter;
     private SetupActivity setupActivity;
 
     private Context context;
-    public AddNormalFragment(Context context) {
+
+    /**
+     * Konstruktor der Klasse. Setzt Context zur späteren Verarbeitung
+     * @param context Context zur späteren Benutzung
+     */
+    public AddBasicFragment(Context context) {
         this.context = context;
     }
 
+    /**
+     * Das Layout wird bestimmt.
+     * @param inflater Inflater zum erstellen des Layouts
+     * @param container Der View, der das Layout umschließt
+     * @param savedInstanceState Von Android übergeben (nicht genutzt)
+     * @return Erstelltes View-Element aus dem Layout
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_add_basic, container, false);
     }
 
+    /**
+     * Festlegen der UI-Elemente aus dem Layout
+     * @param view View-Element
+     * @param savedInstanceState Von Android übergeben (nicht genutzt)
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -60,6 +80,10 @@ public class AddNormalFragment extends Fragment implements OnListItemCallback, V
         recyclerView.setAdapter(adapter);
     }
 
+    /**
+     * Fängt das Klick-Event des "Hinzufügen"-Buttons ab. Es wird eine neue Aktivität gestartet und auf ein Resultat dieser gewartet.
+     * @param v Angeklickter Button
+     */
     @Override
     public void onClick(View v) {
         if(v.getId() == this.addSubjectBtn.getId()) {
@@ -78,6 +102,10 @@ public class AddNormalFragment extends Fragment implements OnListItemCallback, V
         }
     }
 
+    /**
+     * Das angeklickte Listenelement wird entfernt
+     * @param object Angeklicktes Element
+     */
     @Override
     public void onItemDeleted(ListableObject object) {
         if(object instanceof Subject) {
@@ -93,6 +121,10 @@ public class AddNormalFragment extends Fragment implements OnListItemCallback, V
         }
     }
 
+    /**
+     * Wenn auf "Bearbeiten" geklickt wurde, wird ein Dialogfenster mit weiteren Einstellungen angezeigt.
+     * @param object Angeklicktes Element
+     */
     @Override
     public void onItemEdit(final ListableObject object) {
         try {
@@ -117,6 +149,10 @@ public class AddNormalFragment extends Fragment implements OnListItemCallback, V
         }
     }
 
+    /**
+     * Funktion leitet auf onItemEdit() weiter, da diese die gleichen Resultate haben
+     * @param object Angeklicktes Listenelement
+     */
     @Override
     public void onItemClicked(ListableObject object) {
         onItemEdit(object);
