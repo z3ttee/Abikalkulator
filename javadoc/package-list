@@ -14,6 +14,7 @@ de.zitzmanncedric.abicalc.fragments.main
 de.zitzmanncedric.abicalc.fragments.setup
 de.zitzmanncedric.abicalc.fragments.subject
 de.zitzmanncedric.abicalc.listener
+de.zitzmanncedric.abicalc.service
 de.zitzmanncedric.abicalc.sheets
 de.zitzmanncedric.abicalc.utils
 de.zitzmanncedric.abicalc.views
