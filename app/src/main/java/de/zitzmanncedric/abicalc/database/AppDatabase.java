@@ -164,6 +164,7 @@ public class AppDatabase extends SQLiteOpenHelper {
                 "value INTEGER NOT NULL," +
                 "typeID INTEGER NOT NULL," +
                 "date LONG NOT NULL," +
+                "edited BOOLEAN NOT NULL," +
                 "PRIMARY KEY(id));");
     }
 
@@ -175,7 +176,17 @@ public class AppDatabase extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        if(i1 >= 2) {
+            try {
+                sqLiteDatabase.execSQL("ALTER TABLE " + TABLE_GRADES + " ADD COLUMN edited BOOLEAN default 0;");
+            } catch (Exception ignored){ }
+        }
         // Upgrade entries
+    }
+
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        super.onDowngrade(db, oldVersion, newVersion);
     }
 
     /**
@@ -203,11 +214,11 @@ public class AppDatabase extends SQLiteOpenHelper {
         values.put("oralExam", subject.isOralExam());
         values.put("intensified", subject.isIntensified());
 
-        values.put("quickAvgT1", subject.getQuickAvgT1());
-        values.put("quickAvgT2", subject.getQuickAvgT2());
-        values.put("quickAvgT3", subject.getQuickAvgT3());
-        values.put("quickAvgT4", subject.getQuickAvgT4());
-        values.put("quickAvgTA", subject.getQuickAvgTA());
+        values.put("quickAvgT1", AppCore.getSharedPreferences().getInt("defaultAVG", 10));
+        values.put("quickAvgT2", AppCore.getSharedPreferences().getInt("defaultAVG", 10));
+        values.put("quickAvgT3", AppCore.getSharedPreferences().getInt("defaultAVG", 10));
+        values.put("quickAvgT4", AppCore.getSharedPreferences().getInt("defaultAVG", 10));
+        values.put("quickAvgTA", AppCore.getSharedPreferences().getInt("defaultAVG", 10));
 
         values.put("cacheKey", System.currentTimeMillis());
 
@@ -383,6 +394,7 @@ public class AppDatabase extends SQLiteOpenHelper {
         values.put("value", grade.getValue());
         values.put("date", grade.getDateCreated());
         values.put("termID", grade.getTermID());
+        values.put("edited", grade.isEdited());
 
         long id = getWritableDatabase().insert(TABLE_GRADES, null, values);
         AppDatabase.getInstance().notifyGradesChanged(subjectID, grade.getTermID());
@@ -406,6 +418,7 @@ public class AppDatabase extends SQLiteOpenHelper {
         values.put("value", grade.getValue());
         values.put("date", grade.getDateCreated());
         values.put("termID", grade.getTermID());
+        values.put("edited", grade.isEdited());
 
         long l = getWritableDatabase().updateWithOnConflict(TABLE_GRADES, values, "id=?", new String[]{String.valueOf(grade.getId())}, SQLiteDatabase.CONFLICT_REPLACE);
         AppDatabase.getInstance().notifyGradesChanged(subjectID, grade.getTermID());
@@ -442,8 +455,10 @@ public class AppDatabase extends SQLiteOpenHelper {
                 int valueIndex = cursor.getColumnIndex("value");
                 int dateIndex = cursor.getColumnIndex("date");
                 int termIDIndex = cursor.getColumnIndex("termID");
+                int editedIndex = cursor.getColumnIndex("edited");
 
                 Grade.Type type = Grade.Type.getByID(cursor.getInt(typeIDIndex));
+                boolean edited = cursor.getInt(editedIndex) == 1;
 
                 Grade grade = new Grade(
                         cursor.getInt(idIndex),
@@ -451,7 +466,8 @@ public class AppDatabase extends SQLiteOpenHelper {
                         cursor.getInt(termIDIndex),
                         cursor.getInt(valueIndex),
                         type,
-                        cursor.getLong(dateIndex));
+                        cursor.getLong(dateIndex),
+                        edited);
                 grades.add(grade);
             } while (cursor.moveToNext());
             cursor.close();
@@ -475,8 +491,10 @@ public class AppDatabase extends SQLiteOpenHelper {
                 int valueIndex = cursor.getColumnIndex("value");
                 int dateIndex = cursor.getColumnIndex("date");
                 int termIDIndex = cursor.getColumnIndex("termID");
+                int editedIndex = cursor.getColumnIndex("edited");
 
                 Grade.Type type = Grade.Type.getByID(cursor.getInt(typeIDIndex));
+                boolean edited = cursor.getInt(editedIndex) == 1;
 
                 Grade grade = new Grade(
                         cursor.getInt(idIndex),
@@ -484,8 +502,10 @@ public class AppDatabase extends SQLiteOpenHelper {
                         cursor.getInt(termIDIndex),
                         cursor.getInt(valueIndex),
                         type,
-                        cursor.getLong(dateIndex));
+                        cursor.getLong(dateIndex),
+                        edited);
                 grades.add(grade);
+                Log.i(TAG, "getGradesForSeminar: "+grade.isEdited());
             } while (cursor.moveToNext());
             cursor.close();
         }

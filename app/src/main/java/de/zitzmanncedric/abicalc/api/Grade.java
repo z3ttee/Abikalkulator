@@ -21,6 +21,7 @@ public class Grade extends ListableObject implements Serializable, Cloneable {
     @Getter @Setter private int value;
     @Getter @Setter private Type type;
     @Getter private long dateCreated;
+    @Getter @Setter private boolean edited;
 
     /**
      * Konstruktor zum setzen von Standardwerten. Datum der Erstellung wird automatisch gesetzt.
@@ -30,7 +31,7 @@ public class Grade extends ListableObject implements Serializable, Cloneable {
      * @param value Wert der Note (z.B. 15)
      * @param type Typ der Note (z.B. LK)
      */
-    public Grade(long id, int subjectID, int termID, int value, Type type) {
+    public Grade(long id, int subjectID, int termID, int value, Type type, boolean edited) {
         super("", "", "");
         this.id = id;
         this.subjectID = subjectID;
@@ -38,6 +39,7 @@ public class Grade extends ListableObject implements Serializable, Cloneable {
         this.value = value;
         this.type = type;
         this.dateCreated = System.currentTimeMillis();
+        this.edited = edited;
     }
 
     /**
@@ -49,7 +51,7 @@ public class Grade extends ListableObject implements Serializable, Cloneable {
      * @param type Typ der Note (z.B. LK)
      * @param date Datum der Erstellung
      */
-    public Grade(long id, int subjectID, int termID, int value, Type type, long date) {
+    public Grade(long id, int subjectID, int termID, int value, Type type, long date, boolean edited) {
         super("", "", "");
         this.id = id;
         this.subjectID = subjectID;
@@ -57,6 +59,7 @@ public class Grade extends ListableObject implements Serializable, Cloneable {
         this.value = value;
         this.type = type;
         this.dateCreated = date;
+        this.edited = edited;
     }
 
     /**
