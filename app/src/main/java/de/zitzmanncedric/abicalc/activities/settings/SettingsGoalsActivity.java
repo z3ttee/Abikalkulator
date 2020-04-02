@@ -9,8 +9,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import de.zitzmanncedric.abicalc.AppCore;
 import de.zitzmanncedric.abicalc.R;
+import de.zitzmanncedric.abicalc.api.Grade;
+import de.zitzmanncedric.abicalc.api.Seminar;
 import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.api.calculation.Average;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
@@ -123,6 +127,7 @@ public class SettingsGoalsActivity extends AppCompatActivity implements View.OnC
             dialog.setTitle(getString(R.string.notice_settings_beingsaved));
             dialog.show();
 
+            //TODO: Copy validation from SetupSettings
             Needle.onBackgroundThread().execute(new UiRelatedTask<Void>() {
                 @Override
                 protected Void doWork() {
@@ -169,6 +174,15 @@ public class SettingsGoalsActivity extends AppCompatActivity implements View.OnC
                                 }
                             }
                         }
+
+                        ArrayList<Grade> grades = AppDatabase.getInstance().getGradesForSeminar();
+                        for(Grade grade : grades){
+                            if(!grade.isEdited()) {
+                                grade.setValue(AppCore.getSharedPreferences().getInt("defaultAVG", 10));
+                                AppDatabase.getInstance().updateGrade(-1, grade);
+                            }
+                        }
+                        Seminar.getInstance().setAside(String.valueOf(Average.getSeminarSync()));
                     } catch (Exception ex){
                         ex.printStackTrace();
                     }

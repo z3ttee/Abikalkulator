@@ -294,6 +294,7 @@ public class GradeEditorActivity extends AppCompatActivity implements View.OnCli
             if(seminar) {
                 if(newGrade.getValue() != value) {
                     newGrade.setValue(value);
+                    newGrade.setEdited(true);
                     AppDatabase.getInstance().updateGrade(newGrade.getSubjectID(), newGrade);
                     intent.putExtra("newGrade", AppSerializer.serialize(newGrade));
                     intent.putExtra("oldGrade", AppSerializer.serialize(grade));
