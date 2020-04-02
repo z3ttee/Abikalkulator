@@ -1,5 +1,6 @@
 package de.zitzmanncedric.abicalc.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.VibrationEffect;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.AnimRes;
 import androidx.annotation.Nullable;
@@ -88,10 +90,7 @@ public class AppUtils {
      * Funktion zum Zurücksetzen der gesamten App-Daten
      */
     public static void resetAppSettings(){
-        AppCore.getSharedPreferences().edit().putInt("defaultAVG", 8).apply();
-        AppCore.getSharedPreferences().edit().putFloat("goalAVG", 2.0f).apply();
-        AppCore.getSharedPreferences().edit().putInt("goalPoints", 660).apply();
-        AppCore.getSharedPreferences().edit().putInt("currentTerm", 0).apply();
+        AppCore.getSharedPreferences().edit().putInt("defaultAVG", 10).putFloat("goalAVG", 2.3f).putInt("goalPoints", 600).putInt("currentTerm", 0).apply();
 
         AppCore.Setup.setSetupPassed(false);
         Seminar.getInstance().setMinded(false);
@@ -99,6 +98,32 @@ public class AppUtils {
 
         AppCore.getInstance().getApplicationContext().deleteDatabase(AppDatabase.getInstance().getDatabaseName());
         AppDatabase.createInstance(AppCore.getInstance().getApplicationContext(), AppCore.DATABASE_VERSION);
+    }
+
+    /**
+     * Funktion zum Öffnen der Tastatur
+     * @param context Context zum Zugriff auf App-Resourcen
+     * @param view Das UI-ELement zum Zugriff auf den Fenster-Token
+     * @param focused UI-Element welches fokusiert werden soll, um eine Eingabe vorzunehmen
+     */
+    public static void showKeyboard(Context context, View view, @Nullable View focused){
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(inputMethodManager != null) {
+            inputMethodManager.toggleSoftInputFromWindow(view.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
+            if(focused != null) focused.requestFocus();
+        }
+    }
+
+    /**
+     * Funktion zum Schließen der Tastatur
+     * @param context Context zum Zugriff auf App-Resourcen
+     * @param view Das UI-ELement zum Zugriff auf den Fenster-Token
+     */
+    public static void hideKeyboardFrom(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if(imm != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
 }

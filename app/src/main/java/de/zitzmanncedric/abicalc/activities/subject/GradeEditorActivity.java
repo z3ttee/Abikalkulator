@@ -255,7 +255,7 @@ public class GradeEditorActivity extends AppCompatActivity implements View.OnCli
             Subject subject = AppDatabase.getInstance().userSubjects.get(subjectPosition);
 
             Grade.Type type = Grade.Type.getByID(typePosition);
-            Grade grade = new Grade(0, subject.getId(), termPosition, value, type); // SubjectID ist gleich mit position, durch sortierung Geht nur, weil positionen wie in der Liste der AppDatenbank
+            Grade grade = new Grade(0, subject.getId(), termPosition, value, type, false); // SubjectID ist gleich mit position, durch sortierung Geht nur, weil positionen wie in der Liste der AppDatenbank
 
             long id = AppDatabase.getInstance().createGrade(subject.getId(), grade);
 
@@ -264,7 +264,7 @@ public class GradeEditorActivity extends AppCompatActivity implements View.OnCli
             intent.putExtra("grade", bytes);
         } else {
             Grade.Type type = Grade.Type.getByID(typePosition);
-            Grade grade = new Grade(0, Seminar.getInstance().getSubjectID(), 4, value, type); // SubjectID ist gleich mit position, durch sortierung Geht nur, weil positionen wie in der Liste der AppDatenbank
+            Grade grade = new Grade(0, Seminar.getInstance().getSubjectID(), 4, value, type, false); // SubjectID ist gleich mit position, durch sortierung Geht nur, weil positionen wie in der Liste der AppDatenbank
 
             AppDatabase.getInstance().createGrade(Seminar.getInstance().getSubjectID(), grade);
         }
@@ -286,7 +286,7 @@ public class GradeEditorActivity extends AppCompatActivity implements View.OnCli
         }
 
         try {
-            Grade newGrade = new Grade(grade.getId(), grade.getSubjectID(), grade.getTermID(), grade.getValue(), grade.getType());
+            Grade newGrade = new Grade(grade.getId(), grade.getSubjectID(), grade.getTermID(), grade.getValue(), grade.getType(), grade.isEdited());
 
             int typeID = typeSpinner.getSelectedItemPosition();
             int value = amountPicker.getValue();

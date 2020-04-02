@@ -27,6 +27,7 @@ import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.api.Subject;
 import de.zitzmanncedric.abicalc.fragments.setup.AddBasicFragment;
 import de.zitzmanncedric.abicalc.fragments.setup.AddIntensifiedFragment;
+import de.zitzmanncedric.abicalc.fragments.setup.SetupSettingsFragment;
 import de.zitzmanncedric.abicalc.fragments.setup.SetupWelcomeFragment;
 import lombok.Getter;
 import needle.Needle;
@@ -37,14 +38,13 @@ import needle.UiRelatedTask;
  * @author Cedric Zitzmann
  */
 public class SetupActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final String TAG = "SetupActivity";
 
     public static final int AMOUNT_INTENSIFIED = 5;
     public static final int AMOUNT_BASICS = 6;
     public static final int AMOUNT_WRITTEN_EXAMS = 3;
     public static final int AMOUNT_ORAL_EXAMS = 2;
 
-    private final int COUNT_STEPS = 3;
+    private final int COUNT_STEPS = 4;
     private int CURRENT_STEP = 1;
 
     private ViewPager fragmentPager;
@@ -57,6 +57,9 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
     @Getter private ArrayList<Subject> intensified = new ArrayList<>();
     @Getter private ArrayList<Subject> basics = new ArrayList<>();
 
+    private InfoDialog dialog;
+    private boolean isDialogOpen = false;
+
     /**
      * Von Android implementiert. Methode zum Aufbauen des Fensters
      * @param savedInstanceState Von Android übergeben (nicht genutzt)
@@ -66,6 +69,11 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
         getWindow().setBackgroundDrawable(new ColorDrawable(getColor(R.color.splash_background)));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
+
+        dialog = new InfoDialog(this);
+        dialog.setTitle(getString(R.string.error_headline));
+        dialog.setOnCancelListener((dialog) -> isDialogOpen = false);
+        dialog.setCallback((button) -> isDialogOpen = false);
 
         progressBar = findViewById(R.id.setup_progress);
         fragmentPager = findViewById(R.id.app_fragment_pager);
@@ -126,7 +134,7 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
             btnNext.animate().alpha(1f).setDuration(animSpeed);
             btnNext.setImageDrawable(getDrawable(R.drawable.ic_back));
             btnNext.setRotation(180f);
-            ObjectAnimator.ofInt(progressBar, "progress", 333).setDuration(animSpeed).start();
+            ObjectAnimator.ofInt(progressBar, "progress", 250).setDuration(animSpeed).start();
             return;
         }
         if(CURRENT_STEP == 2){
@@ -136,10 +144,19 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
             btnNext.animate().alpha(1f).setDuration(animSpeed);
             btnNext.setImageDrawable(getDrawable(R.drawable.ic_back));
             btnNext.setRotation(180f);
-            ObjectAnimator.ofInt(progressBar, "progress", 666).setDuration(animSpeed).start();
+            ObjectAnimator.ofInt(progressBar, "progress", 500).setDuration(animSpeed).start();
             return;
         }
         if(CURRENT_STEP == 3){
+            btnPrevious.setEnabled(true);
+            btnPrevious.animate().alpha(1f).setDuration(animSpeed);
+            btnNext.setEnabled(true);
+            btnNext.animate().alpha(1f).setDuration(animSpeed);
+            btnNext.setImageDrawable(getDrawable(R.drawable.ic_back));
+            btnNext.setRotation(180f);
+            ObjectAnimator.ofInt(progressBar, "progress", 750).setDuration(animSpeed).start();
+        }
+        if(CURRENT_STEP == 4){
             btnPrevious.setEnabled(true);
             btnPrevious.animate().alpha(1f).setDuration(animSpeed);
             btnNext.setEnabled(true);
@@ -164,6 +181,10 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         if(v.getId() == btnPrevious.getId()){
+            if(CURRENT_STEP == 4){
+                fragmentPager.setCurrentItem(2, true);
+                return;
+            }
             if(CURRENT_STEP == 3){
                 fragmentPager.setCurrentItem(1, true);
                 return;
@@ -188,8 +209,12 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
             }
             if(CURRENT_STEP == 3){
                 if(isReadyForNext(true)) {
-                    finishSetup();
+                    fragmentPager.setCurrentItem(3, true);
                 }
+                return;
+            }
+            if(CURRENT_STEP == 4){
+                finishSetup();
             }
         }
     }
@@ -201,10 +226,8 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
      */
     private boolean isReadyForNext(boolean showDialogOnError){
         boolean ready = true;
-        if(CURRENT_STEP == 2){
-            InfoDialog dialog = new InfoDialog(this);
-            dialog.setTitle(getString(R.string.error_headline));
 
+        if(CURRENT_STEP == 2){
             if(this.intensified.size() < AMOUNT_INTENSIFIED){
                 dialog.setMessage(R.string.error_missing_intensified);
                 ready = false;
@@ -213,13 +236,12 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
                 ready = false;
             }
 
-            if(!ready && showDialogOnError) {
+            if(!ready && showDialogOnError && !isDialogOpen) {
                 dialog.show();
+                isDialogOpen = true;
             }
-        } else if(CURRENT_STEP == 3){
-            InfoDialog dialog = new InfoDialog(this);
-            dialog.setTitle(getString(R.string.error_headline));
 
+        } else if(CURRENT_STEP == 3){
             if(this.basics.size() < AMOUNT_BASICS){
                 dialog.setMessage(R.string.error_missing_basics);
                 ready = false;
@@ -228,8 +250,9 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
                 ready = false;
             }
 
-            if(!ready && showDialogOnError) {
+            if(!ready && showDialogOnError && !isDialogOpen) {
                 dialog.show();
+                isDialogOpen = true;
             }
         }
 
@@ -264,6 +287,9 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
                     break;
                 case 2:
                     fragment = new AddBasicFragment(SetupActivity.this);
+                    break;
+                case 3:
+                    fragment = new SetupSettingsFragment(SetupActivity.this);
                     break;
 
                 default:
@@ -347,9 +373,9 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
                 }
 
                 // Create default grades for seminar
-                AppDatabase.getInstance().createGrade(Seminar.getInstance().getSubjectID(), new Grade(0, Seminar.getInstance().getSubjectID(), 4, 8, Grade.Type.PROCESS));
-                AppDatabase.getInstance().createGrade(Seminar.getInstance().getSubjectID(), new Grade(0, Seminar.getInstance().getSubjectID(), 4, 8, Grade.Type.THESIS));
-                AppDatabase.getInstance().createGrade(Seminar.getInstance().getSubjectID(), new Grade(0, Seminar.getInstance().getSubjectID(), 4, 8, Grade.Type.PRESENTATION));
+                AppDatabase.getInstance().createGrade(Seminar.getInstance().getSubjectID(), new Grade(0, Seminar.getInstance().getSubjectID(), 4, AppCore.getSharedPreferences().getInt("defaultAVG", 10), Grade.Type.PROCESS, false));
+                AppDatabase.getInstance().createGrade(Seminar.getInstance().getSubjectID(), new Grade(0, Seminar.getInstance().getSubjectID(), 4, AppCore.getSharedPreferences().getInt("defaultAVG", 10), Grade.Type.THESIS, false));
+                AppDatabase.getInstance().createGrade(Seminar.getInstance().getSubjectID(), new Grade(0, Seminar.getInstance().getSubjectID(), 4, AppCore.getSharedPreferences().getInt("defaultAVG", 10), Grade.Type.PRESENTATION, false));
 
                 AppCore.Setup.setSetupPassed(true);
                 AppDatabase.getInstance().reloadSubjects();

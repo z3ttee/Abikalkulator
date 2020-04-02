@@ -14,7 +14,7 @@ public class AppCore extends Application {
 
     @Getter private static AppCore instance;
     @Getter private static SharedPreferences sharedPreferences;
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     /**
      * Bildet instanz der App
@@ -27,6 +27,7 @@ public class AppCore extends Application {
         sharedPreferences = getSharedPreferences(getPackageName(), MODE_PRIVATE);
 
         AppDatabase.createInstance(this, DATABASE_VERSION);
+        AppCore.getSharedPreferences().edit().putInt("defaultAVG", 10).putFloat("goalAVG", 2.3f).putInt("goalPoints", 600).apply();
     }
 
     /**

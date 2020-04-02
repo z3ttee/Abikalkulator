@@ -16,6 +16,7 @@ import de.zitzmanncedric.abicalc.api.calculation.Average;
 import de.zitzmanncedric.abicalc.database.AppDatabase;
 import de.zitzmanncedric.abicalc.dialogs.ProgressDialog;
 import de.zitzmanncedric.abicalc.listener.OnButtonTouchListener;
+import de.zitzmanncedric.abicalc.utils.AppUtils;
 import de.zitzmanncedric.abicalc.views.AppToolbar;
 import needle.Needle;
 import needle.UiRelatedTask;

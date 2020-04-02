@@ -130,4 +130,7 @@
     <string name="notice_app_beingresetted">App wird zurückgesetzt…</string>
     <string name="notice_app_data_will_resetted">Alle deine vorgenommenen Einstellungen, sowie deine Fächerwahl und eingetragenen Noten werden gelöscht.</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
