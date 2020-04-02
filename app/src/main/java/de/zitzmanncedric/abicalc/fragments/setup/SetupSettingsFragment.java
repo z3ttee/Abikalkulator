@@ -24,6 +24,9 @@ import de.zitzmanncedric.abicalc.R;
 import de.zitzmanncedric.abicalc.listener.OnButtonTouchListener;
 import de.zitzmanncedric.abicalc.utils.AppUtils;
 
+/**
+ * Fragment zum Anzeigen des vierten Schritts in der Ersteinrichtung. Hier können Nebenfächer hinzugefügt werden
+ */
 public class SetupSettingsFragment extends Fragment {
 
     private ConstraintLayout containerDefaultPoints;
@@ -37,15 +40,31 @@ public class SetupSettingsFragment extends Fragment {
     private Context context;
     private View view;
 
+    /**
+     * Konstruktor der Klasse. Setzt Context zur späteren Verarbeitung
+     * @param context Context zur späteren Benutzung
+     */
     public SetupSettingsFragment(Context context) {
         this.context = context;
     }
 
+    /**
+     * Das Layout wird bestimmt.
+     * @param inflater Inflater zum erstellen des Layouts
+     * @param container Der View, der das Layout umschließt
+     * @param savedInstanceState Von Android übergeben (nicht genutzt)
+     * @return Erstelltes View-Element aus dem Layout
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_setup_settings, container, false);
     }
 
+    /**
+     * Festlegen der UI-Elemente aus dem Layout
+     * @param view View-Element
+     * @param savedInstanceState Von Android übergeben (nicht genutzt)
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -70,23 +89,36 @@ public class SetupSettingsFragment extends Fragment {
         goalPointsInput.addTextChangedListener(new TextValidator(goalPointsInput));
     }
 
+    /**
+     * Ist das Fragment gerade nicht aktiv, wird die Tastatur geschlossen
+     */
     @Override
     public void onPause() {
         super.onPause();
         AppUtils.hideKeyboardFrom(context, view);
     }
 
+    /**
+     * Wird die App geschlossen, wird auch die Tastatur geschlossen
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
         AppUtils.hideKeyboardFrom(context, view);
     }
 
+    /**
+     * Private Funktion, zum öffnen der Tastatur und zum fokusieren eines Edittexts
+     * @param focused Element, das fokusiert werden soll
+     */
     private void showKeyboard(View focused){
         AppUtils.hideKeyboardFrom(context, view);
         AppUtils.showKeyboard(context, view, focused);
     }
 
+    /**
+     * Private Funktion zur Vorbereitung aller Rahmenelemente um das eigentliche Edittext
+     */
     private void prepareContainer(){
         containerDefaultPoints.setClipToOutline(true);
         containerDefaultPoints.setOnTouchListener(new OnButtonTouchListener());
@@ -108,17 +140,31 @@ public class SetupSettingsFragment extends Fragment {
         });
     }
 
+    /**
+     * Private innere Klasse. Dient der validation von Eingaben
+     */
     private static class TextValidator implements TextWatcher {
 
         private EditText text;
 
+        /**
+         * Konstruktor der Klasse. Setzt das Edittext-Feld, welches behandelt wird
+         * @param text
+         */
         TextValidator(EditText text) {
             this.text = text;
         }
 
+        /**
+         * Implementiert, aber nicht genutzt
+         */
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
+        /**
+         * Funktion zum Prüfen von Texteingaben. Sollten Fehler auffallen, werde diese behoben.
+         * @param s Eingabe durch den Nutzer
+         */
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             text.removeTextChangedListener(this);
@@ -212,6 +258,9 @@ public class SetupSettingsFragment extends Fragment {
             text.addTextChangedListener(this);
         }
 
+        /**
+         * Implementiert, aber nicht genutzt
+         */
         @Override
         public void afterTextChanged(Editable s) { }
     }
