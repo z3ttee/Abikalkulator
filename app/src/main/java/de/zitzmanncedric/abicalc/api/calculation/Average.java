@@ -1,5 +1,7 @@
 package de.zitzmanncedric.abicalc.api.calculation;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,6 +18,7 @@ import needle.UiRelatedTask;
  * Klasse mit Funktionen zur Berechnung verschiedener Durchschnittswerte, Punktezahlen und zur Ermittlung streichbarer Fächer
  */
 public class Average {
+    private static final String TAG = "Average";
 
     /**
      * Ermittelt den Durchschnittswert für ein bestimmtes Fach in einem bestimmten Halbjahr in einem neuen Thread (asynchron)
@@ -150,9 +153,24 @@ public class Average {
                 // Durchschnitt von 0.9 und weniger vermeiden
                 if(points > 822) {
                     avg = 1.0;
-                } else {
-                    avg = (double) 17 / 3 - ((double) points / (double) 180); // N = 17/3 – (E / 180)
+                    return avg;
                 }
+
+                if(points <= 61) {
+                    if(points >= 44){
+                        avg = 5.7;
+                    } else if(points >= 27) {
+                        avg = 5.8;
+                    } else if(points >= 10){
+                        avg = 5.9;
+                    } else {
+                        avg = 6.0;
+                    }
+                    return avg;
+                }
+
+                avg = (double) 17 / 3 - ((double) points / (double) 180); // N = 17/3 – (E / 180)
+
                 return avg;
             }
 
