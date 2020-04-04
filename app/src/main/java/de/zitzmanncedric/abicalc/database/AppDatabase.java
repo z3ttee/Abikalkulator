@@ -166,7 +166,7 @@ public class AppDatabase extends SQLiteOpenHelper {
                 "value INTEGER NOT NULL," +
                 "typeID INTEGER NOT NULL," +
                 "date LONG NOT NULL," +
-                // "edited BOOLEAN NOT NULL," +
+                "edited BOOLEAN NOT NULL," +
                 "PRIMARY KEY(id));");
     }
 
